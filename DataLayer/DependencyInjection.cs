@@ -23,7 +23,7 @@ namespace DataLayer
 
             services.AddScoped<IDatabaseContext>(provider => provider.GetService<DatabaseContext>());
 
-            services.AddTransient<IIdentityService, IdentityService>();
+            //services.AddTransient<IIdentityService, IdentityService>();
 
             return services;
         }
