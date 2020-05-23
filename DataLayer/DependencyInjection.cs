@@ -21,10 +21,6 @@ namespace DataLayer
                 .AddEntityFrameworkStores<DatabaseContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IDatabaseContext>(provider => provider.GetService<DatabaseContext>());
-
-            //services.AddTransient<IIdentityService, IdentityService>();
-
             return services;
         }
     }

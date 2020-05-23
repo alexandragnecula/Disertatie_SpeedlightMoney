@@ -35,4 +35,15 @@
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Services\Users\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Views\" />
+    <Folder Include="Common\" />
+    <Folder Include="Common\Constants\" />
+    <Folder Include="Common\Models\" />
+    <Folder Include="Common\Models\Authentication\" />
+    <Folder Include="Services\Roles\" />
+  </ItemGroup>
 </Project>

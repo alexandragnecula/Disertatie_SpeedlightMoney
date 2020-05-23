@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataLayer.Shared
+namespace BusinessLayer.Common.Models.Authentication
 {
     public class AuthenticationResult
     {

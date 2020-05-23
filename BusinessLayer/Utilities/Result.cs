@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataLayer.Shared
+namespace BusinessLayer.Utilities
 {
     public class Result
     {

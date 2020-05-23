@@ -11,7 +11,7 @@ using DataLayer.SharedInterfaces;
 
 namespace DataLayer.DataContext
 {
-    public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>, IDatabaseContext
+    public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>
     {
         private readonly ICurrentUserService _currentUserService;
 
@@ -38,7 +38,7 @@ namespace DataLayer.DataContext
               .ToList()
               .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict));
 
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());         
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

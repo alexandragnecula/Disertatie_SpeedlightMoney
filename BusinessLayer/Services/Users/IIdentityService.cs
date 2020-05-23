@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DataLayer.Shared;
+using BusinessLayer.Utilities;
+using BusinessLayer.Views;
 
-namespace DataLayer.SharedInterfaces
+namespace BusinessLayer.Services.Users
 {
     public interface IIdentityService
     {
@@ -15,7 +16,7 @@ namespace DataLayer.SharedInterfaces
         Task<bool> RoleExistsAsync(string role);
         Task<long?> GetUserIdAsync(string email);
         //Task<AuthenticationResult> LoginAsync(LoginUserCommand loginUser);
-        //Task<AuthenticationResult> RegisterAsync(AddUserCommand userToAdd);
+        Task<AuthenticationResult> RegisterAsync(AddUserDto userToAdd);
         //Task<(Result, long UserId)> CreateUserSeedAsync(AddUserCommand userToAdd);
     }
 }

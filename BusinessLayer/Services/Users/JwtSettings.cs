@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SpeedlightMoney_App.Options
+namespace BusinessLayer.Services.Users
 {
     public class JwtSettings
     {

@@ -1,19 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using DataLayer.DataContext;
-using DataLayer.Entities;
-using Microsoft.AspNetCore.Identity;
 using FluentValidation.AspNetCore;
 using AutoMapper;
 using SpeedlightMoney_App.Options;
@@ -22,6 +11,8 @@ using DataLayer.SharedInterfaces;
 using SpeedlightMoney_App.Services;
 using DataLayer;
 using SpeedlightMoney_App.Installers;
+using BusinessLayer.Services.Users;
+using BusinessLayer.Services.Roles;
 
 namespace SpeedlightMoney_App
 {
@@ -45,16 +36,16 @@ namespace SpeedlightMoney_App
                     builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
             });
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
             services.AddInfrastructure(Configuration, Environment);
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IRoleService, RoleService>();
 
             services.AddHttpContextAccessor();
 
             services.AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IDatabaseContext>());
+                .AddFluentValidation();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
