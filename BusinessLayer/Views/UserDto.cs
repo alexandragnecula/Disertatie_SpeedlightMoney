@@ -1,8 +1,9 @@
 ﻿using System;
 namespace BusinessLayer.Views
 {
-    public class AddUserDto
+    public class UserDto
     {
+        public long Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
 
@@ -23,6 +24,5 @@ namespace BusinessLayer.Views
         public string PhoneNumber { get; set; }
 
         public long RoleId { get; set; }
-
     }
 }

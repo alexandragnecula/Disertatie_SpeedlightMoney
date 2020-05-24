@@ -11,7 +11,7 @@ namespace DataLayer.DataContext.Configurations
         {
             builder.ToTable(nameof(LoanStatus));
             builder.Property(x => x.Deleted)
-                 .HasDefaultValue(true);
+                 .HasDefaultValue(false);
             builder.Property(x => x.LoanStatusName)
                 .IsRequired();
         }

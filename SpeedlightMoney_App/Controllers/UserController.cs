@@ -18,7 +18,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPost("adduser")]
-        public async Task<IActionResult> AddUser([FromBody] AddUserDto userToAdd)
+        public async Task<IActionResult> AddUser([FromBody] UserDto userToAdd)
         {
             var authResponse = await _identityService.RegisterAsync(userToAdd);
 
@@ -33,6 +33,25 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(new AuthSuccessResponse
             {
                 Token = authResponse.Token
+            });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
+        {
+            var authResponse = await _identityService.LoginAsync(loginUser);
+
+            if (!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessResponse
+            {
+                Token = authResponse.Token,
             });
         }
     }

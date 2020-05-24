@@ -21,7 +21,7 @@ namespace BusinessLayer.Services.Roles
             _context = context;
         }
 
-        public async Task<Result> AddRoleAsync(AddRoleDto roleToAdd)
+        public async Task<Result> AddRoleAsync(RoleDto roleToAdd)
         {
             var existingRole = await _roleManager.FindByNameAsync(roleToAdd.Name);
 

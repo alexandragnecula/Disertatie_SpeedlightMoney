@@ -18,7 +18,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPost("addrole")]
-        public async Task<IActionResult> AddUser([FromBody] AddRoleDto roleToAdd)
+        public async Task<IActionResult> AddUser([FromBody] RoleDto roleToAdd)
         {
             var result = await _roleService.AddRoleAsync(roleToAdd);
 

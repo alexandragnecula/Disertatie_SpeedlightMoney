@@ -9,6 +9,6 @@ namespace DataLayer.Shared
         public DateTime? DeletedOn { get; set; }
         public bool Deleted { get; set; }
         public long? LastModifiedBy { get; set; }
-        public DateTime LastModifiedOn { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
     }
 }

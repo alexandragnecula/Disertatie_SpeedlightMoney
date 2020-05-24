@@ -11,7 +11,7 @@ namespace DataLayer.DataContext.Configurations
         {
             builder.ToTable(nameof(Debt));
             builder.Property(x => x.Deleted)
-                 .HasDefaultValue(true);
+                 .HasDefaultValue(false);
 
             builder.HasOne(x => x.Loan)
                 .WithMany(x => x.Debts)

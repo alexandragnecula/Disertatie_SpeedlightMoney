@@ -15,7 +15,7 @@ namespace DataLayer.DataContext.Configurations
             builder.HasIndex(x => x.CurrencyName)
                 .IsUnique();
             builder.Property(x => x.Deleted)
-               .HasDefaultValue(true);
+               .HasDefaultValue(false);
         }
     }
 }

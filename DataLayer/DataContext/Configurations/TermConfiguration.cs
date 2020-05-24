@@ -11,7 +11,7 @@ namespace DataLayer.DataContext.Configurations
         {
             builder.ToTable(nameof(Term));
             builder.Property(x => x.Deleted)
-                 .HasDefaultValue(true);
+                 .HasDefaultValue(false);
         }
     }
 }

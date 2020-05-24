@@ -89,7 +89,7 @@ namespace BusinessLayer.Services.Users
             return user?.Id;
         }
 
-        public async Task<(Result, long UserId)> CreateUserSeedAsync(AddUserDto userToAdd)
+        public async Task<(Result, long UserId)> CreateUserSeedAsync(UserDto userToAdd)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -118,11 +118,6 @@ namespace BusinessLayer.Services.Users
                 };
 
                 var result = await _userManager.CreateAsync(user, userToAdd.Password);
-                //var existingRoles = new RoleList();
-                //if (existingRoles.Roles.Any(x => x == userToAdd.RoleName))
-                //{
-                //    await _userManager.AddToRoleAsync(user, userToAdd.RoleName);
-                //}
 
                 var role = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == userToAdd.RoleId);
                 if(role != null)
@@ -150,7 +145,7 @@ namespace BusinessLayer.Services.Users
             }
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(AddUserDto userToAdd)
+        public async Task<AuthenticationResult> RegisterAsync(UserDto userToAdd)
         {
             var existingUser = await _userManager.FindByEmailAsync(userToAdd.Email);
 

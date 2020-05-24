@@ -45,5 +45,9 @@
     <Folder Include="Common\Models\" />
     <Folder Include="Common\Models\Authentication\" />
     <Folder Include="Services\Roles\" />
+    <Folder Include="Common\Mappings\" />
+    <Folder Include="Services\Currencies\" />
+    <Folder Include="Common\Models\SelectItem\" />
+    <Folder Include="Services\Debts\" />
   </ItemGroup>
 </Project>

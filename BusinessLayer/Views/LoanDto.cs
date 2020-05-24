@@ -1,0 +1,18 @@
+﻿using System;
+namespace BusinessLayer.Views
+{
+    public class LoanDto
+    {
+        public long Id { get; set; }
+        public string Description { get; set; }
+        public double Amount { get; set; }
+        public DateTime BorrowDate { get; set; }
+        public DateTime ReturnDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public long BorrowerId { get; set; }
+        public long LenderId { get; set; }
+        public long CurrencyId { get; set; }
+        public long LoanStatusId { get; set; }
+        public long TermId { get; set; }
+    }
+}

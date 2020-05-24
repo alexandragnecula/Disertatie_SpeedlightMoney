@@ -13,6 +13,7 @@ using DataLayer;
 using SpeedlightMoney_App.Installers;
 using BusinessLayer.Services.Users;
 using BusinessLayer.Services.Roles;
+using BusinessLayer.Services.Currencies;
 
 namespace SpeedlightMoney_App
 {
@@ -41,6 +42,7 @@ namespace SpeedlightMoney_App
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
 
             services.AddHttpContextAccessor();
 

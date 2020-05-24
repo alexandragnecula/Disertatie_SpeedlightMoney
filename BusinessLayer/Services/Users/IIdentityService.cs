@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
+using DataLayer.Entities;
 
 namespace BusinessLayer.Services.Users
 {
@@ -15,8 +16,8 @@ namespace BusinessLayer.Services.Users
         Task<Result> AddToRoleAsync(long userId, string role);
         Task<bool> RoleExistsAsync(string role);
         Task<long?> GetUserIdAsync(string email);
-        //Task<AuthenticationResult> LoginAsync(LoginUserCommand loginUser);
-        Task<AuthenticationResult> RegisterAsync(AddUserDto userToAdd);
+        Task<AuthenticationResult> LoginAsync(LoginUserDto loginUser);
+        Task<AuthenticationResult> RegisterAsync(UserDto userToAdd);
         //Task<(Result, long UserId)> CreateUserSeedAsync(AddUserCommand userToAdd);
     }
 }

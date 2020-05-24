@@ -8,6 +8,6 @@ namespace BusinessLayer.Services.Roles
 {
     public interface IRoleService
     {
-        Task<Result> AddRoleAsync(AddRoleDto roleToAdd);
+        Task<Result> AddRoleAsync(RoleDto roleToAdd);
     }
 }
