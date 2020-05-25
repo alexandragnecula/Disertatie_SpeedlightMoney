@@ -14,6 +14,7 @@ using SpeedlightMoney_App.Installers;
 using BusinessLayer.Services.Users;
 using BusinessLayer.Services.Roles;
 using BusinessLayer.Services.Currencies;
+using BusinessLayer.Common.Mappings;
 
 namespace SpeedlightMoney_App
 {
@@ -39,6 +40,8 @@ namespace SpeedlightMoney_App
 
             services.AddInfrastructure(Configuration, Environment);
 
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
+
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -49,8 +52,7 @@ namespace SpeedlightMoney_App
             services.AddControllers()
                 .AddFluentValidation();
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+          
             services.InstallServicesInAssembly(Configuration);
         }
 

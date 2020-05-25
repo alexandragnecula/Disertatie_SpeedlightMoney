@@ -49,5 +49,11 @@
     <Folder Include="Services\Currencies\" />
     <Folder Include="Common\Models\SelectItem\" />
     <Folder Include="Services\Debts\" />
+    <Folder Include="Services\DebtStatuses\" />
+    <Folder Include="Services\Friends\" />
+    <Folder Include="Services\Loans\" />
+    <Folder Include="Services\LoanStatuses\" />
+    <Folder Include="Services\Terms\" />
+    <Folder Include="Services\Wallets\" />
   </ItemGroup>
 </Project>

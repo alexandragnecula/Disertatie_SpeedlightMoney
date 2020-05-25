@@ -1,7 +1,11 @@
 ﻿using System;
+using AutoMapper;
+using BusinessLayer.Common.Mappings;
+using DataLayer.Entities;
+
 namespace BusinessLayer.Views
 {
-    public class UserDto
+    public class UserDto : IMapFrom<ApplicationUser>
     {
         public long Id { get; set; }
         public string Email { get; set; }
@@ -23,6 +27,18 @@ namespace BusinessLayer.Views
         public double Salary { get; set; }
         public string PhoneNumber { get; set; }
 
+        //ROLE
         public long RoleId { get; set; }
+        public string RoleName { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<ApplicationUser, UserDto>()           
+                .ForMember(d => d.RoleName,
+                    opt => opt.MapFrom(s =>
+                        s.Role != null
+                            ? s.Role.Name
+                            : string.Empty));
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace BusinessLayer.Services.Debts
         Task<Result> DeleteDebt(DebtDto debtToDelete);
         Task<Result> RestoreDebt(DebtDto debtToRestore);
         Task<DebtDto> GetDebtById(long id);
-        Task<IList<DebtDto>> GetAllCurrencies();
+        Task<IList<DebtDto>> GetAllDebts();
         Task<SelectItemVm> GetAllAsSelect(DebtDto debtDto);
     }
 }

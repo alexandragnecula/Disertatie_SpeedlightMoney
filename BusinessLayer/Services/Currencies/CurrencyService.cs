@@ -40,7 +40,6 @@ namespace BusinessLayer.Services.Currencies
 
         public async Task<Result> UpdateCurrency(CurrencyDto currencyToUpdate)
         {
-            var test = await _context.Currencies.ToListAsync();
             var entity = await _context.Currencies
                .FirstOrDefaultAsync(x => x.Id == currencyToUpdate.Id && !x.Deleted);
 

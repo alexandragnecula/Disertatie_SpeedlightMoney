@@ -100,7 +100,7 @@ namespace BusinessLayer.Services.Debts
             return entity == null ? null : _mapper.Map<DebtDto>(entity);
         }
 
-        public async Task<IList<DebtDto>> GetAllCurrencies()
+        public async Task<IList<DebtDto>> GetAllDebts()
         {
             List<DebtDto> debts = await _context.Debts
                  .OrderByDescending(x => x.CreatedOn)

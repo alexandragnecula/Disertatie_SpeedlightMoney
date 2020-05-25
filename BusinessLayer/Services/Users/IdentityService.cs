@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BusinessLayer.Common.Constants;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;

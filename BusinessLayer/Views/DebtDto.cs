@@ -31,14 +31,14 @@ namespace BusinessLayer.Views
                     opt => opt.MapFrom(s => s.Loan.BorrowDate))
                 .ForMember(d => d.ReturnDate,
                     opt => opt.MapFrom(s => s.Loan.ReturnDate))
-                   .ForMember(d => d.DueDate,
+                .ForMember(d => d.DueDate,
                     opt => opt.MapFrom(s => s.Loan.DueDate))
-                 .ForMember(d => d.BorrowerName,
+                .ForMember(d => d.BorrowerName,
                     opt => opt.MapFrom(s =>
                         s.Loan.Borrower != null
                             ? s.Loan.Borrower.GetFullName()
                             : string.Empty))
-                 .ForMember(d => d.LenderName,
+                .ForMember(d => d.LenderName,
                     opt => opt.MapFrom(s =>
                         s.Loan.Lender != null
                             ? s.Loan.Lender.GetFullName()
