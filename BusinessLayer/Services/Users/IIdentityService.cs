@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.Entities;
@@ -18,6 +20,10 @@ namespace BusinessLayer.Services.Users
         Task<long?> GetUserIdAsync(string email);
         Task<AuthenticationResult> LoginAsync(LoginUserDto loginUser);
         Task<AuthenticationResult> RegisterAsync(UserDto userToAdd);
-        //Task<(Result, long UserId)> CreateUserSeedAsync(AddUserCommand userToAdd);
+        Task<(Result, long UserId)> CreateUserSeedAsync(UserDto userToAdd);
+        Task<Result> UpdateUser(UserDto userToUpdate);
+        Task<UserDto> GetUserById(long id);
+        Task<IList<UserDto>> GetAllUsers();
+        Task<SelectItemVm> GetAllAsSelect(UserDto userDto);
     }
 }

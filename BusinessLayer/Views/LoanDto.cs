@@ -32,6 +32,8 @@ namespace BusinessLayer.Views
         public long TermId { get; set; }
         public string TermName { get; set; }
 
+        public bool Deleted { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Loan, LoanDto>()

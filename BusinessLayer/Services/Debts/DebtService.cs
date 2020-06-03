@@ -29,7 +29,7 @@ namespace BusinessLayer.Services.Debts
             var entity = new Debt
             {
                 LoanId = debtToAdd.LoanId,
-                DebtStatusId = debtToAdd.DebtStatusId,
+                DebtStatusId = debtToAdd.DebtStatusId
             };
 
             await _context.Debts.AddAsync(entity);

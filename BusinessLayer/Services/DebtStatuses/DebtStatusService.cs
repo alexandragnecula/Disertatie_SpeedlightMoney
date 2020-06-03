@@ -28,7 +28,7 @@ namespace BusinessLayer.Services.DebtStatuses
         {
             var entity = new DebtStatus
             {
-                DebtStatusName = debtStatusToAdd.DebtStatusName
+                DebtStatusName = debtStatusToAdd.DebtStatusName,
             };
 
             await _context.DebtStatuses.AddAsync(entity);

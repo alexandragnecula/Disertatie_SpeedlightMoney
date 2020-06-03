@@ -5,5 +5,6 @@ namespace BusinessLayer.Views
     {
         public long Id { get; set; }
         public string LoanStatusName { get; set; }
+        public bool Deleted { get; set; }
     }
 }

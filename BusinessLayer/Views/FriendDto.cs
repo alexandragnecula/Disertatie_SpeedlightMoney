@@ -18,6 +18,8 @@ namespace BusinessLayer.Views
         public long UserFriendId { get; set; }
         public string UserFriendName { get; set; }
 
+        public bool Deleted { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Friend, FriendDto>()

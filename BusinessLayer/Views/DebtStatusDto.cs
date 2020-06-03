@@ -8,5 +8,6 @@ namespace BusinessLayer.Views
     {
         public long Id { get; set; }
         public string DebtStatusName { get; set; }
+        public bool Deleted { get; set; }
     }
 }

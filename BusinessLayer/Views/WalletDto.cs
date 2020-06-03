@@ -7,5 +7,6 @@ namespace BusinessLayer.Views
         public double TotalAmount { get; set; }
         public long UserId { get; set; }
         public long CurrencyId { get; set; }
+        public bool Deleted { get; set; }
     }
 }

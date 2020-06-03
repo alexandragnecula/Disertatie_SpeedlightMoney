@@ -5,6 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
@@ -23,16 +26,19 @@ namespace BusinessLayer.Services.Users
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DatabaseContext _context;
         private readonly JwtSettings _jwtSettings;
+        private readonly IMapper _mapper;
 
         public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
             IHttpContextAccessor httpContextAccessor,
-            DatabaseContext context, JwtSettings jwtSettings)
+            DatabaseContext context, JwtSettings jwtSettings,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
             _jwtSettings = jwtSettings;
+            _mapper = mapper;
         }
 
         public async Task<string> GetUserNameAsync(long userId)
@@ -297,6 +303,69 @@ namespace BusinessLayer.Services.Users
                 Success = true,
                 Token = tokenHandler.WriteToken(token)
             };
+        }
+
+        public async Task<Result> UpdateUser(UserDto userToUpdate)
+        {
+            var entity = await _context.Users.FindAsync(userToUpdate.Id);
+
+            if (entity == null)
+            {
+                return Result.Failure(new List<string> { "No valid user found" });
+            }
+
+            entity.Email = userToUpdate.Email;
+            entity.FirstName = userToUpdate.FirstName;
+            entity.LastName = userToUpdate.LastName;
+            entity.Birthdate = userToUpdate.Birthdate;
+            entity.CNP = userToUpdate.CNP;
+            entity.Country = userToUpdate.Country;
+            entity.County = userToUpdate.County;
+            entity.City = userToUpdate.City;
+            entity.StreetName = userToUpdate.StreetName;
+            entity.StreetNumber = userToUpdate.StreetNumber;
+            entity.CurrentStatus = userToUpdate.CurrentStatus;
+            entity.CardNumber = userToUpdate.CardNumber;
+            entity.Cvv = userToUpdate.Cvv;
+            entity.ExpireDate = userToUpdate.ExpireDate;
+            entity.Salary = userToUpdate.Salary;
+            entity.PhoneNumber = userToUpdate.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success("User update was successful");
+        }
+
+        public async Task<UserDto> GetUserById(long id)
+        {
+            var entity = await _context.Users
+                .FindAsync(id);
+
+            return entity == null ? null : _mapper.Map<UserDto>(entity);
+        }
+
+        public async Task<IList<UserDto>> GetAllUsers()
+        {
+            List<UserDto> users = await _context.Users
+               .OrderByDescending(x => x.Email)
+               .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+               .ToListAsync();
+
+            return users;
+        }
+
+        public async Task<SelectItemVm> GetAllAsSelect(UserDto userDto)
+        {
+            var vm = new SelectItemVm
+            {
+                SelectItems = await _context.Users
+                    //de verificat ca e corect IsActive.Value
+                    .Where(x => x.IsActive.Value)
+                    .Select(x => new SelectItemDto { Label = x.GetFullName(), Value = x.Id.ToString() })
+                    .ToListAsync()
+            };
+
+            return vm;
         }
     }
 }

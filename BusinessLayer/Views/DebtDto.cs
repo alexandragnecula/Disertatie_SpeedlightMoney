@@ -22,6 +22,8 @@ namespace BusinessLayer.Views
         public long DebtStatusId { get; set; }
         public string DebtStatusName { get; set; }
 
+        public bool Deleted { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Debt, DebtDto>()

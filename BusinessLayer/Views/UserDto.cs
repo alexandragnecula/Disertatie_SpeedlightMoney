@@ -26,6 +26,7 @@ namespace BusinessLayer.Views
         public DateTime ExpireDate { get; set; }
         public double Salary { get; set; }
         public string PhoneNumber { get; set; }
+        public bool? IsActive { get; set; }
 
         //ROLE
         public long RoleId { get; set; }
