@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
         this.loginForm = new FormGroup({
             email: new FormControl('', [Validators.required]),
             password: new FormControl('', [Validators.required])
-        })
+        });
     }
     login() {
         this.isLoading = true;
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
             }, error => {
                 this.isLoading = false;
                 this.uiService.showErrorSnackbar(error, null, 3000);
-            })
+            });
         } else {
             this.isLoading = false;
             this.uiService.showErrorSnackbar('Login form is not valid', null, 3000);

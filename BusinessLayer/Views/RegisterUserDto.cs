@@ -1,11 +1,10 @@
 ﻿using System;
-using AutoMapper;
 using BusinessLayer.Common.Mappings;
 using DataLayer.Entities;
 
 namespace BusinessLayer.Views
 {
-    public class UserDto : IMapFrom<ApplicationUser>
+    public class RegisterUserDto : IMapFrom<ApplicationUser>
     {
         public long Id { get; set; }
         public string Email { get; set; }
@@ -30,6 +29,9 @@ namespace BusinessLayer.Views
 
         //ROLE
         public long RoleId { get; set; }
-        
+
+        //WALLET
+        public double TotalAmount { get; set; }
+        public long CurrencyId { get; set; }
     }
 }

@@ -22,12 +22,12 @@ namespace SpeedlightMoney_App.Controllers
             _walletService = walletService;
         }
 
-        [HttpPost("addcurrency")]
+        [HttpPost("addwallet")]
         public async Task<IActionResult> AddWallet([FromBody] WalletDto walletToAdd)
         {
             if (walletToAdd.CurrencyId == 0)
             {
-                return BadRequest("The currency is mandatory!");
+                return BadRequest("The wallet is mandatory!");
             }
             var result = await _walletService.AddWallet(walletToAdd);
 
@@ -44,7 +44,7 @@ namespace SpeedlightMoney_App.Controllers
         {
             if (walletToUpdate.CurrencyId == 0)
             {
-                return BadRequest("The currency is mandatory!");
+                return BadRequest("The wallet is mandatory!");
             }
 
             var result = await _walletService.UpdateWallet(walletToUpdate);

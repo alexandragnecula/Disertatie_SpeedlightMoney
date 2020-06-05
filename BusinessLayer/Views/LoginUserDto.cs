@@ -1,4 +1,7 @@
 ﻿using System;
+using BusinessLayer.Common.Mappings;
+using DataLayer.Entities;
+
 namespace BusinessLayer.Views
 {
     public class LoginUserDto

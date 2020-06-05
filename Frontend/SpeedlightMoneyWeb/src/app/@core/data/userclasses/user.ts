@@ -8,7 +8,7 @@ export class User {
     email: string;
     firstName: string;
     lastName: string;
-    birthDate: Date;
+    birthdate: Date;
     cnp: string;
     country: string;
     county: string;
@@ -33,7 +33,7 @@ export class UserLookup {
     id: number;
     email: string;
     name: string;
-    birthDate: Date;
+    birthdate: Date;
     cnp: string;
     country: string;
     county: string;
@@ -59,7 +59,7 @@ export class AddUserCommand {
 
     firstName: string;
     lastName: string;
-    birthDate: Date;
+    birthdate: Date;
     cnp: string;
     country: string;
     county: string;
@@ -72,6 +72,9 @@ export class AddUserCommand {
     expireDate: Date;
     salary: number;
     phoneNumber: string;
+
+    totalAmount: number;
+    currencyId: number;
 }
 
 export class UpdateUserCommand {
@@ -81,11 +84,11 @@ export class UpdateUserCommand {
 
     firstName: string;
     lastName: string;
-    birthDate: Date;
+    birthdate: Date;
     cnp: string;
     country: string;
     county: string;
-    city: number;
+    city: string;
     streetName: string;
     streetNumber: string;
     currentStatus: string;

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BusinessLayer.Common.Models.SelectItem;
+using BusinessLayer.Services.Currencies;
+using BusinessLayer.Services.Wallets;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
@@ -27,11 +29,12 @@ namespace BusinessLayer.Services.Users
         private readonly DatabaseContext _context;
         private readonly JwtSettings _jwtSettings;
         private readonly IMapper _mapper;
+        private readonly IWalletService _walletService;
 
         public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
             IHttpContextAccessor httpContextAccessor,
             DatabaseContext context, JwtSettings jwtSettings,
-            IMapper mapper)
+            IMapper mapper, IWalletService walletService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -39,6 +42,7 @@ namespace BusinessLayer.Services.Users
             _context = context;
             _jwtSettings = jwtSettings;
             _mapper = mapper;
+            _walletService = walletService;
         }
 
         public async Task<string> GetUserNameAsync(long userId)
@@ -180,7 +184,7 @@ namespace BusinessLayer.Services.Users
                     StreetName = userToAdd.StreetName,
                     StreetNumber = userToAdd.StreetNumber,
                     CurrentStatus = userToAdd.CurrentStatus,
-                    CardNumber = userToAdd.CurrentStatus,
+                    CardNumber = userToAdd.CardNumber,
                     Cvv = userToAdd.Cvv,
                     ExpireDate = userToAdd.ExpireDate,
                     Salary = userToAdd.Salary,
@@ -188,7 +192,7 @@ namespace BusinessLayer.Services.Users
                     IsActive = true
                 };
 
-                var result = await _userManager.CreateAsync(user, userToAdd.Password);           
+                var result = await _userManager.CreateAsync(user, userToAdd.Password);
 
                 if (!result.Succeeded)
                 {
@@ -360,12 +364,117 @@ namespace BusinessLayer.Services.Users
             {
                 SelectItems = await _context.Users
                     //de verificat ca e corect IsActive.Value
-                    .Where(x => x.IsActive.Value)
+                    .Where(x => x.IsActive == true)
                     .Select(x => new SelectItemDto { Label = x.GetFullName(), Value = x.Id.ToString() })
                     .ToListAsync()
             };
 
             return vm;
+        }
+
+        public async Task<AuthenticationResult> RegisterAsyncWithWallets(RegisterUserDto userToAdd)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(userToAdd.Email);
+
+            if (existingUser != null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User with this email address already exists" }
+                };
+            }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = userToAdd.Email,
+                    Email = userToAdd.Email,
+
+                    FirstName = userToAdd.FirstName,
+                    LastName = userToAdd.LastName,
+                    Birthdate = userToAdd.Birthdate,
+                    CNP = userToAdd.CNP,
+                    Country = userToAdd.Country,
+                    County = userToAdd.County,
+                    City = userToAdd.City,
+                    StreetName = userToAdd.StreetName,
+                    StreetNumber = userToAdd.StreetNumber,
+                    CurrentStatus = userToAdd.CurrentStatus,
+                    CardNumber = userToAdd.CardNumber,
+                    Cvv = userToAdd.Cvv,
+                    ExpireDate = userToAdd.ExpireDate,
+                    Salary = userToAdd.Salary,
+                    PhoneNumber = userToAdd.PhoneNumber,
+                    IsActive = true
+                };
+
+                var result = await _userManager.CreateAsync(user, userToAdd.Password);
+
+                if (!result.Succeeded)
+                {
+                    return new AuthenticationResult
+                    {
+                        Errors = result.Errors.Select(x => x.Description)
+                    };
+                }
+
+                var role = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == userToAdd.RoleId);
+                if (role != null)
+                {
+                    await _userManager.AddToRoleAsync(user, role.Name);
+                }
+                else
+                {
+                    return new AuthenticationResult
+                    {
+                        Errors = new List<string> { "The role doesn't exist!" }
+                    };
+                }
+
+                var wallet = new Wallet
+                {
+                    TotalAmount = userToAdd.TotalAmount,
+                    UserId = user.Id,
+                    CurrencyId = userToAdd.CurrencyId
+                };
+               
+                if(wallet.CurrencyId == 1) {
+                    var walletEUR = new Wallet
+                    {
+                        TotalAmount = 0.0,
+                        UserId = user.Id,
+                        CurrencyId = 2
+                    };
+                    await _context.Wallets.AddAsync(walletEUR);
+                }
+                else if(wallet.CurrencyId == 2)
+                {
+                    var walletRON = new Wallet
+                    {
+                        TotalAmount = 0.0,
+                        UserId = user.Id,
+                        CurrencyId = 1
+                    };
+                    await _context.Wallets.AddAsync(walletRON);
+                }
+
+                await _context.Wallets.AddAsync(wallet);
+
+                await _context.SaveChangesAsync();
+
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                await transaction.CommitAsync();
+                return await GenerateAuthenticationResultForUserAsync(user);
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+
+                throw new Exception(e.ToString());
+            }
         }
     }
 }

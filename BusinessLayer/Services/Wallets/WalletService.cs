@@ -9,6 +9,7 @@ using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
+using DataLayer.SharedInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Wallets
@@ -17,11 +18,13 @@ namespace BusinessLayer.Services.Wallets
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public WalletService(DatabaseContext context, IMapper mapper)
+        public WalletService(DatabaseContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result> AddWallet(WalletDto walletToAdd)
@@ -112,6 +115,24 @@ namespace BusinessLayer.Services.Wallets
             return wallets;
         }
 
+        public async Task<IList<WalletDto>> GetWalletsForCurrentUser()
+        {
+           
+            if(_currentUserService.UserId == null)
+            {
+                //de verificat castul, not ok
+                return (IList<WalletDto>)Result.Failure(new List<string> { "No valid current user found" });
+            }
+
+            List<WalletDto> walletsForCurrentUser = await _context.Wallets
+                .Where(x => x.UserId == _currentUserService.UserId)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<WalletDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return walletsForCurrentUser;
+        }
+
         public async Task<SelectItemVm> GetAllAsSelect(WalletDto walletDto)
         {
             var vm = new SelectItemVm
@@ -123,6 +144,6 @@ namespace BusinessLayer.Services.Wallets
             };
 
             return vm;
-        }     
+        }
     }
 }

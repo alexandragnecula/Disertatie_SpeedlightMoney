@@ -15,6 +15,7 @@ namespace BusinessLayer.Services.Wallets
         Task<Result> RestoreWallet(WalletDto walletToRestore);
         Task<WalletDto> GetWalletById(long id);
         Task<IList<WalletDto>> GetAllWallets();
+        Task<IList<WalletDto>> GetWalletsForCurrentUser();
         Task<SelectItemVm> GetAllAsSelect(WalletDto walletDto);
     }
 }

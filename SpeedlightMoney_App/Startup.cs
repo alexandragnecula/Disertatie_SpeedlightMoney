@@ -15,6 +15,13 @@ using BusinessLayer.Services.Users;
 using BusinessLayer.Services.Roles;
 using BusinessLayer.Services.Currencies;
 using BusinessLayer.Common.Mappings;
+using BusinessLayer.Services.Debts;
+using BusinessLayer.Services.DebtStatuses;
+using BusinessLayer.Services.Friends;
+using BusinessLayer.Services.Loans;
+using BusinessLayer.Services.LoanStatuses;
+using BusinessLayer.Services.Terms;
+using BusinessLayer.Services.Wallets;
 
 namespace SpeedlightMoney_App
 {
@@ -46,6 +53,13 @@ namespace SpeedlightMoney_App
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICurrencyService, CurrencyService>();
+            services.AddScoped<IDebtService, DebtService>();
+            services.AddScoped<IDebtStatusService, DebtStatusService>();
+            services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<ILoanService, LoanService>();
+            services.AddScoped<ILoanStatusService, LoanStatusService>();
+            services.AddScoped<ITermService, TermService>();
+            services.AddScoped<IWalletService, WalletService>();
 
             services.AddHttpContextAccessor();
 

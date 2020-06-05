@@ -15,11 +15,15 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { RoleGuardService } from './auth/role-guard.service';
 import { UIService } from './shared/ui.service';
 import { ErrorService } from './shared/error.service';
+import { NavbarComponent } from './navigation/navbar/navbar.component';
+import { SidebarComponent } from './navigation/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
+    NavbarComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

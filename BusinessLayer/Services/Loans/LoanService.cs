@@ -9,6 +9,7 @@ using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
+using DataLayer.SharedInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Loans
@@ -17,11 +18,13 @@ namespace BusinessLayer.Services.Loans
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public LoanService(DatabaseContext context, IMapper mapper)
+        public LoanService(DatabaseContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result> AddLoan(LoanDto loanToAdd)

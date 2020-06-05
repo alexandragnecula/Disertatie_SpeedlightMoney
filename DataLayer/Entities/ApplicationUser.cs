@@ -42,8 +42,6 @@ namespace DataLayer.Entities
         public ICollection<Friend> Users { get; private set; }
         public ICollection<Friend> UserFriends { get; private set; }
 
-        public ApplicationRole Role { get; set; }
-
         public string GetFullName()
         {
             return FirstName + " " + LastName;
