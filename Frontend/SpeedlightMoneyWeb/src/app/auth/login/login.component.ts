@@ -1,25 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UserService } from 'src/app/@core/services/user.service';
 import { LoginUser, UserData } from 'src/app/@core/data/userclasses/user';
 import { AuthSuccessResponse, AuthFailedResponse } from 'src/app/@core/data/common/authresponse';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UIService } from 'src/app/shared/ui.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-login',
-    templateUrl: 'login.component.html',
-    styleUrls: ['login.component.scss']
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
     isLoading = false;
+    authChange = true;
+    authChangeSubscription: Subscription;
     constructor(private userData: UserData, private authService: AuthService, private router: Router, private uiService: UIService) {}
 
-    ngOnInit() {
-        this.initForm();
+    ngOnInit(): void {
+        this.authChangeSubscription = this.authService.authChange.subscribe((authChange: boolean) => {
+            if (authChange === true) {
+                this.router.navigate(['']);
+            } else {
+                this.authChange = false;
+                this.initForm();
+            }
+        });
      }
 
     initForm() {
@@ -43,10 +54,14 @@ export class LoginComponent implements OnInit {
             }, error => {
                 this.isLoading = false;
                 this.uiService.showErrorSnackbar(error, null, 3000);
-            });
+            })
         } else {
             this.isLoading = false;
             this.uiService.showErrorSnackbar('Login form is not valid', null, 3000);
         }
+    }
+
+    ngOnDestroy(): void {
+        this.authChangeSubscription.unsubscribe();
     }
 }

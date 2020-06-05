@@ -12,7 +12,6 @@ namespace SpeedlightMoney_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
     public class CurrencyController : ControllerBase
     {
         ICurrencyService _currencyService;
@@ -23,6 +22,7 @@ namespace SpeedlightMoney_App.Controllers
             _currencyService = currencyService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addcurrency")]
         public async Task<IActionResult> AddCurrency([FromBody] CurrencyDto currencyToAdd)
         {
@@ -58,6 +58,7 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{currencyId}")]
         public async Task<ActionResult<Result>> DeleteCurrency(long currencyId)
         {
@@ -71,6 +72,7 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("restore")]
         public async Task<ActionResult<Result>> RestoreCurrency(long currencyId)
         {
@@ -83,7 +85,7 @@ namespace SpeedlightMoney_App.Controllers
 
             return Ok(result);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<CurrencyDto>> GetCurrencyById(long id)
         {
@@ -97,6 +99,7 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(vm);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<CurrencyDto>> GetAllCurrencies()
         {

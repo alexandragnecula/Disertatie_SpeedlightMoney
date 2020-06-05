@@ -3,9 +3,15 @@ import { CommonModule } from '@angular/common';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { UserData } from './data/userclasses/user';
 import { UserService } from './services/user.service';
+import { CurrencyData } from './data/currency';
+import { CurrencyService } from './services/currency.service';
+import { RoleData } from './data/role';
+import { RoleService } from './services/role.service';
 
 const DATA_SERVICES = [
-  { provide: UserData, useClass: UserService }
+  { provide: UserData, useClass: UserService },
+  {provide: CurrencyData, useClass: CurrencyService},
+  {provide: RoleData, useClass: RoleService}
 ];
 
 export const NB_CORE_PROVIDERS = [

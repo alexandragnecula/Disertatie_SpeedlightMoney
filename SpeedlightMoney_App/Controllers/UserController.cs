@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using BusinessLayer.Common.Models.SelectItem;
 using Newtonsoft.Json.Linq;
+using BusinessLayer.Common.Constants;
 
 namespace SpeedlightMoney_App.Controllers
 {
@@ -129,5 +130,12 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(vm);
         }
 
+        [HttpGet("currentstatusesdropdown")]
+        public async Task<ActionResult<SelectItemVm>> GetCurrentStatusesDropdown()
+        {
+            var vm = await _identityService.GetCurrentStatusesAsSelect();
+
+            return Ok(vm);
+        }
     }
 }

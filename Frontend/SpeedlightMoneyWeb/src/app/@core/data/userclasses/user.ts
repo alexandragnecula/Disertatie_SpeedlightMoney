@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AuthSuccessResponse } from '../common/authresponse';
 import { CurrentUser } from './currentuser';
 import { Result } from '../common/result';
-import { SelectItemsList } from '../common/selectitem';
+import { SelectItemsList} from '../common/selectitem';
 
 export class User {
     email: string;
@@ -75,6 +75,7 @@ export class AddUserCommand {
 
     totalAmount: number;
     currencyId: number;
+    roleId: number;
 }
 
 export class UpdateUserCommand {
@@ -102,11 +103,13 @@ export class UpdateUserCommand {
 
 export abstract class UserData {
     abstract AddUser(addUserCommand: User): Observable<AuthSuccessResponse>;
+    abstract AddUserWithWallets(addUserCommand: AddUserCommand): Observable<AuthSuccessResponse>;
     abstract LoginUser(loginUserCommand: LoginUser): Observable<AuthSuccessResponse>;
     abstract GetCurrentUser(): Observable<CurrentUser>;
 
     abstract getUsers(): Observable<UserList>;
     abstract getUser(id: number): Observable<User>;
     abstract getUsersDropdown(): Observable<SelectItemsList>;
+    abstract getCurrentStatusesDropdown(): Observable<SelectItemsList>;
     abstract updateUser(user: UpdateUserCommand): Observable<Result>;
 }

@@ -1,71 +1,64 @@
-  <section>
+  <section *ngIf="!authChange">
+    <h1  class="registrationFormTitle">REGISTER</h1>  
     <form
       fxLayout="column"
       fxLayoutAlign="center center"
       fxLayoutGap="10px"
       [formGroup]="registerForm"
-      (ngSubmit)="onSubmit()">
-
-     
+      (ngSubmit)="onSubmit()"
+      class="register-form">
+              
+          <mat-card class="personalInformation">
+            <h2 class="registrationFormHeaders">PERSONAL INFORMATIONS</h2>  
             <mat-form-field>
               <input
-                type="email"
-                matInput
-                placeholder="Your email"
-                formControlName="email"
-                required>
+                  type="email"
+                  matInput
+                  placeholder="Your email"
+                  formControlName="email"
+                  required>
               <mat-hint>Please enter a valid email.</mat-hint>
-              <mat-error>Invalid or missing email. Example: Test@test.com</mat-error>
+               <mat-error>Invalid or missing email. Example: Test@test.com</mat-error>
             </mat-form-field>
-            
+              
             <mat-form-field style="padding-bottom: 10px;">
               <input
-                type="password"
-                matInput
-                placeholder="Your password"
-                formControlName="password"
-                hintLabel="Should be at least 8 characters long and contain at least one lowercase letter, uppercase letter and special characters"
-                required>
+                  type="password"
+                  matInput
+                  placeholder="Your password"
+                  formControlName="password"
+                  hintLabel="Should be at least 8 characters long and contain at least one lowercase letter, uppercase letter and special characters"
+                  required>
               <mat-hint>Please enter a valid password with 8 characters and include special, lowercase, uppercase and numbers.</mat-hint>
               <mat-error>Please enter a valid password with 8 characters and include special, lowercase, uppercase and numbers.</mat-error>
             </mat-form-field>
-      
+
             <mat-form-field>
               <input
-                matInput
-                placeholder="First Name"
-                formControlName="firstName"
-                required>
+                  matInput
+                  placeholder="First Name"
+                  formControlName="firstName"
+                  required>
               <mat-hint>Please enter a first name.</mat-hint>
               <mat-error>First name is required!</mat-error>
             </mat-form-field>
-      
+        
             <mat-form-field>
               <input
-                matInput
-                placeholder="Last Name"
-                formControlName="lastName"
-                required>
+                  matInput
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                  required>
               <mat-hint>Please enter a last name.</mat-hint>
               <mat-error>Last name is required!</mat-error>
-            </mat-form-field>
+            </mat-form-field>        
       
             <mat-form-field>
               <input matInput placeholder="Birthdate" [matDatepicker]="birthdatePicker" formControlName="birthdate" required>
               <mat-datepicker-toggle matSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
               <mat-datepicker #birthdatePicker></mat-datepicker>
             </mat-form-field>
-      
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="CNP"
-                formControlName="cnp"
-                required>
-              <mat-hint>Please enter a valid CNP. Example: 1991111121123</mat-hint>
-              <mat-error>Invalid or missing CNP. Example: 1991111121123</mat-error>
-            </mat-form-field>
-      
+
             <mat-form-field>
               <input
                 matInput
@@ -116,81 +109,127 @@
             <mat-form-field>
               <input
                 matInput
+                placeholder="CNP"
+                formControlName="cnp"
+                required>
+              <mat-hint>Please enter a valid CNP. Example: 1991111121123</mat-hint>
+              <mat-error>Invalid or missing CNP. Example: 1991111121123</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field>
+              <input
+                matInput
                 placeholder="Current status"
                 formControlName="currentStatus"
                 required>
               <mat-hint>Please enter a current status.</mat-hint>
               <mat-error>Current status is required!</mat-error>
+            </mat-form-field> -->
+
+            <mat-form-field>
+              <mat-select placeholder="Choose current status" formControlName="currentStatus" required>
+                <mat-option
+                  *ngFor="let currentStatus of currentStatusSelectList.selectItems"
+                  [value]="currentStatus.value">
+                  {{ currentStatus.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Please choose a current status</mat-hint>
+              <mat-error>Please choose a current status</mat-error>
             </mat-form-field>
 
-          <h2>CARD INFORMATION</h2>  
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="Card Number"
-              formControlName="cardNumber"
-              required>
-            <mat-hint>Please enter a valid Card Number. Example: 1991111121123</mat-hint>
-            <mat-error>Invalid or missing Card Number. Example: 1991111121123</mat-error>
-          </mat-form-field>
-    
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="CVV"
-              formControlName="cvv"
-              required>
-            <mat-hint>Please enter a CVV.</mat-hint>
-            <mat-error>CVV is required!</mat-error>
-          </mat-form-field>
-    
-          <mat-form-field>
-            <input matInput placeholder="Expire date" [matDatepicker]="expireDatePicker" formControlName="expireDate" required>
-            <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #expireDatePicker></mat-datepicker>
-          </mat-form-field>
-    
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="Net salary"
-              formControlName="salary"
-              required>
-            <mat-hint>Please enter a salary.</mat-hint>
-            <mat-error>Salary is required!</mat-error>
-          </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="number" min="0" value="0" step="0.01"
+                placeholder="Net salary"
+                formControlName="salary"             
+                required>
+              <mat-hint>Please enter a salary.</mat-hint>
+              <mat-error>Salary is required!</mat-error>
+            </mat-form-field>
 
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="Phone Number"
-              formControlName="phoneNumber"
-              required>
-            <mat-hint>Please enter a valid phone number. Example: 0743123123</mat-hint>
-            <mat-error>Invalid or missing phone number. Example: 0743123123</mat-error>
-          </mat-form-field>
-    
-          <mat-form-field>
-            <input
-              matInput
-              placeholder= "Amount"
-              formControlName="totalAmount"
-              required>
-            <mat-hint>Please enter an amount.</mat-hint>
-            <mat-error>Amount is required!</mat-error>
-          </mat-form-field>
-    
-          <!-- <mat-form-field>
-            <mat-select placeholder="Choose Currency" formControlName="currencyId" (selectionChange)="getCurrenciesSelect($event.value)" required>
-              <mat-option
-                *ngFor="let currency of currencySelectList.selectItems"
-                [value]="currency.value">
-                {{ country.label }}
-              </mat-option>
-            </mat-select>
-            <mat-hint>Please choose a currency</mat-hint>
-            <mat-error>Please choose a currency</mat-error>
-          </mat-form-field> -->
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Phone Number"
+                formControlName="phoneNumber"
+                required>
+              <mat-hint>Please enter a valid phone number. Example: 0743123123</mat-hint>
+              <mat-error>Invalid or missing phone number. Example: 0743123123</mat-error>
+            </mat-form-field>
+          </mat-card>
+
+          <mat-card class="cardInformation">
+            <h2 class="registrationFormHeaders">CARD INFORMATIONS</h2>  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Card Number"
+                formControlName="cardNumber"
+                required>
+              <mat-hint>Please enter a valid Card Number. Example: 1991111121123</mat-hint>
+              <mat-error>Invalid or missing Card Number. Example: 1991111121123</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="CVV"
+                formControlName="cvv"
+                required>
+              <mat-hint>Please enter a CVV.</mat-hint>
+              <mat-error>CVV is required!</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input matInput placeholder="Expire date" [matDatepicker]="expireDatePicker" formControlName="expireDate" required>
+              <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #expireDatePicker></mat-datepicker>
+            </mat-form-field>
+          </mat-card>
+
+          <mat-card class="subscriptionInformation">
+            <h2 class="registrationFormHeaders">SUBSCRIPTION TYPE</h2>  
+            <mat-form-field>
+              <mat-select placeholder="Choose subscription" formControlName="roleId" required>
+                <mat-option
+                  *ngFor="let role of roleSelectList.selectItems"
+                  [value]="role.value">
+                  {{ role.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Please choose a subscription</mat-hint>
+              <mat-error>Please choose a subscription</mat-error>
+            </mat-form-field>
+          </mat-card>
+
+          <mat-card class="walletInformation">
+            <h2 class="registrationFormHeaders">CHARGE YOUR WALLET</h2>  
+      
+            <mat-form-field>
+              <mat-select placeholder="Choose Currency" formControlName="currencyId" required>
+                <mat-option
+                  *ngFor="let currency of currencySelectList.selectItems"
+                  [value]="currency.value">
+                  {{ currency.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Please choose a currency</mat-hint>
+              <mat-error>Please choose a currency</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                matInput
+                type="number" min="0" value="0" step="0.01"
+                placeholder= "Amount"
+                formControlName="totalAmount"
+                required>
+              <mat-hint>Please enter an amount.</mat-hint>
+              <mat-error>Amount is required!</mat-error>
+            </mat-form-field>
+          </mat-card>
       <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" [disabled]="registerForm.invalid">Submit</button>
       <mat-spinner *ngIf="isLoading"></mat-spinner>
     </form>

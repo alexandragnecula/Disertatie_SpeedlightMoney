@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Roles
 {
@@ -44,5 +47,18 @@ namespace BusinessLayer.Services.Roles
 
                 return (result.ToApplicationResult());
          }
+
+        public async Task<SelectItemVm> GetAllAsSelect(RoleDto roleDto)
+        {
+            var vm = new SelectItemVm
+            {
+                SelectItems = await _context.Roles
+                    .Where(x => x.Name != "Admin")
+                    .Select(x => new SelectItemDto { Label = x.NormalizedName, Value = x.Id.ToString() })
+                    .ToListAsync()
+            };
+
+            return vm;
+        }
     }
 }

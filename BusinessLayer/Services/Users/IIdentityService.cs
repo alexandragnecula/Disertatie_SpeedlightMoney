@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BusinessLayer.Common.Constants;
 using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
@@ -26,5 +27,6 @@ namespace BusinessLayer.Services.Users
         Task<IList<UserDto>> GetAllUsers();
         Task<SelectItemVm> GetAllAsSelect(UserDto userDto);
         Task<AuthenticationResult> RegisterAsyncWithWallets(RegisterUserDto userToAdd);
+        Task<SelectItemVm> GetCurrentStatusesAsSelect();
     }
 }

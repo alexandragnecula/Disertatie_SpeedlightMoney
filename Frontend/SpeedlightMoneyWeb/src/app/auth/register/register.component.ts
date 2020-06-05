@@ -1,23 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { UIService } from 'src/app/shared/ui.service';
 import { UserService } from 'src/app/@core/services/user.service';
 import { AddUserCommand, UserData } from 'src/app/@core/data/userclasses/user';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { SelectItemsList} from 'src/app/@core/data/common/selectitem';
+import { CurrencyData } from 'src/app/@core/data/currency';
+import { RoleData } from 'src/app/@core/data/role';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   isLoading = false;
+  authChange = true;
   registerForm: FormGroup;
-  constructor(private userData: UserData, private uiService: UIService, private router: Router, private authService: AuthService) { }
+  currencySelectList: SelectItemsList = new SelectItemsList();
+  roleSelectList: SelectItemsList = new SelectItemsList();
+  currentStatusSelectList: SelectItemsList = new SelectItemsList();
+
+  authChangeSubscription: Subscription;
+
+  constructor(private userData: UserData,
+              private currencyData: CurrencyData,
+              private roleData: RoleData,
+              private uiService: UIService,
+              private router: Router,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
-      this.initForm();
+    this.authChangeSubscription = this.authService.authChange.subscribe((authChange: boolean) => {
+      if (authChange === true) {
+          this.router.navigate(['']);
+      } else {
+        this.authChange = false;
+        this.initForm();
+        this. getCurrenciesSelect();
+        this.getRolesSelect();
+        this.getCurrentStatusesSelect();
+      }
+    });
   }
 
   initForm() {
@@ -41,6 +67,7 @@ export class RegisterComponent implements OnInit {
         phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$')]),
         totalAmount: new FormControl('', [Validators.required]),
         currencyId: new FormControl('', [Validators.required]),
+        roleId: new FormControl('', [Validators.required])
     });
   }
 
@@ -100,11 +127,12 @@ export class RegisterComponent implements OnInit {
         salary: this.registerForm.value.salary,
         phoneNumber: this.registerForm.value.phoneNumber,
         totalAmount: this.registerForm.value.totalAmount,
-        currencyId: this.registerForm.value.currencyId
+        currencyId: +this.registerForm.value.currencyId,
+        roleId: +this.registerForm.value.roleId
     } as AddUserCommand;
-    this.userData.AddUser(addUserCommand).subscribe(res => {
+    this.userData.AddUserWithWallets(addUserCommand).subscribe(res => {
         this.isLoading = false;
-        this.authService.setToken(res.token)
+        this.authService.setToken(res.token);
         this.uiService.showSuccessSnackbar('You successfully registered! Welcome!', null, 3000);
         this.authService.initAuthListener();
         this.router.navigate(['']);
@@ -112,5 +140,36 @@ export class RegisterComponent implements OnInit {
         this.isLoading = false;
         this.uiService.showErrorSnackbar(error, null, 3000);
     });
+  }
+
+  getCurrenciesSelect() {
+    this.currencyData.GetCurrenciesDropdown().subscribe((currencies: SelectItemsList) => {
+      this.currencySelectList = currencies;
+    },
+    error => {
+        this.uiService.showErrorSnackbar(error, null, 3000);
+    });
+  }
+
+  getRolesSelect() {
+    this.roleData.GetRolesDropdown().subscribe((roles: SelectItemsList) => {
+      this.roleSelectList = roles;
+    },
+    error => {
+        this.uiService.showErrorSnackbar(error, null, 3000);
+    });
+  }
+
+  getCurrentStatusesSelect() {
+    this.userData.getCurrentStatusesDropdown().subscribe((currentStatuses: SelectItemsList) => {
+      this.currentStatusSelectList = currentStatuses;
+    },
+    error => {
+        this.uiService.showErrorSnackbar(error, null, 3000);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authChangeSubscription.unsubscribe();
   }
 }

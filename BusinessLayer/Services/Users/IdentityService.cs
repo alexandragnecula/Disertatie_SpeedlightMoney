@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BusinessLayer.Common.Constants;
 using BusinessLayer.Common.Models.SelectItem;
-using BusinessLayer.Services.Currencies;
 using BusinessLayer.Services.Wallets;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
@@ -129,7 +129,7 @@ namespace BusinessLayer.Services.Users
                 var result = await _userManager.CreateAsync(user, userToAdd.Password);
 
                 var role = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == userToAdd.RoleId);
-                if(role != null)
+                if (role != null)
                 {
                     await _userManager.AddToRoleAsync(user, role.Name);
                 }
@@ -363,7 +363,6 @@ namespace BusinessLayer.Services.Users
             var vm = new SelectItemVm
             {
                 SelectItems = await _context.Users
-                    //de verificat ca e corect IsActive.Value
                     .Where(x => x.IsActive == true)
                     .Select(x => new SelectItemDto { Label = x.GetFullName(), Value = x.Id.ToString() })
                     .ToListAsync()
@@ -401,7 +400,7 @@ namespace BusinessLayer.Services.Users
                     City = userToAdd.City,
                     StreetName = userToAdd.StreetName,
                     StreetNumber = userToAdd.StreetNumber,
-                    CurrentStatus = userToAdd.CurrentStatus,
+                    CurrentStatus = userToAdd.CurrentStatus.ToString(),
                     CardNumber = userToAdd.CardNumber,
                     Cvv = userToAdd.Cvv,
                     ExpireDate = userToAdd.ExpireDate,
@@ -439,8 +438,8 @@ namespace BusinessLayer.Services.Users
                     UserId = user.Id,
                     CurrencyId = userToAdd.CurrencyId
                 };
-               
-                if(wallet.CurrencyId == 1) {
+
+                if (wallet.CurrencyId == 1) {
                     var walletEUR = new Wallet
                     {
                         TotalAmount = 0.0,
@@ -449,7 +448,7 @@ namespace BusinessLayer.Services.Users
                     };
                     await _context.Wallets.AddAsync(walletEUR);
                 }
-                else if(wallet.CurrencyId == 2)
+                else if (wallet.CurrencyId == 2)
                 {
                     var walletRON = new Wallet
                     {
@@ -475,6 +474,19 @@ namespace BusinessLayer.Services.Users
 
                 throw new Exception(e.ToString());
             }
+        }
+
+        public async Task<SelectItemVm> GetCurrentStatusesAsSelect()
+        {
+            var items = new List<SelectItemDto>();
+
+            CurrentStatusesList st = new CurrentStatusesList();
+            foreach(var i in st.CurrentStatuses)
+            {
+                items.Add(new SelectItemDto { Label = i, Value = i });
+            }
+
+            return await Task.FromResult(new SelectItemVm { SelectItems = items });
         }
     }
 }

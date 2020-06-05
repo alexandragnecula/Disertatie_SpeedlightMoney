@@ -38,6 +38,17 @@ export class UserService extends UserData {
             );
     }
 
+    AddUserWithWallets(addUserCommand: AddUserCommand): Observable<AuthSuccessResponse> {
+        return this.http.post<AuthSuccessResponse>(this.baseUrl + '/adduserandwallets', JSON.stringify(addUserCommand), this.httpOptions)
+            .pipe(
+                map(res => {
+                    return res;
+                }),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+
     LoginUser(loginUserCommand: LoginUser): Observable<AuthSuccessResponse> {
         return this.http.post<AuthSuccessResponse>(this.baseUrl + '/login', JSON.stringify(loginUserCommand), this.httpOptions)
             .pipe(
@@ -82,6 +93,15 @@ export class UserService extends UserData {
     }
     getUsersDropdown(): Observable<SelectItemsList> {
         return this.http.get<SelectItemsList>(this.baseUrl + '/usersdropdown', this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
+
+    getCurrentStatusesDropdown(): Observable<SelectItemsList> {
+        return this.http.get<SelectItemsList>(this.baseUrl + '/currentstatusesdropdown', this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),

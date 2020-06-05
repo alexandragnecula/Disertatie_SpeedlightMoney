@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Services.Roles;
 using BusinessLayer.Views;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,14 @@ namespace SpeedlightMoney_App.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("rolesdropdown")]
+        public async Task<ActionResult<SelectItemVm>> GetLoansDropdown()
+        {
+            var vm = await _roleService.GetAllAsSelect(new RoleDto());
+
+            return Ok(vm);
         }
     }
 }
