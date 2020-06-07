@@ -12,7 +12,7 @@ namespace SpeedlightMoney_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+
     public class WalletController : ControllerBase
     {
         IWalletService _walletService;
@@ -44,7 +44,7 @@ namespace SpeedlightMoney_App.Controllers
         {
             if (walletToUpdate.CurrencyId == 0)
             {
-                return BadRequest("The wallet is mandatory!");
+                return BadRequest("The currency is mandatory!");
             }
 
             var result = await _walletService.UpdateWallet(walletToUpdate);
@@ -96,10 +96,10 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(vm);
         }
 
-        [HttpGet]
+        [HttpGet("userwallets")]
         public async Task<ActionResult<WalletDto>> GetAllWallets()
         {
-            var vm = await _walletService.GetAllWallets();
+            var vm = await _walletService.GetWalletsForCurrentUser();
 
             return Ok(vm);
         }
@@ -110,6 +110,27 @@ namespace SpeedlightMoney_App.Controllers
             var vm = await _walletService.GetAllAsSelect(new WalletDto());
 
             return Ok(vm);
+        }
+
+        [HttpGet("userwalletsdropdown")]
+        public async Task<ActionResult<SelectItemVm>> GetWalletsForCurrentUserDropdown()
+        {
+            var vm = await _walletService.GetWalletsForCurrentUserAsSelect(new WalletDto());
+
+            return Ok(vm);
+        }
+
+        [HttpPut("addmoney")]
+        public async Task<ActionResult<Result>> AddMoneyToWallet([FromBody] WalletDto walletToUpdate)
+        {
+            var result = await _walletService.AddMoneyToWallet(walletToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }

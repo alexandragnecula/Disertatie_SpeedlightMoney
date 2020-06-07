@@ -1,1 +1,31 @@
-<p>dashboard works!</p>
+<section >
+    <form
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap="10px"
+        [formGroup]="walletForm"
+        class="wallet-form">
+        <mat-card class="walletInformation">
+              <h1  class="walletFormHeader">WALLET</h1> 
+              <mat-form-field *ngIf="this.currentUserWalletsSelectList.selectItems">
+                <mat-select formControlName="walletId">
+                  <mat-option 
+                  *ngFor="let wallet of currentUserWalletsSelectList.selectItems" 
+                  [value]="wallet.value">
+                    {{wallet.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-card-actions>
+                <button  type="submit" mat-raised-button color="primary"
+                  (click)="openDialogToEdit()">
+                  <mat-icon>add</mat-icon>
+                  Add money
+                </button>
+              </mat-card-actions>
+            
+             
+        </mat-card>
+ </form>
+</section>

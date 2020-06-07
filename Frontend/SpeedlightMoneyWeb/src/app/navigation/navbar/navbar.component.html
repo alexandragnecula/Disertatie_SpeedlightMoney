@@ -11,6 +11,7 @@
       <ul fxLayout fxLayoutGap="10px" class="navigation-items">
         <li *ngIf="!isAuth"><a routerLink="/register">Signup</a></li>
         <li *ngIf="!isAuth"><a routerLink="/login">Login</a></li>
+        <li *ngIf="isAuth"><a routerLink="">Dashboard</a></li>
         <!-- <li *ngIf="isAuth"><a routerLink="/user/profile/{{currentUserId}}">Profile</a></li> -->
 
         <!-- <li *ngIf="isAdmin"><a routerLink="/location/cities">Cities</a></li>
@@ -74,6 +75,7 @@
           Treatment
         </a></li> -->
         <li *ngIf="isAuth"><a style="cursor:pointer" (click)="onLogout()">Logout</a></li>
+        <li *ngIf="isAuth" class="currentUserName">{{currentUserName}}</li>
       </ul>
     </div>
   </mat-toolbar>

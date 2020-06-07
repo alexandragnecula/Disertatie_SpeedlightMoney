@@ -7,11 +7,32 @@ import { CurrencyData } from './data/currency';
 import { CurrencyService } from './services/currency.service';
 import { RoleData } from './data/role';
 import { RoleService } from './services/role.service';
+import { WalletData } from './data/wallet';
+import { WalletService } from './services/wallet.service';
+import { DebtData } from './data/debt';
+import { DebtService } from './services/debt.service';
+import { DebtStatusData } from './data/debtstatus';
+import { DebtStatusService } from './services/debtstatus.service';
+import { FriendData } from './data/friend';
+import { FriendService } from './services/friend.service';
+import { LoanData } from './data/loan';
+import { LoanService } from './services/loan.service';
+import { LoanStatusData } from './data/loanstatus';
+import { LoanStatusService } from './services/loanstatus.service';
+import { TermData } from './data/term';
+import { TermService } from './services/term.service';
 
 const DATA_SERVICES = [
-  { provide: UserData, useClass: UserService },
   {provide: CurrencyData, useClass: CurrencyService},
-  {provide: RoleData, useClass: RoleService}
+  {provide: DebtData, useClass: DebtService},
+  {provide: DebtStatusData, useClass: DebtStatusService},
+  {provide: FriendData, useClass: FriendService},
+  {provide: LoanData, useClass: LoanService},
+  {provide: LoanStatusData, useClass: LoanStatusService},
+  {provide: RoleData, useClass: RoleService},
+  {provide: TermData, useClass: TermService},
+  { provide: UserData, useClass: UserService },
+  {provide: WalletData, useClass: WalletService}
 ];
 
 export const NB_CORE_PROVIDERS = [

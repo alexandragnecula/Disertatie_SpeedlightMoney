@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    canLoad: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'location',

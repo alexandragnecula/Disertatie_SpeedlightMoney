@@ -7,12 +7,11 @@ import { SelectItemsList } from '../data/common/selectitem';
 import { Result } from '../data/common/result';
 import { ErrorService } from 'src/app/shared/error.service';
 import { AuthService } from 'src/app/auth/auth.service';
-// tslint:disable-next-line: max-line-length
-import { CurrencyData, Currency, CurrenciesList, AddCurrencyCommand, UpdateCurrencyCommand, RestoreCurrencyCommand } from '../data/currency';
+import { DebtStatusData, DebtStatus, DebtStatusesList, AddDebtStatusCommand, UpdateDebtStatusCommand, RestoreDebtStatusCommand } from '../data/debtstatus';
 
 @Injectable()
-export class CurrencyService extends CurrencyData {
-    baseUrl = environment.baseURL + 'Currency';
+export class DebtStatusService extends DebtStatusData {
+    baseUrl = environment.baseURL + 'DebtStatus';
 
     // Http Headers
         httpOptions = {
@@ -26,70 +25,72 @@ export class CurrencyService extends CurrencyData {
         super();
     }
 
-
-    GetCurrency(id: number): Observable<Currency> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<Currency>(this.baseUrl + '/' + id, this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    GetCurrencies(): Observable<CurrenciesList> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<CurrenciesList>(this.baseUrl, this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    GetCurrenciesDropdown(): Observable<SelectItemsList> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<SelectItemsList>(this.baseUrl + '/currenciesdropdown', this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    AddCurrency(addCurrencyCommand: AddCurrencyCommand): Observable<Result> {
+    GetDebtStatus(id: number): Observable<DebtStatus> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addCurrencyCommand), this.httpOptions)
+        return this.http.get<DebtStatus>(this.baseUrl + '/' + id, this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),
                 catchError(this.errService.errorHandl)
             );
     }
-    UpdateCurrency(updateCurrencyCommand: UpdateCurrencyCommand): Observable<Result> {
+    GetDebtStatuses(): Observable<DebtStatusesList> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl, JSON.stringify(updateCurrencyCommand), this.httpOptions)
+        return this.http.get<DebtStatusesList>(this.baseUrl, this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetDebtStatusesDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<SelectItemsList>(this.baseUrl + '/debtstatusesdropdown', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    AddDebtStatus(addDebtStatusCommand: AddDebtStatusCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.post<Result>(this.baseUrl, JSON.stringify(addDebtStatusCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    UpdateDebtStatus(updateDebtStatusCommand: UpdateDebtStatusCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl, JSON.stringify(updateDebtStatusCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),
             catchError(this.errService.errorHandl)
         );
     }
-    DeleteCurrency(id: number): Observable<Result> {
+    DeleteDebtStatus(id: number): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -102,13 +103,13 @@ export class CurrencyService extends CurrencyData {
             catchError(this.errService.errorHandl)
         );
     }
-    RestoreCurrency(restoreCurrencyCommand: RestoreCurrencyCommand): Observable<Result> {
+    RestoreDebtStatus(restoreDebtStatusCommand: RestoreDebtStatusCommand): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreCurrencyCommand), this.httpOptions)
+        return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreDebtStatusCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),

@@ -39,9 +39,12 @@ export class RestoreWalletCommand {
 export abstract class WalletData {
     abstract GetWallet(id: number): Observable<Wallet>;
     abstract GetWallets(): Observable<WalletsList>;
+    abstract GetWalletsForCurrentUser(): Observable<WalletsList>;
     abstract GetWalletsDropdown(): Observable<SelectItemsList>;
+    abstract GetWalletsForCurrentUserDropdown(): Observable<SelectItemsList>;
     abstract AddWallet(addWalletCommand: AddWalletCommand): Observable<Result>;
     abstract UpdateWallet(updateWalletCommand: UpdateWalletCommand): Observable<Result>;
     abstract DeleteWallet(id: number): Observable<Result>;
     abstract RestoreWallet(restoreWalletCommand: RestoreWalletCommand): Observable<Result>;
+    abstract AddMoneyToWallet(updateWalletCommand: UpdateWalletCommand);
 }

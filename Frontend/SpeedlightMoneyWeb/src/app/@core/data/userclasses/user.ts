@@ -105,8 +105,6 @@ export abstract class UserData {
     abstract AddUser(addUserCommand: User): Observable<AuthSuccessResponse>;
     abstract AddUserWithWallets(addUserCommand: AddUserCommand): Observable<AuthSuccessResponse>;
     abstract LoginUser(loginUserCommand: LoginUser): Observable<AuthSuccessResponse>;
-    abstract GetCurrentUser(): Observable<CurrentUser>;
-
     abstract getUsers(): Observable<UserList>;
     abstract getUser(id: number): Observable<User>;
     abstract getUsersDropdown(): Observable<SelectItemsList>;

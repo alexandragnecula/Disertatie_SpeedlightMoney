@@ -3,6 +3,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 import { Subject, of as observableOf, Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { CurrentUser } from '../@core/data/userclasses/currentuser';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
   isPremium = new BehaviorSubject<boolean>(false);
   isExplorer = new BehaviorSubject<boolean>(false);
   currentUserId = new BehaviorSubject<number>(-1);
+  currentUser = new BehaviorSubject<CurrentUser>(null);
 
   private isUserAuthenticated = false;
 
@@ -46,15 +48,9 @@ export class AuthService {
               this.isExplorer.next(true);
             }
             this.currentUserId.next(+token.id);
+            this.currentUser.next(this.GetCurrentUser());
         } else {
-            this.isUserAuthenticated = false;
-            this.authChange.next(false);
-            this.isAdmin.next(false);
-            this.isUltimate.next(false);
-            this.isPremium.next(false);
-            this.isExplorer.next(false);
-            this.currentUserId.next(-1);
-            this.router.navigate(['/login']);
+            this.logout();
         }
     });
 }
@@ -86,6 +82,16 @@ export class AuthService {
     return this.jwtHelper.decodeToken(this.getToken());
   }
 
+  public GetCurrentUser(): CurrentUser {
+    const token = this.getDecodedToken();
+    const user = new CurrentUser();
+    user.email = token.email;
+    user.firstName = token.firstName;
+    user.lastName = token.lastName;
+    user.id = token.id;
+    return user;
+}
+
   public logout(): void {
     localStorage.removeItem(environment.authToken);
     this.isUserAuthenticated = false;
@@ -95,6 +101,7 @@ export class AuthService {
     this.isPremium.next(false);
     this.isExplorer.next(false);
     this.currentUserId.next(-1);
+    this.currentUser.next(null);
     this.router.navigate(['/login']);
   }
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
+import { UserData } from 'src/app/@core/data/userclasses/user';
+import { UIService } from 'src/app/shared/ui.service';
+import { CurrentUser } from 'src/app/@core/data/userclasses/currentuser';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,27 +26,36 @@ export class SidebarComponent implements OnInit, OnDestroy {
   premiumSubscription: Subscription;
   explorerSubscription: Subscription;
   currentUserIdSubscription: Subscription;
+  currentUserSubscription: Subscription;
+  currentUserName: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private userData: UserData,
+              private uiService: UIService) { }
 
   ngOnInit(): void {
     this.authSubscription = this.authService.authChange.subscribe(authStatus => {
       this.isAuth = authStatus;
-    })
+    });
     this.adminSubscription = this.authService.isAdmin.subscribe(isAdmin => {
       this.isAdmin = isAdmin;
-    })
+    });
     this.ultimateSubscription = this.authService.isUltimate.subscribe(isUltimate => {
       this.isUltimate = isUltimate;
-    })
+    });
     this.premiumSubscription = this.authService.isPremium.subscribe(isPremium => {
       this.isPremium = isPremium;
-    })
+    });
     this.explorerSubscription = this.authService.isExplorer.subscribe(isExplorer => {
       this.isExplorer = isExplorer;
-    })
+    });
     this.currentUserIdSubscription = this.authService.currentUserId.subscribe(userId => {
       this.currentUserId = userId;
+    });
+    this.currentUserSubscription = this.authService.currentUser.subscribe(currentUser => {
+      if (currentUser !== null) {
+        this.currentUserName = currentUser.email;
+      }
     });
   }
 
@@ -54,6 +66,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.premiumSubscription.unsubscribe();
     this.explorerSubscription.unsubscribe();
     this.currentUserIdSubscription.unsubscribe();
+    this.currentUserSubscription.unsubscribe();
   }
 
   onClose() {

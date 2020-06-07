@@ -1,13 +1,18 @@
 <mat-nav-list>
+  <mat-list-item class="currentUserName">
+    {{currentUserName}}
+</mat-list-item>
   <a mat-list-item routerLink="/register" (click)="onClose()" *ngIf="!isAuth">
     <mat-icon>face</mat-icon>
     <span class="nav-caption">Signup</span>
   </a>
   <a mat-list-item routerLink="/login" (click)="onClose()" *ngIf="!isAuth">
     <mat-icon>input</mat-icon>
-    <span class="nav-caption">
-      Login
-    </span>
+    <span class="nav-caption">Login</span>
+  </a>
+  <a mat-list-item routerLink="" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>input</mat-icon>
+    <span class="nav-caption">Dashboard</span>
   </a>
   <!-- <a  mat-list-item routerLink="/user/profile/{{currentUserId}}" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>fitness_center</mat-icon>

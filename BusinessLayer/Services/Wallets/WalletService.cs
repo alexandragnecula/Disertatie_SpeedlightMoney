@@ -139,11 +139,53 @@ namespace BusinessLayer.Services.Wallets
             {
                 SelectItems = await _context.Wallets
                     .Where(x => !x.Deleted)
-                    .Select(x => new SelectItemDto { Label = x.Currency.CurrencyName, Value = x.Id.ToString() })
+                    .Select(x => new SelectItemDto { Label = x.TotalAmount.ToString(), Value = x.Id.ToString() })
                     .ToListAsync()
             };
 
             return vm;
+        }
+
+        public async Task<SelectItemVm> GetWalletsForCurrentUserAsSelect(WalletDto walletDto)
+        {
+            var vm = new SelectItemVm
+            {
+                SelectItems = await _context.Wallets
+                    .Where(x => x.UserId == _currentUserService.UserId && !x.Deleted)
+                    .Select(x => new SelectItemDto { Label = x.Currency.CurrencyName + " " + x.TotalAmount.ToString(), Value = x.Id.ToString() })
+                    .ToListAsync()
+            };
+
+            return vm;
+        }
+
+        public async Task<Result> AddMoneyToWallet(WalletDto walletToUpdate)
+        {
+            //List<WalletDto> walletsForCurrentUser = await _context.Wallets
+            //    .Where(x => x.UserId == _currentUserService.UserId)
+            //    .OrderByDescending(x => x.CreatedOn)
+            //    .ProjectTo<WalletDto>(_mapper.ConfigurationProvider)
+            //    .ToListAsync();
+
+            //foreach (var walletToUpdate in walletsForCurrentUser)
+            //{
+               var entity = await _context.Wallets
+                        .FirstOrDefaultAsync(x => x.Id == walletToUpdate.Id && !x.Deleted);
+
+                if (entity == null)
+                {
+                    return Result.Failure(new List<string> { "No valid wallet found" });
+                }
+
+                entity.TotalAmount += walletToUpdate.TotalAmount;
+            // }
+                        
+            //entity.UserId = walletToUpdate.UserId;
+            //entity.CurrencyId = walletToUpdate.CurrencyId;
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success("Wallet update was successful");
         }
     }
 }

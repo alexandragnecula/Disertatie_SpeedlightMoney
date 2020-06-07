@@ -7,12 +7,11 @@ import { SelectItemsList } from '../data/common/selectitem';
 import { Result } from '../data/common/result';
 import { ErrorService } from 'src/app/shared/error.service';
 import { AuthService } from 'src/app/auth/auth.service';
-// tslint:disable-next-line: max-line-length
-import { CurrencyData, Currency, CurrenciesList, AddCurrencyCommand, UpdateCurrencyCommand, RestoreCurrencyCommand } from '../data/currency';
+import { TermData, TermsList, AddTermCommand, UpdateTermCommand, RestoreTermCommand, Term } from '../data/term';
 
 @Injectable()
-export class CurrencyService extends CurrencyData {
-    baseUrl = environment.baseURL + 'Currency';
+export class TermService extends TermData {
+    baseUrl = environment.baseURL + 'Term';
 
     // Http Headers
         httpOptions = {
@@ -26,70 +25,72 @@ export class CurrencyService extends CurrencyData {
         super();
     }
 
-
-    GetCurrency(id: number): Observable<Currency> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<Currency>(this.baseUrl + '/' + id, this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    GetCurrencies(): Observable<CurrenciesList> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<CurrenciesList>(this.baseUrl, this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    GetCurrenciesDropdown(): Observable<SelectItemsList> {
-        this.httpOptions = {
-            headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        })};
-        return this.http.get<SelectItemsList>(this.baseUrl + '/currenciesdropdown', this.httpOptions)
-            .pipe(
-                map((response: any) => response),
-                retry(1),
-                catchError(this.errService.errorHandl)
-            );
-    }
-    AddCurrency(addCurrencyCommand: AddCurrencyCommand): Observable<Result> {
+    GetTerm(id: number): Observable<Term> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addCurrencyCommand), this.httpOptions)
+        return this.http.get<Term>(this.baseUrl + '/' + id, this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),
                 catchError(this.errService.errorHandl)
             );
     }
-    UpdateCurrency(updateCurrencyCommand: UpdateCurrencyCommand): Observable<Result> {
+    GetTerms(): Observable<TermsList> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl, JSON.stringify(updateCurrencyCommand), this.httpOptions)
+        return this.http.get<TermsList>(this.baseUrl, this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetTermsDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<SelectItemsList>(this.baseUrl + '/termsdropdown', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    AddTerm(addTermCommand: AddTermCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.post<Result>(this.baseUrl, JSON.stringify(addTermCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    UpdateTerm(updateTermCommand: UpdateTermCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl, JSON.stringify(updateTermCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),
             catchError(this.errService.errorHandl)
         );
     }
-    DeleteCurrency(id: number): Observable<Result> {
+    DeleteTerm(id: number): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -102,13 +103,13 @@ export class CurrencyService extends CurrencyData {
             catchError(this.errService.errorHandl)
         );
     }
-    RestoreCurrency(restoreCurrencyCommand: RestoreCurrencyCommand): Observable<Result> {
+    RestoreTerm(restoreTermCommand: RestoreTermCommand): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreCurrencyCommand), this.httpOptions)
+        return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreTermCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),

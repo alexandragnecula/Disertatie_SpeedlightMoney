@@ -29,6 +29,11 @@ export class RoleService extends RoleData {
 
 
     GetRole(id: number): Observable<Role> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<Role>(this.baseUrl + '/' + id, this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -37,6 +42,11 @@ export class RoleService extends RoleData {
             );
     }
     GetRoles(): Observable<RolesList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<RolesList>(this.baseUrl, this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -45,6 +55,10 @@ export class RoleService extends RoleData {
             );
     }
     GetRolesDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        })};
         return this.http.get<SelectItemsList>(this.baseUrl + '/rolesdropdown', this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -53,6 +67,11 @@ export class RoleService extends RoleData {
             );
     }
     AddRole(addRoleCommand: AddRoleCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.post<Result>(this.baseUrl, JSON.stringify(addRoleCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -61,6 +80,11 @@ export class RoleService extends RoleData {
             );
     }
     UpdateRole(updateRoleCommand: UpdateRoleCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.put<Result>(this.baseUrl, JSON.stringify(updateRoleCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
@@ -69,6 +93,11 @@ export class RoleService extends RoleData {
         );
     }
     DeleteRole(id: number): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.delete<Result>(this.baseUrl + '/' + id, this.httpOptions)
         .pipe(
             map((response: any) => response),
@@ -77,6 +106,11 @@ export class RoleService extends RoleData {
         );
     }
     RestoreRole(restoreRoleCommand: RestoreRoleCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreRoleCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),

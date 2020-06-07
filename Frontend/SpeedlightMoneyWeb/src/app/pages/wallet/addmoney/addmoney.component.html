@@ -1,0 +1,55 @@
+<div mat-dialog-content>
+    <section fxLayout fxLayoutAlign="center" class="prescription-drug-card">
+        <form [formGroup]="addMoneyForm">
+          <mat-card fxFlex.xs="100%" fxFlex="600px">
+            <mat-card-title fxLayoutAlign="center">Add money</mat-card-title>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field *ngIf="this.currentUserWalletsSelectList.selectItems">
+                  <mat-select placeholder="Choose Wallet Currency" formControlName="walletId" required>
+                    <mat-option
+                      *ngFor="let wallet of currentUserWalletsSelectList.selectItems"
+                      [value]="wallet.value">
+                      {{ wallet.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint>Please choose a currency</mat-hint>
+                  <mat-error>Please choose a currency</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input
+                      matInput
+                      type="number" min="0" value="0" step="0.01"
+                      placeholder="Amount"
+                      formControlName="totalAmount"             
+                      required>
+                    <mat-hint>Please enter an amount.</mat-hint>
+                    <mat-error>Amount is required!</mat-error>
+                  </mat-form-field>
+
+              <mat-spinner *ngIf="isLoading"></mat-spinner>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+              <button
+              *ngIf="!isLoading"
+              type="button"
+              mat-raised-button
+              color="accent"
+              [mat-dialog-close]
+            >
+              Close
+            </button>
+              <button
+                type="submit"
+                mat-raised-button
+                color="primary"
+                [disabled]="addMoneyForm.invalid"
+                [mat-dialog-close]="addMoneyForm"
+              >
+                Submit
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
+      </section>
+</div>

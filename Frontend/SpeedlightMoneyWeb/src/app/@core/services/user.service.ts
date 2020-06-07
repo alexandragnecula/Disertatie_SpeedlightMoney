@@ -28,6 +28,11 @@ export class UserService extends UserData {
     }
 
     AddUser(addUserCommand: AddUserCommand): Observable<AuthSuccessResponse> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.post<AuthSuccessResponse>(this.baseUrl + '/adduser', JSON.stringify(addUserCommand), this.httpOptions)
             .pipe(
                 map(res => {
@@ -39,6 +44,11 @@ export class UserService extends UserData {
     }
 
     AddUserWithWallets(addUserCommand: AddUserCommand): Observable<AuthSuccessResponse> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.post<AuthSuccessResponse>(this.baseUrl + '/adduserandwallets', JSON.stringify(addUserCommand), this.httpOptions)
             .pipe(
                 map(res => {
@@ -50,6 +60,11 @@ export class UserService extends UserData {
     }
 
     LoginUser(loginUserCommand: LoginUser): Observable<AuthSuccessResponse> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.post<AuthSuccessResponse>(this.baseUrl + '/login', JSON.stringify(loginUserCommand), this.httpOptions)
             .pipe(
                 map(res => {
@@ -60,17 +75,12 @@ export class UserService extends UserData {
             );
     }
 
-    GetCurrentUser(): Observable<CurrentUser> {
-        const token = this.authService.getDecodedToken();
-        const user = new CurrentUser();
-        user.email = token.email;
-        user.firstName = token.firstName;
-        user.lastName = token.lastName;
-        user.id = token.id;
-        return observableOf(user);
-    }
-
     getUsers(): Observable<UserList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<UserList>(this.baseUrl, this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -78,6 +88,11 @@ export class UserService extends UserData {
             );
     }
     getUser(id: number): Observable<User> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<User>(this.baseUrl + '/' + id, this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -85,6 +100,11 @@ export class UserService extends UserData {
             );
     }
     updateUser(userProfile: UpdateUserCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.put<Result>(this.baseUrl, JSON.stringify(userProfile), this.httpOptions)
             .pipe(
                 map((response: any) => response),
@@ -92,6 +112,11 @@ export class UserService extends UserData {
             );
     }
     getUsersDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<SelectItemsList>(this.baseUrl + '/usersdropdown', this.httpOptions)
         .pipe(
             map((response: any) => response),
@@ -101,6 +126,11 @@ export class UserService extends UserData {
     }
 
     getCurrentStatusesDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
         return this.http.get<SelectItemsList>(this.baseUrl + '/currentstatusesdropdown', this.httpOptions)
         .pipe(
             map((response: any) => response),
