@@ -18,5 +18,9 @@ namespace BusinessLayer.Services.Debts
         Task<SelectItemVm> GetAllAsSelect(DebtDto debtDto);
         Task<IList<DebtDto>> GetDebtsForCurrentUser();
         Task<IList<DebtDto>> GetCreditsForCurrentUser();
+        Task<IList<DebtDto>> GetDebtsHistoryForCurrentUser();
+        Task<IList<DebtDto>> GetCreditsHistoryForCurrentUser();
+        Task<Result> PayDebt(DebtDto debtToUpdate);
+        Task<Result> DeferPayment(DebtDto debtToUpdate);
     }
 }

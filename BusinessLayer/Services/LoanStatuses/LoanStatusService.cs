@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BusinessLayer.Common.Models.SelectItem;
+using BusinessLayer.Services.Loans;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
@@ -17,11 +18,13 @@ namespace BusinessLayer.Services.LoanStatuses
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly ILoanService _loanService;
 
-        public LoanStatusService(DatabaseContext context, IMapper mapper)
+        public LoanStatusService(DatabaseContext context, IMapper mapper, ILoanService loanService)
         {
             _context = context;
             _mapper = mapper;
+            _loanService = loanService;
         }
 
         public async Task<Result> AddLoanStatus(LoanStatusDto loanStatusToAdd)
@@ -114,7 +117,7 @@ namespace BusinessLayer.Services.LoanStatuses
             var vm = new SelectItemVm
             {
                 SelectItems = await _context.LoanStatuses
-                    .Where(x => !x.Deleted)
+                    .Where(x => !x.Deleted && x.LoanStatusName != "Pending")
                     .Select(x => new SelectItemDto { Label = x.LoanStatusName, Value = x.Id.ToString() })
                     .ToListAsync()
             };

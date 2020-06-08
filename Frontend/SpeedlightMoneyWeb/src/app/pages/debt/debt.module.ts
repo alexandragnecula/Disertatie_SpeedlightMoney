@@ -5,11 +5,12 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DEBTROUTES } from './debt-routing';
+import { DebtshistoryComponent } from './debtshistory/debtshistory.component';
 
 
 
 @NgModule({
-  declarations: [DebtsComponent],
+  declarations: [DebtsComponent, DebtshistoryComponent],
   imports: [
     DEBTROUTES,
     CommonModule,

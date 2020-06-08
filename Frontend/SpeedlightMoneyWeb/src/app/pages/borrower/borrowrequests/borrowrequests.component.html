@@ -33,7 +33,7 @@
 
         <ng-container matColumnDef="dueDate">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Due date</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.dueDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{element.dueDate | date: 'dd/MM/yyyy'}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lenderName">

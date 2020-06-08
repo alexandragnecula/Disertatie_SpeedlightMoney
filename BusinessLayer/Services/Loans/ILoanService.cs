@@ -17,8 +17,10 @@ namespace BusinessLayer.Services.Loans
         Task<IList<LoanDto>> GetAllLoans();
         Task<SelectItemVm> GetAllAsSelect(LoanDto loanDto);
         Task<Result> RequestLoan(LoanDto loanToAdd);
-        Task<Result> ApproveLoan(LoanDto loanToAdd);
+        Task<Result> ManageLoan(LoanDto loanToAdd);
         Task<IList<LoanDto>> GetBorrowRequestsForCurrentUser();
         Task<IList<LoanDto>> GetLendRequestsForCurrentUser();
+        Task<IList<LoanDto>> GetBorrowRequestsHistoryForCurrentUser();
+        Task<IList<LoanDto>> GetLendRequestsHistoryForCurrentUser();
     }
 }

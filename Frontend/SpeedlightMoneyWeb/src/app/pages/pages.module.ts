@@ -6,17 +6,19 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PAGESROUTES } from './pages-routing';
 import { SharedModule } from '../shared/shared.module';
 import { AddmoneyComponent } from './wallet/addmoney/addmoney.component';
+import { WalletModule } from './wallet/wallet.module';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent, AddmoneyComponent],
+  declarations: [DashboardComponent],
   imports: [
     PAGESROUTES,
     LayoutModule,
     CommonModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    WalletModule
   ]
 })
 export class PagesModule { }

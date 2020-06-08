@@ -5,17 +5,17 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WALLETROUTES } from './wallet-routing';
+import { SendmoneyComponent } from './sendmoney/sendmoney.component';
 
 
 @NgModule({
-  declarations: [AddmoneyComponent],
+  declarations: [AddmoneyComponent, SendmoneyComponent],
   imports: [
     WALLETROUTES,
     CommonModule,
     LayoutModule,
-    MaterialModule,
     SharedModule
   ],
-  entryComponents: [AddmoneyComponent]
+  entryComponents: [AddmoneyComponent, SendmoneyComponent]
 })
 export class WalletModule { }

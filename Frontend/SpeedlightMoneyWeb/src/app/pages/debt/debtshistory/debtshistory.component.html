@@ -1,0 +1,61 @@
+<mat-card class="debtsHistoryCard">
+<div class="margintopFilter" fxLayoutAlign="center center">
+    <h3  class="debtsHeader">Debts History</h3> 
+    <mat-icon class="iconStyle">filter_list</mat-icon>
+    <mat-form-field fxFlex="40%" fxFlex.xs="100%">
+       <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter"/>
+    </mat-form-field>
+</div>
+<mat-table [dataSource]="dataSource" matSort>
+           <ng-container matColumnDef="loanAmount">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.loanAmount | number}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="currencyName">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.currencyName}}</mat-cell>
+           </ng-container>
+   
+           <ng-container matColumnDef="termName">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Term</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.termName}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="borrowDate">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Borrow date</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.borrowDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="returnDate">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Return date</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.returnDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="dueDate">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Due date</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.dueDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="lenderName">
+               <mat-header-cell *matHeaderCellDef mat-sort-header>Lender</mat-header-cell>
+               <mat-cell *matCellDef="let element">{{element.lenderName}}</mat-cell>
+           </ng-container>
+
+           <ng-container matColumnDef="debtStatusName">
+               <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+               <mat-cell *matCellDef="let element"> 
+               <button mat-icon-button class="iconbutton" color="primary">
+                   <mat-icon aria-label="Debt status" >swap_vert</mat-icon>
+                   {{element.debtStatusName}}
+               </button>
+               </mat-cell>
+           </ng-container>
+
+           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+           <mat-spinner *ngIf="isLoading"></mat-spinner>
+</mat-table>
+
+<mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" fxLayoutAlign="center center"></mat-paginator>
+</mat-card>

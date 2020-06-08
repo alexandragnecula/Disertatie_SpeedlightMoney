@@ -129,13 +129,13 @@ export class LoanService extends LoanData {
                 catchError(this.errService.errorHandl)
             );
     }
-    ApproveLoan(addLoanCommand: ManageLoanCommand): Observable<Result> {
+    ManageLoan(addLoanCommand: ManageLoanCommand): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl + '/approveloan', JSON.stringify(addLoanCommand), this.httpOptions)
+        return this.http.put<Result>(this.baseUrl + '/manageloan', JSON.stringify(addLoanCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),
@@ -162,6 +162,33 @@ export class LoanService extends LoanData {
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
         return this.http.get<LoansList>(this.baseUrl + '/lendrequests', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+
+    GetBorrowRequestsHistoryForCurrentUser(): Observable<LoansLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<LoansList>(this.baseUrl + '/borrowrequestshistory', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetLendRequestsHistoryForCurrentUser(): Observable<LoansLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<LoansList>(this.baseUrl + '/lendrequestshistory', this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

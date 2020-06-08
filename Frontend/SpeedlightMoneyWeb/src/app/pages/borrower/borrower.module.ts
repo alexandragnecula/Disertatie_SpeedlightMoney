@@ -7,17 +7,18 @@ import { MaterialModule } from 'src/app/material.module';
 import { BORROWERSROUTES } from './borrower-routing';
 import { BorrowrequestComponent } from './borrowrequest/borrowrequest.component';
 import { BorrowrequestsComponent } from './borrowrequests/borrowrequests.component';
-
-
+import { BorrowrequestshistoryComponent } from './borrowrequestshistory/borrowrequestshistory.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
-  declarations: [UsersComponent, BorrowrequestComponent, BorrowrequestsComponent],
+  declarations: [UsersComponent, BorrowrequestComponent, BorrowrequestsComponent, BorrowrequestshistoryComponent],
   imports: [
     BORROWERSROUTES,
     LayoutModule,
     CommonModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    MatExpansionModule
   ],
   entryComponents: [UsersComponent, BorrowrequestComponent, BorrowrequestsComponent]
 })

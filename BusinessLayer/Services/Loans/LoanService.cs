@@ -169,7 +169,7 @@ namespace BusinessLayer.Services.Loans
             return Result.Success("Loan was requested successfully");
         }
 
-        public async Task<Result>  ApproveLoan(LoanDto loanToUpdate)
+        public async Task<Result>  ManageLoan(LoanDto loanToUpdate)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -182,6 +182,7 @@ namespace BusinessLayer.Services.Loans
                     return Result.Failure(new List<string> { "No valid loan found" });
                 }
 
+                entity.Deleted = true;
                 entity.BorrowDate = loanToUpdate.LoanStatusId == 1 ? DateTime.Now : (DateTime?)null;
                 entity.LoanStatusId = loanToUpdate.LoanStatusId;
                 entity.DueDate = loanToUpdate.LoanStatusId == 1 ?
@@ -193,58 +194,50 @@ namespace BusinessLayer.Services.Loans
 
                 if (loanToUpdate.LoanStatusId == 1)
                 {
-                    //lender wallets
-                    IList<WalletDto> walletsForCurrentUser = await _walletService.GetWalletsForCurrentUser();
-                   
-                    //borrower wallets
-                    List<WalletDto> walletsForBorrower = await _context.Wallets
-                                                               .Where(x => x.UserId == loanToUpdate.BorrowerId )
-                                                               .ProjectTo<WalletDto>(_mapper.ConfigurationProvider)
-                                                               .ToListAsync();
-
-                    if (walletsForCurrentUser == null && walletsForBorrower == null)
-                    {
-                        return Result.Failure(new List<string> { "No valid wallet found" });
-                    }
-
-                    foreach (var currentUserWallet in walletsForCurrentUser)
-                    {
-                        //    var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.Id == walletToUpdate.Id && !x.Deleted);
-                       
-                        if (currentUserWallet.TotalAmount >= loanToUpdate.Amount)
-                        {
-                            //Update RON
-                            if (loanToUpdate.CurrencyId == 1)
-                            {
-                                walletsForCurrentUser[1].TotalAmount -= loanToUpdate.Amount;
-                                walletsForBorrower[1].TotalAmount += loanToUpdate.Amount;
-                            }
-
-                            //Update EUR
-                            if (loanToUpdate.CurrencyId == 2)
-                            {
-                                walletsForCurrentUser[0].TotalAmount -= loanToUpdate.Amount;
-                                walletsForBorrower[0].TotalAmount += loanToUpdate.Amount;
-                            }
-                        }
-                        else
-                        {
-                            return Result.Failure(new List<string> { "Inssuficient funds" });
-                        }
-                    }
-
+                    //create debt for borrower
                     var debt = new Debt
                     {
                         LoanId = loanToUpdate.Id,
-                        DebtStatusId = 1
+                        DebtStatusId = 1                 
                     };
+
+                    var wallletForCurentUser = await _context.Wallets.Where(x => x.UserId == loanToUpdate.LenderId)
+                                                                        .FirstOrDefaultAsync(x => x.CurrencyId == loanToUpdate.CurrencyId);
+
+                    var walletForBorrower = await _context.Wallets.Where(x => x.UserId == loanToUpdate.BorrowerId)
+                                                                     .FirstOrDefaultAsync(x => x.CurrencyId == loanToUpdate.CurrencyId);
+
+                    //add amount to borrower wallet and withdraw amount from lender
+                    if (loanToUpdate.CurrencyId == wallletForCurentUser.CurrencyId)
+                    {
+                        if (wallletForCurentUser.TotalAmount >= loanToUpdate.Amount)
+                        {
+                            wallletForCurentUser.TotalAmount -= loanToUpdate.Amount;
+                            walletForBorrower.TotalAmount += loanToUpdate.Amount;
+                           
+                        }
+                        else
+                        {
+                            return Result.Failure(new List<string> { "Insuficient funds" });
+                        }
+                    }
+
                     await _context.Debts.AddAsync(debt);
+
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return Result.Success("Loan was successfully approved");
                 }
-
-                await _context.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-                return Result.Success("Loan was successfully approved!");
+                else if(loanToUpdate.LoanStatusId == 2)
+                {
+                    return Result.Success("Loan was successfully rejected");
+                }
+                else
+                {
+                    return Result.Success("Something went wrong. Please contact your administrator");
+                }             
             }
             catch (Exception e)
             {
@@ -258,7 +251,22 @@ namespace BusinessLayer.Services.Loans
         public async Task<IList<LoanDto>> GetBorrowRequestsForCurrentUser()
         {
             List<LoanDto> loans = await _context.Loans
-                .Where(x => x.BorrowerId == _currentUserService.UserId.Value)
+                .Where(x => x.BorrowerId == _currentUserService.UserId.Value && !x.Deleted)
+                .Include(x => x.Borrower)
+                .Include(x => x.Lender)
+                .Include(x => x.Currency)
+                .Include(x => x.Term)
+                .Include(x => x.LoanStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<LoanDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return loans;
+        }
+
+        public async Task<IList<LoanDto>> GetLendRequestsForCurrentUser()
+        {
+            List<LoanDto> loans = await _context.Loans
+                .Where(x => x.LenderId == _currentUserService.UserId.Value && !x.Deleted)
                 .Include(x => x.Borrower)
                 .Include(x => x.Lender)
                 .Include(x => x.Currency)
@@ -271,10 +279,26 @@ namespace BusinessLayer.Services.Loans
             return loans;
         }
 
-        public async Task<IList<LoanDto>> GetLendRequestsForCurrentUser()
+        public async Task<IList<LoanDto>> GetBorrowRequestsHistoryForCurrentUser()
         {
             List<LoanDto> loans = await _context.Loans
-                .Where(x => x.LenderId == _currentUserService.UserId.Value)
+                .Where(x => x.BorrowerId == _currentUserService.UserId.Value && x.Deleted)
+                .Include(x => x.Borrower)
+                .Include(x => x.Lender)
+                .Include(x => x.Currency)
+                .Include(x => x.Term)
+                .Include(x => x.LoanStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<LoanDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return loans;
+        }
+
+        public async Task<IList<LoanDto>> GetLendRequestsHistoryForCurrentUser()
+        {
+            List<LoanDto> loans = await _context.Loans
+                .Where(x => x.LenderId == _currentUserService.UserId.Value && x.Deleted)
                 .Include(x => x.Borrower)
                 .Include(x => x.Lender)
                 .Include(x => x.Currency)

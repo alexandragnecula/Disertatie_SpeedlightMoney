@@ -368,7 +368,7 @@ namespace BusinessLayer.Services.Users
             var vm = new SelectItemVm
             {
                 SelectItems = await _context.Users
-                    .Where(x => x.IsActive == true)
+                    .Where(x => x.IsActive == true && x.Id != _currentUserService.UserId.Value)
                     .Select(x => new SelectItemDto { Label = x.GetFullName(), Value = x.Id.ToString() })
                     .ToListAsync()
             };

@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { UIService } from 'src/app/shared/ui.service';
+import { Result } from 'src/app/@core/data/common/result';
+import { DebtshistoryComponent } from '../debtshistory/debtshistory.component';
 
 @Component({
   selector: 'app-debts',
@@ -13,22 +15,24 @@ import { UIService } from 'src/app/shared/ui.service';
 })
 export class DebtsComponent implements OnInit, AfterViewInit {
   isLoading = false;
-  displayedColumns = ['lenderName', 'amount', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName', 'actions'];
+  displayedColumns = ['lenderName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName', 'actions'];
   dataSource = new MatTableDataSource<DebtsLookup>();
   currentUserIdSubscription: Subscription;
   currentUserId = -1;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(DebtshistoryComponent) debtshistorycomponent: DebtshistoryComponent;
 
   constructor(private debtData: DebtData,
               private uiService: UIService) { }
 
   ngOnInit(): void {
-    this.getBorrowRequestsForCurrentUser();
+    this.getDebtsForCurrentUser();
   }
 
-  getBorrowRequestsForCurrentUser() {
+  getDebtsForCurrentUser() {
+    this.isLoading = true;
     this.debtData.GetDebtsForCurrentUser().subscribe((debtsList: DebtsLookup[]) => {
       this.isLoading = false;
       this.dataSource.data = debtsList;
@@ -45,5 +49,18 @@ export class DebtsComponent implements OnInit, AfterViewInit {
 
   doFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  payDebt(debt){
+    this.isLoading = true;
+    this.debtData.PayDebt(debt).subscribe((res: Result) => {
+      this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
+      this.debtshistorycomponent.getDebtsHistoryForCurrentUser();
+      this.isLoading = false;
+      this.getDebtsForCurrentUser();
+    }, error => {
+      this.isLoading = false;
+      this.uiService.showErrorSnackbar(error, null, 3000);
+    });
   }
 }

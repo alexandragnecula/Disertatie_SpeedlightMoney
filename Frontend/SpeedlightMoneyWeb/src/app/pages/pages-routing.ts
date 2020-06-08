@@ -11,7 +11,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'lenders',
+    path: 'borrowings',
     loadChildren: () => import('./borrower/borrower.module').then(m => m.BorrowerModule), canLoad: [AuthGuard]
   },
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
   loadChildren: () => import('./debt/debt.module').then(m => m.DebtModule), canLoad: [AuthGuard]
   },
   {
-  path: 'credits',
+  path: 'loans',
   loadChildren: () => import('./lender/lender.module').then(m => m.LenderModule), canLoad: [AuthGuard]
   },
   {

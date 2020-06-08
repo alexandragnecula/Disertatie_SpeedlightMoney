@@ -66,6 +66,7 @@ export class ManageLoanCommand {
     id: number;
     loanStatusId: number;
     borrowerId: number;
+    lenderId: number;
     currencyId: number;
     amount: number;
 }
@@ -83,7 +84,9 @@ export abstract class LoanData {
     abstract DeleteLoan(id: number): Observable<Result>;
     abstract RestoreLoan(restoreLoanCommand: RestoreLoanCommand): Observable<Result>;
     abstract RequestLoan(addLoanCommand: AddLoanCommand): Observable<Result>;
-    abstract ApproveLoan(updateLoanCommand: ManageLoanCommand): Observable<Result>;
+    abstract ManageLoan(updateLoanCommand: ManageLoanCommand): Observable<Result>;
     abstract GetBorrowRequestsForCurrentUser(): Observable<LoansLookup[]>;
     abstract GetLendRequestsForCurrentUser(): Observable<LoansLookup[]>;
+    abstract GetBorrowRequestsHistoryForCurrentUser(): Observable<LoansLookup[]>;
+    abstract GetLendRequestsHistoryForCurrentUser(): Observable<LoansLookup[]>;
 }

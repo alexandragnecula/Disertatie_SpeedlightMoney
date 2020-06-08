@@ -129,9 +129,9 @@ namespace BusinessLayer.Services.Debts
         public async Task<IList<DebtDto>> GetDebtsForCurrentUser()
         {
             List<DebtDto> debts = await _context.Debts
-                .Where(x => x.Loan.BorrowerId == (_currentUserService.UserId.HasValue ? _currentUserService.UserId.Value : 0))
+                .Where(x => x.Loan.BorrowerId == (_currentUserService.UserId.HasValue ? _currentUserService.UserId.Value : 0) && !x.Deleted)
                 .Include(x => x.Loan)
-                .Include(x=> x.DebtStatus)
+                .Include(x => x.DebtStatus)
                 .OrderByDescending(x => x.CreatedOn)
                 .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -142,7 +142,7 @@ namespace BusinessLayer.Services.Debts
         public async Task<IList<DebtDto>> GetCreditsForCurrentUser()
         {
             List<DebtDto> debts = await _context.Debts
-                .Where(x => x.Loan.LenderId == _currentUserService.UserId.Value)
+                .Where(x => x.Loan.LenderId == _currentUserService.UserId.Value && !x.Deleted)
                 .Include(x => x.Loan)
                 .Include(x => x.DebtStatus)
                 .OrderByDescending(x => x.CreatedOn)
@@ -152,6 +152,146 @@ namespace BusinessLayer.Services.Debts
             return debts;
         }
 
+        public async Task<IList<DebtDto>> GetDebtsHistoryForCurrentUser()
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Where(x => x.Loan.BorrowerId == (_currentUserService.UserId.HasValue ? _currentUserService.UserId.Value : 0) && x.Deleted)
+                .Include(x => x.Loan)
+                .Include(x => x.DebtStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return debts;
+        }
+
+        public async Task<IList<DebtDto>> GetCreditsHistoryForCurrentUser()
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Where(x => x.Loan.LenderId == _currentUserService.UserId.Value && x.Deleted)
+                .Include(x => x.Loan)
+                .Include(x => x.DebtStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return debts;
+        }
+
+        public async Task<Result> PayDebt(DebtDto debtToUpdate)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                //update debt status
+                var entity = await _context.Debts
+                                            .FirstOrDefaultAsync(x => x.Id == debtToUpdate.Id && !x.Deleted);
+
+                if (entity == null)
+                {
+                    return Result.Failure(new List<string> { "No valid debt found" });
+                }
+
+                entity.DebtStatusId = 3;
+                entity.Deleted = true;
+
+                //update loan return date
+                var loan = await _context.Loans
+                                           .FirstOrDefaultAsync(x => x.Id == debtToUpdate.LoanId);
+
+                if (loan == null)
+                {
+                    return Result.Failure(new List<string> { "No valid loan found" });
+                }
+
+                loan.ReturnDate = DateTime.Now;
+
+
+                var wallletForCurentUser = await _context.Wallets.Where(x => x.UserId == entity.Loan.BorrowerId)
+                                                                         .FirstOrDefaultAsync(x => x.CurrencyId == loan.CurrencyId);
+                //var wallletForCurentUserEUR = await _context.Wallets.Where(x => x.UserId == entity.Loan.BorrowerId)
+                //                                                    .FirstOrDefaultAsync(x => x.CurrencyId == 2);
+
+                var walletForLender = await _context.Wallets.Where(x => x.UserId == entity.Loan.LenderId)
+                                                                 .FirstOrDefaultAsync(x => x.CurrencyId == loan.CurrencyId);
+                //var walletForLenderEUR = await _context.Wallets.Where(x => x.UserId == entity.Loan.LenderId)
+                //                                                .FirstOrDefaultAsync(x => x.CurrencyId == 2);
+
+                // withdraw amount from borrower and add amount to lender wallet
+                if (loan.CurrencyId == wallletForCurentUser.CurrencyId)
+                {
+                    if (wallletForCurentUser.TotalAmount >= debtToUpdate.LoanAmount)
+                    {
+                        wallletForCurentUser.TotalAmount -= debtToUpdate.LoanAmount;
+                        walletForLender.TotalAmount += debtToUpdate.LoanAmount;
+
+                    }
+                    else
+                    {
+                        return Result.Failure(new List<string> { "Inssuficient funds for wallet in RON" });
+                    }
+                }
+
+                //if (loan.CurrencyId == wallletForCurentUserEUR.CurrencyId)
+                //{
+                //    if (wallletForCurentUserEUR.TotalAmount >= debtToUpdate.LoanAmount)
+                //    {
+                //        wallletForCurentUserEUR.TotalAmount -= debtToUpdate.LoanAmount;
+                //        walletForLenderEUR.TotalAmount += debtToUpdate.LoanAmount;
+                //    }
+                //    else
+                //    {
+                //        return Result.Failure(new List<string> { "Inssuficient funds for wallet in EUR" });
+                //    }
+
+                //}
+
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return Result.Success("Debt was successfully payed");
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+
+                throw new Exception(e.ToString());
+            }
+        }
+
+        public async Task<Result> DeferPayment(DebtDto debtToUpdate)
+        {
+            //update debt status
+            var entity = await _context.Debts
+                                        .FirstOrDefaultAsync(x => x.Id == debtToUpdate.Id && !x.Deleted);
+
+            if (entity == null)
+            {
+                return Result.Failure(new List<string> { "No valid debt found" });
+            }
+
+            entity.DebtStatusId = 3;
+
+            var loan = await _context.Loans
+                                        .FirstOrDefaultAsync(x => x.Id == debtToUpdate.LoanId && !x.Deleted);
+
+            if (entity == null)
+            {
+                return Result.Failure(new List<string> { "No valid loan found" });
+            }
+
+            if (loan.DueDate.Value.DayOfYear == DateTime.Now.DayOfYear)
+            {
+                loan.DueDate = DateTime.Now.AddDays(14);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success("Debt deferral was successful (14 days)");
+        }
+
 
     }
+
 }

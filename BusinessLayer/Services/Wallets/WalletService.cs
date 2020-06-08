@@ -64,8 +64,8 @@ namespace BusinessLayer.Services.Wallets
 
         public async Task<Result> DeleteWallet(WalletDto walletToDelete)
         {
-           var entity = await _context.Wallets               
-                .FirstOrDefaultAsync(x => x.Id == walletToDelete.Id && !x.Deleted);
+            var entity = await _context.Wallets
+                 .FirstOrDefaultAsync(x => x.Id == walletToDelete.Id && !x.Deleted);
 
             if (entity == null)
             {
@@ -117,8 +117,8 @@ namespace BusinessLayer.Services.Wallets
 
         public async Task<IList<WalletDto>> GetWalletsForCurrentUser()
         {
-           
-            if(_currentUserService.UserId == null)
+
+            if (_currentUserService.UserId == null)
             {
                 //de verificat castul, not ok
                 return (IList<WalletDto>)Result.Failure(new List<string> { "No valid current user found" });
@@ -174,6 +174,51 @@ namespace BusinessLayer.Services.Wallets
             await _context.SaveChangesAsync();
 
             return Result.Success("Money were added was successful");
+        }
+
+        public async Task<Result> SendMoney(WalletDto walletToUpdate)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var beneficiaryWallet = await _context.Wallets
+                                        .Where(x => x.CurrencyId == walletToUpdate.CurrencyId)
+                                        .FirstOrDefaultAsync(x => x.UserId == walletToUpdate.UserId && !x.Deleted);
+
+                var currentUserWallet = await _context.Wallets
+                                       .Where(x => x.CurrencyId == walletToUpdate.CurrencyId)
+                                       .FirstOrDefaultAsync(x => x.UserId == _currentUserService.UserId.Value && !x.Deleted);
+
+
+                if (beneficiaryWallet == null)
+                {
+                    return Result.Failure(new List<string> { "No valid beneficiary wallet found" });
+                }
+
+
+                if (currentUserWallet.TotalAmount >= walletToUpdate.TotalAmount)
+                {
+                    currentUserWallet.TotalAmount -= walletToUpdate.TotalAmount;
+                    beneficiaryWallet.TotalAmount += walletToUpdate.TotalAmount;                   
+                }
+                else
+                {
+                    return Result.Failure(new List<string> { "Insufficient funds"});
+                }
+
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();              
+
+                return Result.Success("Transaction was successful");
+
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+
+                throw new Exception(e.ToString());
+            }
         }
     }
 }

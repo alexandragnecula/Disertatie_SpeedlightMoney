@@ -47,4 +47,5 @@ export abstract class WalletData {
     abstract DeleteWallet(id: number): Observable<Result>;
     abstract RestoreWallet(restoreWalletCommand: RestoreWalletCommand): Observable<Result>;
     abstract AddMoneyToWallet(updateWalletCommand: UpdateWalletCommand);
+    abstract SendMoney(updateWalletCommand: UpdateWalletCommand): Observable<Result>;
 }

@@ -129,10 +129,10 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(result);
         }
 
-        [HttpPut("approveloan")]
+        [HttpPut("manageloan")]
         public async Task<ActionResult<Result>> ApproveLoan([FromBody] LoanDto loanToUpdate)
         {
-            var result = await _loanService.ApproveLoan(loanToUpdate);
+            var result = await _loanService.ManageLoan(loanToUpdate);
 
             if (!result.Succeeded)
             {
@@ -154,6 +154,22 @@ namespace SpeedlightMoney_App.Controllers
         public async Task<ActionResult<IList<LoanDto>>> GetLenderRequestsForCurrentUser()
         {
             var vm = await _loanService.GetLendRequestsForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpGet("borrowrequestshistory")]
+        public async Task<ActionResult<IList<LoanDto>>> GetBorrowerRequestsHistoryForCurrentUser()
+        {
+            var vm = await _loanService.GetBorrowRequestsHistoryForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpGet("lendrequestshistory")]
+        public async Task<ActionResult<IList<LoanDto>>> GetLenderRequestsHistoryForCurrentUser()
+        {
+            var vm = await _loanService.GetLendRequestsHistoryForCurrentUser();
 
             return Ok(vm);
         }

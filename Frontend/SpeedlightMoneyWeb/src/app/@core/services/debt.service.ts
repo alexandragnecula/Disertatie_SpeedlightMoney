@@ -77,6 +77,32 @@ export class DebtService extends DebtData {
                 catchError(this.errService.errorHandl)
             );
     }
+    GetDebtsHistoryForCurrentUser(): Observable<DebtsLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<DebtsList>(this.baseUrl + '/userdebtshistory', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetCreditsHistoryForCurrentUser(): Observable<DebtsLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<DebtsList>(this.baseUrl + '/usercreditshistory', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
     GetDebtsDropdown(): Observable<SelectItemsList> {
         this.httpOptions = {
             headers: new HttpHeaders({
@@ -136,6 +162,32 @@ export class DebtService extends DebtData {
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
         return this.http.put<Result>(this.baseUrl + '/restore', JSON.stringify(restoreDebtCommand), this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
+    PayDebt(updateDebtCommand: UpdateDebtCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl + '/paydebt', JSON.stringify(updateDebtCommand), this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
+    DeferPayment(updateDebtCommand: UpdateDebtCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl + '/deferpayment', JSON.stringify(updateDebtCommand), this.httpOptions)
         .pipe(
             map((response: any) => response),
             retry(1),

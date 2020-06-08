@@ -1,6 +1,5 @@
-<mat-card class="loanRequestsCard">
-    <h3  class="loanRequestsHeader">Loan Requests</h3> 
-    <div class="margintopFilter" fxLayoutAlign="center center">
+<div class="margintopFilter" fxLayoutAlign="center center">
+        <h3  class="loanRequestsHeader">Loan Requests</h3> 
         <mat-icon class="iconStyle">filter_list</mat-icon>
         <mat-form-field fxFlex="40%" fxFlex.xs="100%">
             <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter"/>
@@ -69,11 +68,7 @@
         <ng-container matColumnDef="manageRequest">
             <mat-header-cell *matHeaderCellDef>Manage loan request</mat-header-cell>
             <mat-cell *matCellDef="let element"> 
-            <!-- <button mat-icon-button class="iconbutton" color="primary">
-                <mat-icon aria-label="Manage loan request" >swap_vert</mat-icon>
-                {{element.loanStatusName}}
-            </button> -->
-            <mat-select id="family_relation" placeholder="Manage request"  (selectionChange)="manageLoanRequest($event.value, element)">
+            <mat-select *ngIf="!element.borrowDate" id="family_relation" placeholder="Manage request"  (selectionChange)="manageLoanRequest($event.value, element)">
                 <mat-option *ngFor="let loanStatus of loanstatusesSelectList.selectItems" 
                 [value]="loanStatus.value">
                      {{loanStatus.label}}
@@ -88,4 +83,13 @@
     </mat-table>
 
     <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" fxLayoutAlign="center center"></mat-paginator>
-</mat-card>
+
+<section fxLayout fxLayoutAlign="center">
+    <app-loanrequestshistory></app-loanrequestshistory>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+</section>
+
+<section fxLayout fxLayoutAlign="center">
+    <app-credits></app-credits>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+</section>

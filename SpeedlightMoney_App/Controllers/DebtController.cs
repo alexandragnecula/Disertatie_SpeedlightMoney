@@ -22,7 +22,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPost("adddebt")]
-        public async Task<IActionResult> AddUser([FromBody] DebtDto debtToAdd)
+        public async Task<IActionResult> AddDebt([FromBody] DebtDto debtToAdd)
         {
             if (debtToAdd.DebtStatusName == null)
             {
@@ -45,7 +45,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Result>> UpdateCity([FromBody] DebtDto debtToUpdate)
+        public async Task<ActionResult<Result>> UpdateDebt([FromBody] DebtDto debtToUpdate)
         {
             if (debtToUpdate.DebtStatusName == null)
             {
@@ -136,6 +136,49 @@ namespace SpeedlightMoney_App.Controllers
             var vm = await _debtService.GetCreditsForCurrentUser();
 
             return Ok(vm);
+        }
+
+        [HttpGet("userdebtshistory")]
+        public async Task<ActionResult<IList<DebtDto>>> GetDebtsHistoryForCurrentUser()
+        {
+            var vm = await _debtService.GetDebtsHistoryForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpGet("usercreditshistory")]
+        public async Task<ActionResult<IList<DebtDto>>> GetCreditsHistoryForCurrentUser()
+        {
+            var vm = await _debtService.GetCreditsHistoryForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpPut("paydebt")]
+        public async Task<ActionResult<Result>> PayDebt([FromBody] DebtDto debtToUpdate)
+        {
+            var result = await _debtService.PayDebt(debtToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+
+        [HttpPut("defferpayment")]
+        public async Task<ActionResult<Result>> DefferPayment([FromBody] DebtDto debtToUpdate)
+        {
+            var result = await _debtService.DeferPayment(debtToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -19,5 +19,6 @@ namespace BusinessLayer.Services.Wallets
         Task<SelectItemVm> GetAllAsSelect(WalletDto walletDto);
         Task<SelectItemVm> GetWalletsForCurrentUserAsSelect(WalletDto walletDto);
         Task<Result> AddMoneyToWallet(WalletDto walletToUpdate);
+        Task<Result> SendMoney(WalletDto walletToUpdate);
     }
 }

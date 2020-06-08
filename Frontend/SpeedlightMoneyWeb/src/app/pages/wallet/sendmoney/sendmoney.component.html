@@ -1,0 +1,67 @@
+<div mat-dialog-content>
+    <section fxLayout fxLayoutAlign="center">
+        <form [formGroup]="sendMoneyForm">
+          <mat-card fxFlex.xs="100%" fxFlex="600px">
+            <mat-card-title fxLayoutAlign="center">Send money</mat-card-title>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field *ngIf="this.beneficiarsSelectList.selectItems">
+                    <mat-select placeholder="Choose Beneficiar" formControlName="beneficiarId" required>
+                      <mat-option
+                        *ngFor="let beneficiar of beneficiarsSelectList.selectItems"
+                        [value]="beneficiar.value">
+                        {{ beneficiar.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint>Please choose a beneficiar</mat-hint>
+                    <mat-error>Please choose a beneficiar</mat-error>
+                  </mat-form-field>
+
+                <mat-form-field *ngIf="this.currenciesSelectList.selectItems">
+                  <mat-select placeholder="Choose Wallet Currency" formControlName="currencyId" required>
+                    <mat-option
+                      *ngFor="let currency of currenciesSelectList.selectItems"
+                      [value]="currency.value">
+                      {{ currency.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint>Please choose a currency</mat-hint>
+                  <mat-error>Please choose a currency</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input
+                      matInput
+                      type="number" min="0" value="0" step="0.01"
+                      placeholder="Amount"
+                      formControlName="totalAmount"             
+                      required>
+                    <mat-hint>Please enter an amount.</mat-hint>
+                    <mat-error>Amount is required!</mat-error>
+                  </mat-form-field>
+
+              <mat-spinner *ngIf="isLoading"></mat-spinner>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+              <button
+              *ngIf="!isLoading"
+              type="button"
+              mat-raised-button
+              color="accent"
+              [mat-dialog-close]
+            >
+              Close
+            </button>
+              <button
+                type="submit"
+                mat-raised-button
+                color="primary"
+                [disabled]="sendMoneyForm.invalid"
+                [mat-dialog-close]="sendMoneyForm"
+              >
+                Send
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
+      </section>
+</div>

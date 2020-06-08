@@ -17,10 +17,14 @@ namespace BusinessLayer.Views
         public DateTime? DueDate { get; set; }
         public string BorrowerName { get; set; }
         public string LenderName { get; set; }
+        public string LoanStatusName { get; set; }
 
         //DEBT STATUS
         public long DebtStatusId { get; set; }
         public string DebtStatusName { get; set; }
+
+        public string CurrencyName { get; set; }
+        public string TermName { get; set; }
 
         public bool Deleted { get; set; }
 
@@ -49,6 +53,21 @@ namespace BusinessLayer.Views
                     opt => opt.MapFrom(s =>
                         s.DebtStatus != null
                             ? s.DebtStatus.DebtStatusName
+                            : string.Empty))
+                .ForMember(d => d.LoanStatusName,
+                    opt => opt.MapFrom(s =>
+                        s.Loan != null
+                            ? s.Loan.LoanStatus.LoanStatusName
+                            : string.Empty))
+                .ForMember(d => d.CurrencyName,
+                    opt => opt.MapFrom(s =>
+                        s.Loan != null
+                            ? s.Loan.Currency.CurrencyName
+                            : string.Empty))
+                 .ForMember(d => d.TermName,
+                    opt => opt.MapFrom(s =>
+                        s.Loan != null
+                            ? s.Loan.Term.TermName
                             : string.Empty));
         }
     }

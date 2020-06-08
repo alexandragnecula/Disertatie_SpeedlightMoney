@@ -17,6 +17,9 @@ export class DebtsLookup {
     borrowerName: string;
     lenderName: string;
     debtStatusName: string;
+    loanStatusName: string;
+    currencyName: string;
+    termName: string;
     deleted: boolean;
 }
 
@@ -44,9 +47,13 @@ export abstract class DebtData {
     abstract GetDebts(): Observable<DebtsList>;
     abstract GetDebtsForCurrentUser(): Observable<DebtsLookup[]>;
     abstract GetCreditsForCurrentUser(): Observable<DebtsLookup[]>;
+    abstract GetDebtsHistoryForCurrentUser(): Observable<DebtsLookup[]>;
+    abstract GetCreditsHistoryForCurrentUser(): Observable<DebtsLookup[]>;
     abstract GetDebtsDropdown(): Observable<SelectItemsList>;
     abstract AddDebt(addDebtCommand: AddDebtCommand): Observable<Result>;
     abstract UpdateDebt(updateDebtCommand: UpdateDebtCommand): Observable<Result>;
     abstract DeleteDebt(id: number): Observable<Result>;
     abstract RestoreDebt(restoreDebtCommand: RestoreDebtCommand): Observable<Result>;
+    abstract PayDebt(updateDebtCommand: UpdateDebtCommand): Observable<Result>;
+    abstract DeferPayment(updateDebtCommand: UpdateDebtCommand): Observable<Result>;
 }

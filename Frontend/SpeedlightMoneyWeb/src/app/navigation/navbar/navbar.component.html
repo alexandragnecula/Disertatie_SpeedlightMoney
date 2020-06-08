@@ -12,8 +12,8 @@
         <li *ngIf="!isAuth"><a routerLink="/register">Signup</a></li>
         <li *ngIf="!isAuth"><a routerLink="/login">Login</a></li>
         <li *ngIf="isAuth"><a routerLink="">Dashboard</a></li>
-        <li *ngIf="isAuth"><a routerLink="/lenders">Borrow</a></li>
-        <li *ngIf="isAuth"><a routerLink="/credits">Lend</a></li>
+        <li *ngIf="isAuth"><a routerLink="/borrowings">Borrow</a></li>
+        <li *ngIf="isAuth"><a routerLink="/loans">Lend</a></li>
         <li *ngIf="isAuth"><a routerLink="/debts">Debts</a></li>
         <!-- <li *ngIf="isAuth"><a routerLink="/user/profile/{{currentUserId}}">Profile</a></li> -->
         <li *ngIf="isAuth"><a style="cursor:pointer" (click)="onLogout()">Logout</a></li>

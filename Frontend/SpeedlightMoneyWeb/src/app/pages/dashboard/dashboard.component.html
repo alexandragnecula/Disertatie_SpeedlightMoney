@@ -18,11 +18,17 @@
               </mat-form-field>
 
               <!-- <mat-card-actions> -->
-                <button  type="submit" mat-raised-button color="primary"
+                <button class="buttonSubmit" mat-raised-button color="primary"
                   (click)="openDialogToEdit()">
                   <mat-icon>add</mat-icon>
                   Add money
                 </button>
+
+                <button mat-raised-button color="primary"
+                (click)="openDialogToSendMoney()">
+                  <mat-icon>send</mat-icon>
+                  Send money
+               </button>
               <!-- </mat-card-actions> -->
               <h5  class="walletFormHeader">Transactions</h5> 
              

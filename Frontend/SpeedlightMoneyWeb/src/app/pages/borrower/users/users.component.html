@@ -56,7 +56,48 @@
 </mat-table>
 
 <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" fxLayoutAlign="center center"></mat-paginator>
+
+
+<!-- <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borrow Requests
+        </mat-panel-title>
+        <mat-panel-description>
+          Active Requests
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <section fxLayout fxLayoutAlign="center">
+        <app-borrowrequests></app-borrowrequests>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </section>
+    </mat-expansion-panel>
+    
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borrow Requests History
+        </mat-panel-title>
+        <mat-panel-description>
+          Unmanaged Requests
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <section fxLayout fxLayoutAlign="center">
+        <app-borrowrequestshistory></app-borrowrequestshistory>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </section>
+    </mat-expansion-panel>
+  </mat-accordion> -->
+
 <section fxLayout fxLayoutAlign="center">
     <app-borrowrequests></app-borrowrequests>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+</section>
+
+<section fxLayout fxLayoutAlign="center">
+    <app-borrowrequestshistory></app-borrowrequestshistory>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
 </section>

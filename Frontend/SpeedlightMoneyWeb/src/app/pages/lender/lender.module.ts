@@ -5,11 +5,14 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LENDERROUTES } from './lender-routing';
+import { CreditsComponent } from './credits/credits.component';
+import { LoanrequestshistoryComponent } from './loanrequestshistory/loanrequestshistory.component';
+import { CreditshistoryComponent } from './creditshistory/creditshistory.component';
 
 
 
 @NgModule({
-  declarations: [LoanrequestsComponent],
+  declarations: [LoanrequestsComponent, CreditsComponent, LoanrequestshistoryComponent, CreditshistoryComponent],
   imports: [
     LENDERROUTES,
     CommonModule,

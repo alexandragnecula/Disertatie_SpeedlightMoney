@@ -21,6 +21,7 @@ import { BorrowrequestsComponent } from '../borrowrequests/borrowrequests.compon
 })
 export class UsersComponent implements OnInit, AfterViewInit {
   isLoading = true;
+  panelOpenState = false;
   displayedColumns = ['email', 'firstName', 'country', 'city', 'currentStatus', 'phoneNumber', 'actions'];
   dataSource = new MatTableDataSource<UserLookup>();
   @ViewChild(MatSort) sort: MatSort;
