@@ -14,6 +14,7 @@ using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
+using DataLayer.SharedInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,11 +31,13 @@ namespace BusinessLayer.Services.Users
         private readonly JwtSettings _jwtSettings;
         private readonly IMapper _mapper;
         private readonly IWalletService _walletService;
+        private readonly ICurrentUserService _currentUserService;
 
         public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
             IHttpContextAccessor httpContextAccessor,
             DatabaseContext context, JwtSettings jwtSettings,
-            IMapper mapper, IWalletService walletService)
+            IMapper mapper, IWalletService walletService,
+            ICurrentUserService currentUserService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -43,6 +46,7 @@ namespace BusinessLayer.Services.Users
             _jwtSettings = jwtSettings;
             _mapper = mapper;
             _walletService = walletService;
+            _currentUserService = currentUserService;
         }
 
         public async Task<string> GetUserNameAsync(long userId)
@@ -351,6 +355,7 @@ namespace BusinessLayer.Services.Users
         public async Task<IList<UserDto>> GetAllUsers()
         {
             List<UserDto> users = await _context.Users
+               .Where(x => x.Id != _currentUserService.UserId.Value)
                .OrderByDescending(x => x.Email)
                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                .ToListAsync();

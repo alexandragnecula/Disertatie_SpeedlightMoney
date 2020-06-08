@@ -1,0 +1,91 @@
+<mat-card class="loanRequestsCard">
+    <h3  class="loanRequestsHeader">Loan Requests</h3> 
+    <div class="margintopFilter" fxLayoutAlign="center center">
+        <mat-icon class="iconStyle">filter_list</mat-icon>
+        <mat-form-field fxFlex="40%" fxFlex.xs="100%">
+            <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter"/>
+        </mat-form-field>
+    </div>
+    <!-- <div fxLayoutAlign="end" fxLayout="row" >
+    <button *ngIf="!isLoading" mat-raised-button color="primary" 
+    fxFlex="200px" fxFlex.xs="100%" (click)="openDialogToAdd()">Request Loan</button>
+    </div> -->
+    <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.id | number}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.amount | number}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="borrowDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Borrow date</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.borrowDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="returnDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Return date</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.returnDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Due date</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.dueDate | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="borrowerName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Lender</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.lenderName}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="currencyName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.currencyName}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Term</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.termName}}</mat-cell>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="loanStatusName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.loanStatusName}}</mat-cell>
+        </ng-container> -->
+
+        <ng-container matColumnDef="loanStatusName">
+            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+            <button mat-icon-button class="iconbutton" color="primary">
+                <mat-icon aria-label="Approve loan" >swap_vert</mat-icon>
+                {{element.loanStatusName}}
+            </button>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="manageRequest">
+            <mat-header-cell *matHeaderCellDef>Manage loan request</mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+            <!-- <button mat-icon-button class="iconbutton" color="primary">
+                <mat-icon aria-label="Manage loan request" >swap_vert</mat-icon>
+                {{element.loanStatusName}}
+            </button> -->
+            <mat-select id="family_relation" placeholder="Manage request"  (selectionChange)="manageLoanRequest($event.value, element)">
+                <mat-option *ngFor="let loanStatus of loanstatusesSelectList.selectItems" 
+                [value]="loanStatus.value">
+                     {{loanStatus.label}}
+                </mat-option>
+          </mat-select>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </mat-table>
+
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" fxLayoutAlign="center center"></mat-paginator>
+</mat-card>

@@ -5,14 +5,14 @@ import { Result } from './common/result';
 export class Loan {
     description: string;
     amount: number;
-    borrowDate: Date;
-    returnDate: Date;
-    dueDate: Date;
+    borrowDate?: Date;
+    returnDate?: Date;
+    dueDate?: Date;
     borrowerId: number;
     lenderId: number;
     currencyId: number;
     loadStatusId: number;
-    termID: number;
+    termId: number;
     deleted: boolean;
 }
 
@@ -20,9 +20,9 @@ export class LoansLookup {
     id: number;
     description: string;
     amount: number;
-    borrowDate: Date;
-    returnDate: Date;
-    dueDate: Date;
+    borrowDate?: Date;
+    returnDate?: Date;
+    dueDate?: Date;
     borrowerName: string;
     lenderName: string;
     currencyName: string;
@@ -38,28 +38,36 @@ export class LoansList {
 export class AddLoanCommand {
     description: string;
     amount: number;
-    borrowDate: Date;
-    returnDate: Date;
-    dueDate: Date;
+    borrowDate?: Date;
+    returnDate?: Date;
+    dueDate?: Date;
     borrowerId: number;
     lenderId: number;
     currencyId: number;
     loadStatusId: number;
-    termID: number;
+    termId: number;
 }
 
 export class UpdateLoanCommand {
     id: number;
     description: string;
     amount: number;
-    borrowDate: Date;
-    returnDate: Date;
-    dueDate: Date;
+    borrowDate?: Date;
+    returnDate?: Date;
+    dueDate?: Date;
     borrowerId: number;
     lenderId: number;
     currencyId: number;
     loadStatusId: number;
-    termID: number;
+    termId: number;
+}
+
+export class ManageLoanCommand {
+    id: number;
+    loanStatusId: number;
+    borrowerId: number;
+    currencyId: number;
+    amount: number;
 }
 
 export class RestoreLoanCommand {
@@ -74,4 +82,8 @@ export abstract class LoanData {
     abstract UpdateLoan(updateLoanCommand: UpdateLoanCommand): Observable<Result>;
     abstract DeleteLoan(id: number): Observable<Result>;
     abstract RestoreLoan(restoreLoanCommand: RestoreLoanCommand): Observable<Result>;
+    abstract RequestLoan(addLoanCommand: AddLoanCommand): Observable<Result>;
+    abstract ApproveLoan(updateLoanCommand: ManageLoanCommand): Observable<Result>;
+    abstract GetBorrowRequestsForCurrentUser(): Observable<LoansLookup[]>;
+    abstract GetLendRequestsForCurrentUser(): Observable<LoansLookup[]>;
 }

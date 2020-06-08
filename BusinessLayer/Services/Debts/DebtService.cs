@@ -9,6 +9,7 @@ using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
+using DataLayer.SharedInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Debts
@@ -17,11 +18,13 @@ namespace BusinessLayer.Services.Debts
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public DebtService(DatabaseContext context, IMapper mapper)
+        public DebtService(DatabaseContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result> AddDebt(DebtDto debtToAdd)
@@ -122,5 +125,33 @@ namespace BusinessLayer.Services.Debts
 
             return vm;
         }
+
+        public async Task<IList<DebtDto>> GetDebtsForCurrentUser()
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Where(x => x.Loan.BorrowerId == (_currentUserService.UserId.HasValue ? _currentUserService.UserId.Value : 0))
+                .Include(x => x.Loan)
+                .Include(x=> x.DebtStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return debts;
+        }
+
+        public async Task<IList<DebtDto>> GetCreditsForCurrentUser()
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Where(x => x.Loan.LenderId == _currentUserService.UserId.Value)
+                .Include(x => x.Loan)
+                .Include(x => x.DebtStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return debts;
+        }
+
+
     }
 }

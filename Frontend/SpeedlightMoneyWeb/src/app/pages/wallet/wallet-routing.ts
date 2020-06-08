@@ -7,10 +7,10 @@ const routes: Routes = [
 //     component: DashboardComponent,
 //     canActivate: [AuthGuard]
 //   },
-  {
-    path: 'location',
-    loadChildren: './location/location.module#LocationModule', canLoad: [RoleGuard], data: { expectedRoles: ['Admin'] }
-  },
+  // {
+  //   path: 'location',
+  //   loadChildren: './location/location.module#LocationModule', canLoad: [RoleGuard], data: { expectedRoles: ['Admin'] }
+  // },
 ];
 
 

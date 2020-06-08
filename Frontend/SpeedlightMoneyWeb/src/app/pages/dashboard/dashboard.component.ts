@@ -38,8 +38,8 @@ export class DashboardComponent implements OnInit {
     this.walletData.GetWalletsForCurrentUserDropdown().subscribe((userWallets: SelectItemsList) => {
       this.currentUserWalletsSelectList = userWallets;
       if (this.currentUserWalletsSelectList.selectItems.length > 0) {
-        this.walletId = +this.currentUserWalletsSelectList.selectItems[1].value;
-        this.walletForm.patchValue({walletId: this.currentUserWalletsSelectList.selectItems[1].value});
+        this.walletId = +this.currentUserWalletsSelectList.selectItems[0].value;
+        this.walletForm.patchValue({walletId: this.currentUserWalletsSelectList.selectItems[0].value});
         // const toSelect = this.currentUserWalletsSelectList.selectItems.find(c => c.value === '1');
       }
     },

@@ -12,7 +12,7 @@ namespace SpeedlightMoney_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class DebtController : ControllerBase
     {
         IDebtService _debtService;
@@ -118,6 +118,22 @@ namespace SpeedlightMoney_App.Controllers
         public async Task<ActionResult<SelectItemVm>> GetDebtsDropdown()
         {
             var vm = await _debtService.GetAllAsSelect(new DebtDto());
+
+            return Ok(vm);
+        }
+
+        [HttpGet("userdebts")]
+        public async Task<ActionResult<IList<DebtDto>>> GetDebtsForCurrentUser()
+        {
+            var vm = await _debtService.GetDebtsForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpGet("usercredits")]
+        public async Task<ActionResult<IList<DebtDto>>> GetCreditsForCurrentUser()
+        {
+            var vm = await _debtService.GetCreditsForCurrentUser();
 
             return Ok(vm);
         }

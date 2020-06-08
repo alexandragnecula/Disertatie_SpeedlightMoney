@@ -382,7 +382,7 @@ namespace DataLayer.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("BorrowDate")
+                    b.Property<DateTime?>("BorrowDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("BorrowerId")
@@ -412,7 +412,7 @@ namespace DataLayer.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("LastModifiedBy")
@@ -427,7 +427,7 @@ namespace DataLayer.Migrations
                     b.Property<long>("LoanStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("TermId")

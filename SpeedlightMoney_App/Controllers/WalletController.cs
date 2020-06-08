@@ -96,8 +96,17 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(vm);
         }
 
-        [HttpGet("userwallets")]
+        [HttpGet]
         public async Task<ActionResult<WalletDto>> GetAllWallets()
+        {
+            var vm = await _walletService.GetAllWallets();
+
+            return Ok(vm);
+        }
+
+
+        [HttpGet("userwallets")]
+        public async Task<ActionResult<WalletDto>> GetWalletsForCurrentUser()
         {
             var vm = await _walletService.GetWalletsForCurrentUser();
 

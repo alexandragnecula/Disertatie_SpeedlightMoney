@@ -11,24 +11,16 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'location',
-    loadChildren: './location/location.module#LocationModule', canLoad: [RoleGuard], data: { expectedRoles: ['Admin'] }
+    path: 'lenders',
+    loadChildren: () => import('./borrower/borrower.module').then(m => m.BorrowerModule), canLoad: [AuthGuard]
   },
   {
-    path: 'user',
-    loadChildren: './user/user.module#UserModule', canLoad: [AuthGuard]
+  path: 'debts',
+  loadChildren: () => import('./debt/debt.module').then(m => m.DebtModule), canLoad: [AuthGuard]
   },
   {
-    path: 'employees',
-    loadChildren: './employee/employee.module#EmployeeModule', canLoad: [RoleGuard], data: { expectedRoles: ['Admin', 'Doctor', 'Nurse'] }
-  },
-  {
-    path: 'diagnoses',
-    loadChildren: './diagnosis/diagnosis.module#DiagnosisModule', canLoad: [RoleGuard], data: { expectedRoles: ['Admin'] }
-  },
-  {
-    path: 'treatments',
-    loadChildren: './treatment/treatment.module#TreatmentModule', canLoad: [AuthGuard]
+  path: 'credits',
+  loadChildren: () => import('./lender/lender.module').then(m => m.LenderModule), canLoad: [AuthGuard]
   },
   {
     path: '**',

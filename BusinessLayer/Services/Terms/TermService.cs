@@ -29,7 +29,8 @@ namespace BusinessLayer.Services.Terms
             var entity = new Term
             {
                 TermName = termToAdd.TermName,
-                PeriodInDays = termToAdd.PeriodInDays
+                PeriodInDays = termToAdd.PeriodInDays,
+               
             };
 
             await _context.Terms.AddAsync(entity);

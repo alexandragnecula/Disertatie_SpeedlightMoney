@@ -7,7 +7,7 @@ import { SelectItemsList } from '../data/common/selectitem';
 import { Result } from '../data/common/result';
 import { ErrorService } from 'src/app/shared/error.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { LoanData, Loan, LoansList, AddLoanCommand, UpdateLoanCommand, RestoreLoanCommand } from '../data/loan';
+import { LoanData, Loan, LoansList, AddLoanCommand, UpdateLoanCommand, RestoreLoanCommand, LoansLookup, ManageLoanCommand } from '../data/loan';
 
 @Injectable()
 export class LoanService extends LoanData {
@@ -115,5 +115,57 @@ export class LoanService extends LoanData {
             retry(1),
             catchError(this.errService.errorHandl)
         );
+    }
+    RequestLoan(addLoanCommand: AddLoanCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.post<Result>(this.baseUrl + '/requestloan', JSON.stringify(addLoanCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    ApproveLoan(addLoanCommand: ManageLoanCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl + '/approveloan', JSON.stringify(addLoanCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetBorrowRequestsForCurrentUser(): Observable<LoansLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<LoansList>(this.baseUrl + '/borrowrequests', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetLendRequestsForCurrentUser(): Observable<LoansLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<LoansList>(this.baseUrl + '/lendrequests', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
     }
 }

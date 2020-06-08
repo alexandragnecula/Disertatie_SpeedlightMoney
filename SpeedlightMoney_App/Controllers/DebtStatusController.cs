@@ -12,7 +12,7 @@ namespace SpeedlightMoney_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class DebtStatusController : ControllerBase
     {
         IDebtStatusService _debtStatusService;

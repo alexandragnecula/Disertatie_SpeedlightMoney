@@ -11,9 +11,9 @@ export class Debt {
 export class DebtsLookup {
     id: number;
     loanAmount: number;
-    borrowDate: Date;
-    returnDate: Date;
-    dueDate: Date;
+    borrowDate?: Date;
+    returnDate?: Date;
+    dueDate?: Date;
     borrowerName: string;
     lenderName: string;
     debtStatusName: string;
@@ -42,6 +42,8 @@ export class RestoreDebtCommand {
 export abstract class DebtData {
     abstract GetDebt(id: number): Observable<Debt>;
     abstract GetDebts(): Observable<DebtsList>;
+    abstract GetDebtsForCurrentUser(): Observable<DebtsLookup[]>;
+    abstract GetCreditsForCurrentUser(): Observable<DebtsLookup[]>;
     abstract GetDebtsDropdown(): Observable<SelectItemsList>;
     abstract AddDebt(addDebtCommand: AddDebtCommand): Observable<Result>;
     abstract UpdateDebt(updateDebtCommand: UpdateDebtCommand): Observable<Result>;

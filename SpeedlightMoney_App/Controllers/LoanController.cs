@@ -12,7 +12,7 @@ namespace SpeedlightMoney_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class LoanController : ControllerBase
     {
         ILoanService _loanService;
@@ -108,6 +108,52 @@ namespace SpeedlightMoney_App.Controllers
         public async Task<ActionResult<SelectItemVm>> GetLoansDropdown()
         {
             var vm = await _loanService.GetAllAsSelect(new LoanDto());
+
+            return Ok(vm);
+        }
+
+        [HttpPost("requestloan")]
+        public async Task<IActionResult> RequestLoan([FromBody] LoanDto loanToAdd)
+        {
+            if (loanToAdd.Description == null)
+            {
+                return BadRequest("The loan description is mandatory!");
+            }
+            var result = await _loanService.RequestLoan(loanToAdd);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("approveloan")]
+        public async Task<ActionResult<Result>> ApproveLoan([FromBody] LoanDto loanToUpdate)
+        {
+            var result = await _loanService.ApproveLoan(loanToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("borrowrequests")]
+        public async Task<ActionResult<IList<LoanDto>>> GetBorrowerRequestsForCurrentUser()
+        {
+            var vm = await _loanService.GetBorrowRequestsForCurrentUser();
+
+            return Ok(vm);
+        }
+
+        [HttpGet("lendrequests")]
+        public async Task<ActionResult<IList<LoanDto>>> GetLenderRequestsForCurrentUser()
+        {
+            var vm = await _loanService.GetLendRequestsForCurrentUser();
 
             return Ok(vm);
         }

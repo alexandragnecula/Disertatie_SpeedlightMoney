@@ -10,9 +10,9 @@ namespace BusinessLayer.Views
         public long Id { get; set; }
         public string Description { get; set; }
         public double Amount { get; set; }
-        public DateTime BorrowDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? BorrowDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         //BORROWER
         public long BorrowerId { get; set; }

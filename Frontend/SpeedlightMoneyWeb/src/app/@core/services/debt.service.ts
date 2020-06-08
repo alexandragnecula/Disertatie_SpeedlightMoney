@@ -7,7 +7,7 @@ import { SelectItemsList } from '../data/common/selectitem';
 import { Result } from '../data/common/result';
 import { ErrorService } from 'src/app/shared/error.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { DebtData, Debt, DebtsList, AddDebtCommand, UpdateDebtCommand, RestoreDebtCommand} from '../data/debt';
+import { DebtData, Debt, DebtsList, AddDebtCommand, UpdateDebtCommand, RestoreDebtCommand, DebtsLookup} from '../data/debt';
 
 @Injectable()
 export class DebtService extends DebtData {
@@ -45,6 +45,32 @@ export class DebtService extends DebtData {
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
         return this.http.get<DebtsList>(this.baseUrl, this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetDebtsForCurrentUser(): Observable<DebtsLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<DebtsList>(this.baseUrl + '/userdebts', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetCreditsForCurrentUser(): Observable<DebtsLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<DebtsList>(this.baseUrl + '/usercredits', this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

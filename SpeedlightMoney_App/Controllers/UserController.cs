@@ -113,8 +113,8 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Ultimate, Premium")]
-        public async Task<ActionResult<UserDto>> GetUsers()
+        [Authorize]
+        public async Task<ActionResult<IList<UserDto>>> GetUsers()
         {
             var vm = await _identityService.GetAllUsers();
 

@@ -12,9 +12,9 @@ namespace BusinessLayer.Views
         //LOAN
         public long LoanId { get; set; }
         public double LoanAmount { get; set; }
-        public DateTime BorrowDate { get; set; }
-        public DateTime ReturnDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? BorrowDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public string BorrowerName { get; set; }
         public string LenderName { get; set; }
 
