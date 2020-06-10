@@ -51,11 +51,30 @@
                 </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="loanStatusName">
+                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                <mat-cell *matCellDef="let element"> 
+                <button mat-icon-button class="iconbutton" color="primary">
+                    <mat-icon aria-label="Debt status" >swap_vert</mat-icon>
+                    {{element.loanStatusName}}
+                </button>
+                </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="actions">
                 <mat-header-cell class="returnLoanStyle" *matHeaderCellDef>Return loan</mat-header-cell>
                 <mat-cell *matCellDef="let element"> 
                   <button mat-icon-button matTooltip="Click to return loan" class="iconbutton" color="primary" *ngIf="element.id && !element.returnDate">
                       <mat-icon aria-label="Return loan" (click)="payDebt(element)">assignment_return</mat-icon>
+                  </button>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="deferpayment">
+                <mat-header-cell class="requestLoanStyle" *matHeaderCellDef>Defer payment </mat-header-cell>
+                <mat-cell *matCellDef="let element"> 
+                  <button mat-icon-button matTooltip="Click to defer payment" class="iconbutton" color="primary" *ngIf="compareDates(element.dueDate)">
+                      <mat-icon aria-label="Defer payment" (click)="deferPayment(element)">watch_later</mat-icon>
                   </button>
                 </mat-cell>
             </ng-container>

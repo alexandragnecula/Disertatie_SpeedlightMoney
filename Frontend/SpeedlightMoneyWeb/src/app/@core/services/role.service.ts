@@ -72,7 +72,7 @@ export class RoleService extends RoleData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addRoleCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + '/addrole', JSON.stringify(addRoleCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

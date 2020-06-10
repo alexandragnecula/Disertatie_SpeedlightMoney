@@ -209,13 +209,9 @@ namespace BusinessLayer.Services.Debts
 
                 var wallletForCurentUser = await _context.Wallets.Where(x => x.UserId == entity.Loan.BorrowerId)
                                                                          .FirstOrDefaultAsync(x => x.CurrencyId == loan.CurrencyId);
-                //var wallletForCurentUserEUR = await _context.Wallets.Where(x => x.UserId == entity.Loan.BorrowerId)
-                //                                                    .FirstOrDefaultAsync(x => x.CurrencyId == 2);
 
                 var walletForLender = await _context.Wallets.Where(x => x.UserId == entity.Loan.LenderId)
                                                                  .FirstOrDefaultAsync(x => x.CurrencyId == loan.CurrencyId);
-                //var walletForLenderEUR = await _context.Wallets.Where(x => x.UserId == entity.Loan.LenderId)
-                //                                                .FirstOrDefaultAsync(x => x.CurrencyId == 2);
 
                 // withdraw amount from borrower and add amount to lender wallet
                 if (loan.CurrencyId == wallletForCurentUser.CurrencyId)
@@ -231,20 +227,6 @@ namespace BusinessLayer.Services.Debts
                         return Result.Failure(new List<string> { "Inssuficient funds for wallet in RON" });
                     }
                 }
-
-                //if (loan.CurrencyId == wallletForCurentUserEUR.CurrencyId)
-                //{
-                //    if (wallletForCurentUserEUR.TotalAmount >= debtToUpdate.LoanAmount)
-                //    {
-                //        wallletForCurentUserEUR.TotalAmount -= debtToUpdate.LoanAmount;
-                //        walletForLenderEUR.TotalAmount += debtToUpdate.LoanAmount;
-                //    }
-                //    else
-                //    {
-                //        return Result.Failure(new List<string> { "Inssuficient funds for wallet in EUR" });
-                //    }
-
-                //}
 
                 await _context.SaveChangesAsync();
 
@@ -271,19 +253,23 @@ namespace BusinessLayer.Services.Debts
                 return Result.Failure(new List<string> { "No valid debt found" });
             }
 
-            entity.DebtStatusId = 3;
+            entity.DebtStatusId = 2;
 
             var loan = await _context.Loans
-                                        .FirstOrDefaultAsync(x => x.Id == debtToUpdate.LoanId && !x.Deleted);
+                                        .FirstOrDefaultAsync(x => x.Id == debtToUpdate.LoanId);
 
-            if (entity == null)
+            if (loan == null)
             {
                 return Result.Failure(new List<string> { "No valid loan found" });
             }
 
-            if (loan.DueDate.Value.DayOfYear == DateTime.Now.DayOfYear)
+            if (loan.DueDate.Value.Date == DateTime.Now.Date)
             {
                 loan.DueDate = DateTime.Now.AddDays(14);
+            }
+            else
+            {
+                return Result.Failure(new List<string> { "Debt cannot be deferred until due date"});
             }
 
             await _context.SaveChangesAsync();

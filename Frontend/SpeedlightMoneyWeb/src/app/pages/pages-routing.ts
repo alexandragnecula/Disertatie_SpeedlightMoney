@@ -23,6 +23,10 @@ const routes: Routes = [
   loadChildren: () => import('./lender/lender.module').then(m => m.LenderModule), canLoad: [AuthGuard]
   },
   {
+  path: 'friends',
+  loadChildren: () => import('./friend/friend.module').then(m => m.FriendModule), canLoad: [AuthGuard]
+  },
+  {
     path: '**',
     component: NotFoundComponent,
   }

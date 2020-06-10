@@ -9,7 +9,6 @@ import { BorrowrequestComponent } from './borrowrequest/borrowrequest.component'
 import { BorrowrequestsComponent } from './borrowrequests/borrowrequests.component';
 import { BorrowrequestshistoryComponent } from './borrowrequestshistory/borrowrequestshistory.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-
 @NgModule({
   declarations: [UsersComponent, BorrowrequestComponent, BorrowrequestsComponent, BorrowrequestshistoryComponent],
   imports: [

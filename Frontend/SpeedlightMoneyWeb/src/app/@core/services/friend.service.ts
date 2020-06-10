@@ -70,7 +70,7 @@ export class FriendService extends FriendData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addFriendCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + '/addfriend', JSON.stringify(addFriendCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),
@@ -115,5 +115,18 @@ export class FriendService extends FriendData {
             retry(1),
             catchError(this.errService.errorHandl)
         );
+    }
+    AddFriendForCurrentUser(addFriendCommand: AddFriendCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.post<Result>(this.baseUrl + '/addfriendforcurrentuser', JSON.stringify(addFriendCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
     }
 }

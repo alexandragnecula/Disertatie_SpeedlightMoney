@@ -69,7 +69,7 @@ export class CurrencyService extends CurrencyData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addCurrencyCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + '/addcurrency', JSON.stringify(addCurrencyCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

@@ -15,5 +15,7 @@ namespace BusinessLayer.Services.Friends
         Task<FriendDto> GetFriendById(long id);
         Task<IList<FriendDto>> GetAllFriends();
         Task<SelectItemVm> GetAllAsSelect(FriendDto friendDto);
+        Task<Result> AddFriendForCurrentUser(FriendDto friendToAdd);
+        Task<IList<FriendDto>> GetAllFriendsForCurrentUser();
     }
 }

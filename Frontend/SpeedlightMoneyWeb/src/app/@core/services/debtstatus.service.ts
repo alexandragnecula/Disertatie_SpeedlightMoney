@@ -70,7 +70,7 @@ export class DebtStatusService extends DebtStatusData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addDebtStatusCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + '/adddebtstatus', JSON.stringify(addDebtStatusCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

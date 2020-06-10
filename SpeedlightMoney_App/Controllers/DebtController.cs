@@ -168,8 +168,8 @@ namespace SpeedlightMoney_App.Controllers
         }
 
 
-        [HttpPut("defferpayment")]
-        public async Task<ActionResult<Result>> DefferPayment([FromBody] DebtDto debtToUpdate)
+        [HttpPut("deferpayment")]
+        public async Task<ActionResult<Result>> DeferPayment([FromBody] DebtDto debtToUpdate)
         {
             var result = await _debtService.DeferPayment(debtToUpdate);
 

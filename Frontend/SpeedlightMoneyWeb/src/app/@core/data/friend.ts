@@ -46,5 +46,6 @@ export abstract class FriendData {
     abstract UpdateFriend(updateFriendCommand: UpdateFriendCommand): Observable<Result>;
     abstract DeleteFriend(id: number): Observable<Result>;
     abstract RestoreFriend(restoreFriendCommand: RestoreFriendCommand): Observable<Result>;
+    abstract AddFriendForCurrentUser(addFriendCommand: AddFriendCommand): Observable<Result>;
 }
 

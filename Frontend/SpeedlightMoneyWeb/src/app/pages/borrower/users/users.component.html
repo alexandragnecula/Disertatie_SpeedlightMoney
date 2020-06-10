@@ -45,13 +45,13 @@
         <mat-header-cell class="requestLoanStyle" *matHeaderCellDef>Request loan </mat-header-cell>
         <mat-cell *matCellDef="let element"> 
           <button mat-icon-button matTooltip="Click to request loan" class="iconbutton" color="primary" *ngIf="element.id">
-              <mat-icon aria-label="Request loan" >swap_vert</mat-icon>
+              <mat-icon aria-label="Request loan" (click)="openDialogToAdd(element)">swap_vert</mat-icon>
           </button>
         </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDialogToAdd(row)"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
 </mat-table>
 

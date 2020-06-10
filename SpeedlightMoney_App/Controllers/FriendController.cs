@@ -23,7 +23,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPost("addfriend")]
-        public async Task<IActionResult> AddCurrency([FromBody] FriendDto friendToAdd)
+        public async Task<IActionResult> AddFriend([FromBody] FriendDto friendToAdd)
         {
             if (friendToAdd.Nickname == null)
             {
@@ -40,7 +40,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Result>> UpdateCurrecy([FromBody] FriendDto friendToUpdate)
+        public async Task<ActionResult<Result>> UpdateFriend([FromBody] FriendDto friendToUpdate)
         {
             if (friendToUpdate.Nickname == null)
             {
@@ -108,6 +108,27 @@ namespace SpeedlightMoney_App.Controllers
         public async Task<ActionResult<SelectItemVm>> GetFriendsDropdown()
         {
             var vm = await _friendService.GetAllAsSelect(new FriendDto());
+
+            return Ok(vm);
+        }
+
+        [HttpPost("addfriendforcurrentuser")]
+        public async Task<IActionResult> AddFriendForCurrentUser([FromBody] FriendDto friendToAdd)
+        {
+            var result = await _friendService.AddFriendForCurrentUser(friendToAdd);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("friendsforcurrentuser")]
+        public async Task<ActionResult<FriendDto>> GetAllFriendsForCurrentUser()
+        {
+            var vm = await _friendService.GetAllFriendsForCurrentUser();
 
             return Ok(vm);
         }

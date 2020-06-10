@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { repeatWhen } from 'rxjs/operators';
 import { BorrowrequestsComponent } from '../borrowrequests/borrowrequests.component';
+import { FriendData } from 'src/app/@core/data/friend';
 
 @Component({
   selector: 'app-users',
@@ -39,7 +40,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
               private userData: UserData,
               private loanData: LoanData,
               private uiService: UIService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private friendData: FriendData) { }
 
   ngOnInit(): void {
     this.getAllLenders();

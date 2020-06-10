@@ -10,21 +10,29 @@
     <mat-icon>input</mat-icon>
     <span class="nav-caption">Login</span>
   </a>
+  <a mat-list-item (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>people</mat-icon>
+    <span class="nav-caption">Profile</span>
+  </a>
   <a mat-list-item routerLink="" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>input</mat-icon>
     <span class="nav-caption">Dashboard</span>
   </a>
-  <a mat-list-item routerLink="" routerLink="/borrowings" (click)="onClose()" *ngIf="isAuth">
-    <mat-icon>fitness_center</mat-icon>
+  <a mat-list-item routerLink="/borrowings" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>domain</mat-icon>
     <span class="nav-caption">Borrow</span>
   </a>
-  <a mat-list-item routerLink="" routerLink="/loans" (click)="onClose()" *ngIf="isAuth">
-    <mat-icon>fitness_center</mat-icon>
+  <a mat-list-item routerLink="/loans" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>poll</mat-icon>
     <span class="nav-caption">Lend</span>
   </a>
-  <a mat-list-item routerLink="" routerLink="/debts" (click)="onClose()" *ngIf="isAuth">
-    <mat-icon>fitness_center</mat-icon>
+  <a mat-list-item routerLink="/debts" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>query_builder</mat-icon>
     <span class="nav-caption">Debts</span>
+  </a>
+  <a mat-list-item routerLink="/friends" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>people</mat-icon>
+    <span class="nav-caption">Friends</span>
   </a>
   <!-- <a  mat-list-item routerLink="/user/profile/{{currentUserId}}" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>fitness_center</mat-icon>

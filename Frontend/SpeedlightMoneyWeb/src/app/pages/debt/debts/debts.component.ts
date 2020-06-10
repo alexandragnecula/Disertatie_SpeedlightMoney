@@ -15,10 +15,11 @@ import { DebtshistoryComponent } from '../debtshistory/debtshistory.component';
 })
 export class DebtsComponent implements OnInit, AfterViewInit {
   isLoading = false;
-  displayedColumns = ['lenderName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName', 'actions'];
+  displayedColumns = ['lenderName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName', 'loanStatusName', 'actions', 'deferpayment'];
   dataSource = new MatTableDataSource<DebtsLookup>();
   currentUserIdSubscription: Subscription;
   currentUserId = -1;
+  currentDate = new Date();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -62,5 +63,25 @@ export class DebtsComponent implements OnInit, AfterViewInit {
       this.isLoading = false;
       this.uiService.showErrorSnackbar(error, null, 3000);
     });
+  }
+
+  deferPayment(row){
+    this.isLoading = true;
+    this.debtData.DeferPayment(row).subscribe((res: Result) => {
+      this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
+      this.debtshistorycomponent.getDebtsHistoryForCurrentUser();
+      this.getDebtsForCurrentUser();
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+      this.uiService.showErrorSnackbar(error, null, 3000);
+    });
+  }
+
+  compareDates(dueDate: string) {
+    const dateToCheck = new Date(dueDate);
+    return this.currentDate.getFullYear() >= dateToCheck.getFullYear() &&
+    this.currentDate.getMonth() >= dateToCheck.getMonth() &&
+    this.currentDate.getDate() >= dateToCheck.getDate();
   }
 }

@@ -70,7 +70,7 @@ export class TermService extends TermData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addTermCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + '/addterm', JSON.stringify(addTermCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

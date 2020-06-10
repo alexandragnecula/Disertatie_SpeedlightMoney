@@ -90,7 +90,7 @@ export class WalletService extends WalletData {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.post<Result>(this.baseUrl, JSON.stringify(addWalletCommand), this.httpOptions)
+        return this.http.post<Result>(this.baseUrl + 'addwallet', JSON.stringify(addWalletCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

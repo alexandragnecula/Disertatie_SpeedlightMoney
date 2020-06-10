@@ -9,6 +9,7 @@ using BusinessLayer.Utilities;
 using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
+using DataLayer.SharedInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Friends
@@ -17,12 +18,15 @@ namespace BusinessLayer.Services.Friends
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public FriendService(DatabaseContext context, IMapper mapper)
+        public FriendService(DatabaseContext context, IMapper mapper, ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
+        
 
         public async Task<Result> AddFriend(FriendDto friendToAdd)
         {
@@ -125,5 +129,42 @@ namespace BusinessLayer.Services.Friends
 
             return vm;
         }
+
+        public async Task<Result> AddFriendForCurrentUser(FriendDto friendToAdd)
+        {
+            var firstFriend = new Friend
+            {
+                Nickname = friendToAdd.Nickname,
+                UserId = _currentUserService.UserId.Value,
+                UserFriendId = friendToAdd.UserFriendId
+            };
+
+            var secondFriend = new Friend
+            {
+                Nickname = null,
+                UserId = friendToAdd.UserId,
+                UserFriendId = _currentUserService.UserId.Value
+            };
+
+            await _context.Friends.AddAsync(firstFriend);
+            await _context.Friends.AddAsync(secondFriend);
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success("Friend was added successfully");
+        }
+
+        public async Task<IList<FriendDto>> GetAllFriendsForCurrentUser()
+        {
+            List<FriendDto> friends = await _context.Friends
+               .Where(x => (x.UserId == _currentUserService.UserId.Value && x.UserFriendId!= _currentUserService.UserId.Value)
+                            && (x.UserId != _currentUserService.UserId.Value && x.UserFriendId == _currentUserService.UserId.Value))
+               .OrderByDescending(x => x.CreatedOn)
+               .ProjectTo<FriendDto>(_mapper.ConfigurationProvider)
+               .ToListAsync();
+
+            return friends;
+        }
+
     }
 }
