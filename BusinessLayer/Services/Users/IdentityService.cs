@@ -262,6 +262,7 @@ namespace BusinessLayer.Services.Users
         private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
             var claims = new List<Claim>
@@ -278,6 +279,7 @@ namespace BusinessLayer.Services.Users
             claims.AddRange(userClaims);
 
             var userRoles = await _userManager.GetRolesAsync(user);
+
             foreach (var userRole in userRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
@@ -293,7 +295,6 @@ namespace BusinessLayer.Services.Users
                     claims.Add(roleClaim);
                 }
             }
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -346,10 +347,19 @@ namespace BusinessLayer.Services.Users
 
         public async Task<UserDto> GetUserById(long id)
         {
+            var userRoleId = await _context.UserRoles
+                               .FirstOrDefaultAsync(x => x.UserId == id);
+
             var entity = await _context.Users
                 .FindAsync(id);
 
-            return entity == null ? null : _mapper.Map<UserDto>(entity);
+            //return entity == null ? null : _mapper.Map<UserDto>(entity);
+            var entityVm = entity == null ? null : _mapper.Map<UserDto>(entity);
+
+            if (entityVm != null)
+                entityVm.RoleId = userRoleId.RoleId;
+
+            return entityVm;
         }
 
         public async Task<IList<UserDto>> GetAllUsers()

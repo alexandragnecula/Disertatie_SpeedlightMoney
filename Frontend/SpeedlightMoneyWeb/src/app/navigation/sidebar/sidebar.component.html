@@ -10,7 +10,7 @@
     <mat-icon>input</mat-icon>
     <span class="nav-caption">Login</span>
   </a>
-  <a mat-list-item (click)="onClose()" *ngIf="isAuth">
+  <a mat-list-item routerLink="/profile/{{currentUserId}}" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>people</mat-icon>
     <span class="nav-caption">Profile</span>
   </a>

@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { ErrorService } from 'src/app/shared/error.service';
-import { User, UserData, AddUserCommand, LoginUser, UserList, UpdateUserCommand, UserLookup } from '../data/userclasses/user';
+import { User, UserData, AddUserCommand, LoginUser, UserList, UpdateUserCommand, UserLookup, UserProfile } from '../data/userclasses/user';
 import { Result } from '../data/common/result';
 import { SelectItemsList } from '../data/common/selectitem';
 
@@ -88,6 +88,18 @@ export class UserService extends UserData {
             );
     }
     getUser(id: number): Observable<User> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<User>(this.baseUrl + '/' + id, this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    getUserProfile(id: number): Observable<UserProfile> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',

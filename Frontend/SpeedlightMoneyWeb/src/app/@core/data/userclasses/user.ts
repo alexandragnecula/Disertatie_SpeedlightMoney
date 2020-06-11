@@ -24,6 +24,28 @@ export class User {
     isActive?: boolean;
 }
 
+export class UserProfile{
+    email: string;
+    firstName: string;
+    lastName: string;
+    birthdate: Date;
+    cnp: string;
+    country: string;
+    county: string;
+    city: number;
+    streetName: string;
+    streetNumber: string;
+    currentStatus: string;
+    cardNumber: string;
+    cvv: string;
+    expireDate: Date;
+    salary: number;
+    phoneNumber: string;
+    currencyId: number;
+    roleId: number;
+    isActive?: boolean;
+}
+
 export class LoginUser {
     email: string;
     password: string;
@@ -80,9 +102,6 @@ export class AddUserCommand {
 
 export class UpdateUserCommand {
     id: number;
-    email: string;
-    password: string;
-
     firstName: string;
     lastName: string;
     birthdate: Date;
@@ -98,7 +117,8 @@ export class UpdateUserCommand {
     expireDate: Date;
     salary: number;
     phoneNumber: string;
-    isActive?: boolean;
+    currencyId: number;
+    roleId: number;
 }
 
 export abstract class UserData {
@@ -107,6 +127,7 @@ export abstract class UserData {
     abstract LoginUser(loginUserCommand: LoginUser): Observable<AuthSuccessResponse>;
     abstract getUsers(): Observable<UserLookup[]>;
     abstract getUser(id: number): Observable<User>;
+    abstract getUserProfile(id: number): Observable<UserProfile>;
     abstract getUsersDropdown(): Observable<SelectItemsList>;
     abstract getCurrentStatusesDropdown(): Observable<SelectItemsList>;
     abstract updateUser(user: UpdateUserCommand): Observable<Result>;

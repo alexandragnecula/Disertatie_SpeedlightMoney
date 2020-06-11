@@ -11,6 +11,5 @@ const routes: Routes = [
   },
 ];
 
-
 export const BORROWERSROUTES = RouterModule.forChild(routes);
 

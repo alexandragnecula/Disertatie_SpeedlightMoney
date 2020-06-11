@@ -7,11 +7,12 @@ import { PAGESROUTES } from './pages-routing';
 import { SharedModule } from '../shared/shared.module';
 import { AddmoneyComponent } from './wallet/addmoney/addmoney.component';
 import { WalletModule } from './wallet/wallet.module';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, ProfileComponent],
   imports: [
     PAGESROUTES,
     LayoutModule,

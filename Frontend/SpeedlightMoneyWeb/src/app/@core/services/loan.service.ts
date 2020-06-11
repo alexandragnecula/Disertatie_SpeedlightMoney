@@ -21,7 +21,8 @@ export class LoanService extends LoanData {
         })
     };
 
-    constructor(private http: HttpClient, private errService: ErrorService, private authService: AuthService) {
+    constructor(private http: HttpClient, private errService: ErrorService,
+                private authService: AuthService) {
         super();
     }
 

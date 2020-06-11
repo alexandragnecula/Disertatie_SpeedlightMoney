@@ -1,0 +1,184 @@
+<section>
+    <h1  class="registrationFormTitle">PROFILE SETTINGS</h1>  
+    <form
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutGap="10px"
+      [formGroup]="userProfileForm"
+      (ngSubmit)="onSubmit()"
+      class="register-form">
+              
+          <mat-card class="personalInformation">
+            <h2 class="registrationFormHeaders">PERSONAL INFORMATIONS</h2>  
+            <mat-form-field>
+              <input
+                  type="email"
+                  matInput
+                  placeholder="Your email"
+                  formControlName="email">
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                  matInput
+                  placeholder="First Name"
+                  formControlName="firstName"
+                  required>
+              <mat-hint>Please enter a first name.</mat-hint>
+              <mat-error>First name is required!</mat-error>
+            </mat-form-field>
+        
+            <mat-form-field>
+              <input
+                  matInput
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                  required>
+              <mat-hint>Please enter a last name.</mat-hint>
+              <mat-error>Last name is required!</mat-error>
+            </mat-form-field>        
+      
+            <mat-form-field>
+              <input matInput placeholder="Birthdate" [matDatepicker]="birthdatePicker" formControlName="birthdate" required>
+              <mat-datepicker-toggle matSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #birthdatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Country"
+                formControlName="country"
+                required>
+              <mat-hint>Please enter a country.</mat-hint>
+              <mat-error>Country is required!</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="County"
+                formControlName="county"
+                required>
+              <mat-hint>Please enter a county.</mat-hint>
+              <mat-error>County is required!</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="City"
+                formControlName="city"
+                required>
+              <mat-hint>Please enter a city.</mat-hint>
+              <mat-error> City is required!</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Street Name"
+                formControlName="streetName">
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Street No."
+                formControlName="streetNumber"
+                required>
+              <mat-hint>Please enter a street no.</mat-hint>
+              <mat-error>Street No. is Required!</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="CNP"
+                formControlName="cnp"
+                required>
+              <mat-hint>Please enter a valid CNP. Example: 1991111121123</mat-hint>
+              <mat-error>Invalid or missing CNP. Example: 1991111121123</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-select placeholder="Choose current status" formControlName="currentStatus" required>
+                <mat-option
+                  *ngFor="let currentStatus of currentStatusSelectList.selectItems"
+                  [value]="currentStatus.value">
+                  {{ currentStatus.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Please choose a current status</mat-hint>
+              <mat-error>Please choose a current status</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                matInput
+                type="number" min="0" value="0" step="0.01"
+                placeholder="Net salary"
+                formControlName="salary"             
+                required>
+              <mat-hint>Please enter a salary.</mat-hint>
+              <mat-error>Salary is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Phone Number"
+                formControlName="phoneNumber"
+                required>
+              <mat-hint>Please enter a valid phone number. Example: 0743123123</mat-hint>
+              <mat-error>Invalid or missing phone number. Example: 0743123123</mat-error>
+            </mat-form-field>
+          </mat-card>
+
+          <mat-card class="cardInformation">
+            <h2 class="registrationFormHeaders">CARD INFORMATIONS</h2>  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Card Number"
+                formControlName="cardNumber"
+                required>
+              <mat-hint>Please enter a valid Card Number. Example: 1991111121123</mat-hint>
+              <mat-error>Invalid or missing Card Number. Example: 1991111121123</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="CVV"
+                formControlName="cvv"
+                required>
+              <mat-hint>Please enter a CVV.</mat-hint>
+              <mat-error>CVV is required!</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <input matInput placeholder="Expire date" [matDatepicker]="expireDatePicker" formControlName="expireDate" required>
+              <mat-datepicker-toggle matSuffix [for]="expireDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #expireDatePicker></mat-datepicker>
+            </mat-form-field>
+          </mat-card>
+
+          <mat-card class="subscriptionInformation">
+            <h2 class="registrationFormHeaders">SUBSCRIPTION TYPE</h2>  
+            <mat-form-field>
+              <mat-select placeholder="Choose subscription" formControlName="roleId" required>
+                <mat-option
+                  *ngFor="let role of roleSelectList.selectItems"
+                  [value]="role.value">
+                  {{ role.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Please choose a subscription</mat-hint>
+              <mat-error>Please choose a subscription</mat-error>
+            </mat-form-field>
+          </mat-card>
+      <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" [disabled]="userProfileForm.invalid">Submit</button>
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </form>
+  </section>

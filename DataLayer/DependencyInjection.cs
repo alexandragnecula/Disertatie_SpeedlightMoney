@@ -1,6 +1,4 @@
-﻿using System;
-using DataLayer.SharedInterfaces;
-using DataLayer.DataContext;
+﻿using DataLayer.DataContext;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,3 +23,5 @@ namespace DataLayer
         }
     }
 }
+
+
