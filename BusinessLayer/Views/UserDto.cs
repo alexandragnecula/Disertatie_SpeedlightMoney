@@ -30,7 +30,6 @@ namespace BusinessLayer.Views
 
         //ROLE
         public long RoleId { get; set; }
-        
     }
 
 

@@ -274,7 +274,7 @@ namespace BusinessLayer.Services.Debts
 
             await _context.SaveChangesAsync();
 
-            return Result.Success("Debt deferral was successful (14 days)");
+            return Result.Success("Debt deferred with 14 days!");
         }
 
 

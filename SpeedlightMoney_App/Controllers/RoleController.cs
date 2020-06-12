@@ -19,7 +19,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpPost("addrole")]
-        public async Task<IActionResult> AddUser([FromBody] RoleDto roleToAdd)
+        public async Task<IActionResult> AddRole([FromBody] RoleDto roleToAdd)
         {
             var result = await _roleService.AddRoleAsync(roleToAdd);
 
@@ -32,7 +32,7 @@ namespace SpeedlightMoney_App.Controllers
         }
 
         [HttpGet("rolesdropdown")]
-        public async Task<ActionResult<SelectItemVm>> GetLoansDropdown()
+        public async Task<ActionResult<SelectItemVm>> GetRolesDropdown()
         {
             var vm = await _roleService.GetAllAsSelect(new RoleDto());
 

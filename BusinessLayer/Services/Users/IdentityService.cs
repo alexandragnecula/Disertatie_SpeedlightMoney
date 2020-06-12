@@ -339,10 +339,24 @@ namespace BusinessLayer.Services.Users
             entity.ExpireDate = userToUpdate.ExpireDate;
             entity.Salary = userToUpdate.Salary;
             entity.PhoneNumber = userToUpdate.PhoneNumber;
-
             await _context.SaveChangesAsync();
+            await AddUserToRole(userToUpdate.Id, userToUpdate.RoleId);
 
             return Result.Success("User update was successful");
+        }
+
+        public async Task AddUserToRole(long userId, long roleId)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.Id == userId && x.IsActive.Value);
+            var roles = await _roleManager.Roles.ToListAsync();
+            var existingRoleNames = await _userManager.GetRolesAsync(user);
+            
+
+            await _userManager.RemoveFromRoleAsync(user, existingRoleNames[0]);
+
+            var roleToAdd = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+            await _userManager.AddToRoleAsync(user, roleToAdd.Name);
         }
 
         public async Task<UserDto> GetUserById(long id)

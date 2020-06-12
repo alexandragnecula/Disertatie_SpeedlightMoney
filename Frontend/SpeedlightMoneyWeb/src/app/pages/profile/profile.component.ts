@@ -86,8 +86,8 @@ export class ProfileComponent implements OnInit {
             roleId: user.roleId.toString()
         });
         // this.getCurrenciesSelect();
-        this.getRolesSelect();
         this.getCurrentStatusesSelect();
+        this.getRolesSelect();
         this.isLoading = false;
     },
         error => {
