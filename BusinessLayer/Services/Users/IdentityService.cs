@@ -9,6 +9,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BusinessLayer.Common.Constants;
 using BusinessLayer.Common.Models.SelectItem;
+using BusinessLayer.Services.Friends;
 using BusinessLayer.Services.Wallets;
 using BusinessLayer.Utilities;
 using BusinessLayer.Views;
@@ -30,14 +31,12 @@ namespace BusinessLayer.Services.Users
         private readonly DatabaseContext _context;
         private readonly JwtSettings _jwtSettings;
         private readonly IMapper _mapper;
-        private readonly IWalletService _walletService;
         private readonly ICurrentUserService _currentUserService;
 
         public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
             IHttpContextAccessor httpContextAccessor,
             DatabaseContext context, JwtSettings jwtSettings,
-            IMapper mapper, IWalletService walletService,
-            ICurrentUserService currentUserService)
+            IMapper mapper, ICurrentUserService currentUserService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -45,7 +44,6 @@ namespace BusinessLayer.Services.Users
             _context = context;
             _jwtSettings = jwtSettings;
             _mapper = mapper;
-            _walletService = walletService;
             _currentUserService = currentUserService;
         }
 
@@ -316,6 +314,8 @@ namespace BusinessLayer.Services.Users
 
         public async Task<Result> UpdateUser(UserDto userToUpdate)
         {
+            try
+            { 
             var entity = await _context.Users.FindAsync(userToUpdate.Id);
 
             if (entity == null)
@@ -323,7 +323,6 @@ namespace BusinessLayer.Services.Users
                 return Result.Failure(new List<string> { "No valid user found" });
             }
 
-            entity.Email = userToUpdate.Email;
             entity.FirstName = userToUpdate.FirstName;
             entity.LastName = userToUpdate.LastName;
             entity.Birthdate = userToUpdate.Birthdate;
@@ -342,7 +341,11 @@ namespace BusinessLayer.Services.Users
             await _context.SaveChangesAsync();
             await AddUserToRole(userToUpdate.Id, userToUpdate.RoleId);
 
-            return Result.Success("User update was successful");
+            return Result.Success("Your profile update was successful");
+            } catch (Exception e)
+            {
+                return Result.Failure(new List<string> { e.Message });  
+            }
         }
 
         public async Task AddUserToRole(long userId, long roleId)
@@ -394,6 +397,24 @@ namespace BusinessLayer.Services.Users
                 SelectItems = await _context.Users
                     .Where(x => x.IsActive == true && x.Id != _currentUserService.UserId.Value)
                     .Select(x => new SelectItemDto { Label = x.GetFullName(), Value = x.Id.ToString() })
+                    .ToListAsync()
+            };
+
+            return vm;
+        }
+
+        public async Task<SelectItemVm> GetUsersNotAlreadyFriendsAsSelect()
+        {
+            var currentUserFriends = await _context.Users
+                    .Include(x => x.UserFriends)
+                    .FirstOrDefaultAsync(x => x.IsActive == true && x.Id == _currentUserService.UserId.Value);
+
+            var existingFriendsIds = currentUserFriends.UserFriends.Select(x => x.UserFriendId).ToList();
+            var vm = new SelectItemVm
+            {
+                SelectItems = await _context.Users
+                    .Where(x => x.IsActive == true && x.Id != _currentUserService.UserId.Value && !existingFriendsIds.Contains(x.Id))
+                    .Select(x => new SelectItemDto { Label = x.GetFullName() + " - "+x.PhoneNumber, Value = x.Id.ToString() })
                     .ToListAsync()
             };
 
@@ -468,24 +489,69 @@ namespace BusinessLayer.Services.Users
                     CurrencyId = userToAdd.CurrencyId
                 };
 
-                if (wallet.CurrencyId == 1) {
-                    var walletEUR = new Wallet
-                    {
-                        TotalAmount = 0.0,
-                        UserId = user.Id,
-                        CurrencyId = 2
-                    };
-                    await _context.Wallets.AddAsync(walletEUR);
-                }
-                else if (wallet.CurrencyId == 2)
+                //no amount required for Subscription = Explorer
+                if (userToAdd.RoleId == 4)
                 {
-                    var walletRON = new Wallet
+                    wallet.TotalAmount = 0.0;
+                    if (wallet.CurrencyId == 1) {
+                        var walletEUR = new Wallet
+                        {
+                            TotalAmount = 0.0,
+                            UserId = user.Id,
+                            CurrencyId = 2
+                        };
+                        await _context.Wallets.AddAsync(walletEUR);
+                    }
+                    else if(wallet.CurrencyId == 2)
                     {
-                        TotalAmount = 0.0,
-                        UserId = user.Id,
-                        CurrencyId = 1
-                    };
-                    await _context.Wallets.AddAsync(walletRON);
+                        var walletRON = new Wallet
+                        {
+                            TotalAmount = 0.0,
+                            UserId = user.Id,
+                            CurrencyId = 1
+                        };
+                        await _context.Wallets.AddAsync(walletRON);
+                    }                            
+                }
+                //validate amount if Subscription == Ultimate, Premium
+                else
+                {
+                    if (wallet.CurrencyId == 1 && wallet.TotalAmount >= 30)
+                    {
+
+                        var walletEUR = new Wallet
+                        {
+                            TotalAmount = 0.0,
+                            UserId = user.Id,
+                            CurrencyId = 2
+                        };
+                        await _context.Wallets.AddAsync(walletEUR);
+                    }
+                    else
+                    {
+                        return new AuthenticationResult
+                        {
+                            Errors = new[] { "You cannot register unless you provide a minimum amount of 30 RON" }
+                        };
+                    }
+
+                    if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 5)
+                    {
+                        var walletRON = new Wallet
+                        {
+                            TotalAmount = 0.0,
+                            UserId = user.Id,
+                            CurrencyId = 1
+                        };
+                        await _context.Wallets.AddAsync(walletRON);
+                    }
+                    else
+                    {
+                        return new AuthenticationResult
+                        {
+                            Errors = new[] { "You cannot register unless you provide a minimum amount of €5" }
+                        };
+                    }
                 }
 
                 await _context.Wallets.AddAsync(wallet);

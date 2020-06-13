@@ -218,6 +218,14 @@ namespace BusinessLayer.Services.Debts
                 {
                     if (wallletForCurentUser.TotalAmount >= debtToUpdate.LoanAmount)
                     {
+                        if (loan.CurrencyId == 1)
+                        {
+                            wallletForCurentUser.TotalAmount -= 0.97;
+                        }
+                        else if (loan.CurrencyId == 2)
+                        {
+                            wallletForCurentUser.TotalAmount -= 0.2;
+                        }
                         wallletForCurentUser.TotalAmount -= debtToUpdate.LoanAmount;
                         walletForLender.TotalAmount += debtToUpdate.LoanAmount;
 

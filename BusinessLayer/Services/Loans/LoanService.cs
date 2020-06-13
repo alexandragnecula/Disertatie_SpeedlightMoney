@@ -161,7 +161,18 @@ namespace BusinessLayer.Services.Loans
                 LoanStatusId = 3,
                 TermId = loanToAdd.TermId
             };
-
+            if(entity.CurrencyId == 1)
+            {
+                if (entity.Amount > 25000)
+                {
+                    return Result.Failure(new List<string> { "You cannot borrow more than 25.000 RON. Please request another amount." });
+                }
+            }
+            else if(entity.CurrencyId == 2)
+            {
+                return Result.Failure(new List<string> { "You cannot borrow more than €5.0000. Please request another amount." });
+            }
+            
             await _context.Loans.AddAsync(entity);
 
             await _context.SaveChangesAsync();
@@ -212,6 +223,14 @@ namespace BusinessLayer.Services.Loans
                     {
                         if (wallletForCurentUser.TotalAmount >= loanToUpdate.Amount)
                         {
+                            if(loanToUpdate.CurrencyId == 1)
+                            {
+                                wallletForCurentUser.TotalAmount -= 0.97;
+                            }
+                            else if(loanToUpdate.CurrencyId == 2)
+                            {
+                                wallletForCurentUser.TotalAmount -= 0.2;
+                            }
                             wallletForCurentUser.TotalAmount -= loanToUpdate.Amount;
                             walletForBorrower.TotalAmount += loanToUpdate.Amount;
                            

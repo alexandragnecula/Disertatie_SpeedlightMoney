@@ -49,7 +49,7 @@
                       formControlName="amount"             
                       required>
                     <mat-hint>Please enter an amount.</mat-hint>
-                    <mat-error>Amount is required!</mat-error>
+                    <mat-error>Please enter a valid amount! It cannot be more than €5.000/25.000 RON</mat-error>
                 </mat-form-field>
                
               <mat-spinner *ngIf="isLoading"></mat-spinner>

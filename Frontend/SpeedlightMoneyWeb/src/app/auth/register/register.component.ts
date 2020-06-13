@@ -9,6 +9,7 @@ import { SelectItemsList} from 'src/app/@core/data/common/selectitem';
 import { CurrencyData } from 'src/app/@core/data/currency';
 import { RoleData } from 'src/app/@core/data/role';
 import { Subscription } from 'rxjs';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +23,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currencySelectList: SelectItemsList = new SelectItemsList();
   roleSelectList: SelectItemsList = new SelectItemsList();
   currentStatusSelectList: SelectItemsList = new SelectItemsList();
+  isExplorer = false;
 
   authChangeSubscription: Subscription;
 
@@ -65,7 +67,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         expireDate: new FormControl(new Date(), [Validators.required]),
         salary: new FormControl('', [Validators.required]),
         phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^(07[0-8]{1}[0-9]{1}|02[0-9]{2}|03[0-9]{2}){1}?([0-9]{3}){2}$')]),
-        totalAmount: new FormControl('', [Validators.required]),
+        totalAmount: new FormControl('', [Validators.required, this.amountValidator()]),
         currencyId: new FormControl('', [Validators.required]),
         roleId: new FormControl('', [Validators.required])
     });
@@ -98,12 +100,61 @@ export class RegisterComponent implements OnInit, OnDestroy {
         case 3  : case 4 : { year += 1800; } break;
         case 5  : case 6 : { year += 2000; } break;
         case 7  : case 8 : case 9 : { year += 2000;
-                                      if ( year > ( new Date().getFullYear() - 14 ) ) { year -= 100; } } 
+                                      if ( year > ( new Date().getFullYear() - 14 ) ) { year -= 100; } }
                                     break;
         default : { return false; }
     }
     if ( year < 1800 || year > 2099 ) { return false; }
     return ( cnp[12] === hashResult );
+  }
+
+  amountValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const invalid = this.validateAmount(control.value);
+      return !invalid ? {invalidError: {value: control.value}} : null;
+    };
+  }
+
+  private validateAmount( pAmount: number ) {
+        if (this.currencySelectList.selectItems) {
+          const item = this.currencySelectList.selectItems.find(x => x.value === this.registerForm.value.currencyId);
+          if (item) {
+          if (item.label === 'RON'){
+            if (pAmount < 30){
+              return false;
+            }
+          }
+
+          if (item.label === 'EUR'){
+            if (pAmount < 5){
+              return false;
+            }
+          }
+        }
+      }
+        return pAmount;
+  }
+
+  disableWallet(){
+    if (this.roleSelectList.selectItems) {
+      const item = this.roleSelectList.selectItems.find(x => x.value === this.registerForm.value.roleId);
+      console.log(item);
+      if (item.label === 'EXPLORER'){
+        this.registerForm.patchValue({
+          currencyId: '1',
+          totalAmount: 0.0
+        });
+        this.registerForm.get('currencyId').disable();
+        this.registerForm.get('totalAmount').disable();
+        this.isExplorer = true;
+        console.log(this.isExplorer);
+      } else {
+        this.isExplorer = false;
+        this.registerForm.get('currencyId').enable();
+        this.registerForm.get('totalAmount').enable();
+        console.log(this.isExplorer);
+      }
+    }
   }
 
   onSubmit() {
@@ -130,6 +181,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
         currencyId: +this.registerForm.value.currencyId,
         roleId: +this.registerForm.value.roleId
     } as AddUserCommand;
+    if (this.isExplorer) {
+      addUserCommand.totalAmount = this.registerForm.getRawValue().totalAmount;
+      addUserCommand.currencyId = +this.registerForm.getRawValue().currencyId;
+    }
     this.userData.AddUserWithWallets(addUserCommand).subscribe(res => {
         this.isLoading = false;
         this.authService.setToken(res.token);

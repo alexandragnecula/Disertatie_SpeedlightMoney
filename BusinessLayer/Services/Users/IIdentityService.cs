@@ -26,6 +26,7 @@ namespace BusinessLayer.Services.Users
         Task<UserDto> GetUserById(long id);
         Task<IList<UserDto>> GetAllUsers();
         Task<SelectItemVm> GetAllAsSelect(UserDto userDto);
+        Task<SelectItemVm> GetUsersNotAlreadyFriendsAsSelect();
         Task<AuthenticationResult> RegisterAsyncWithWallets(RegisterUserDto userToAdd);
         Task<SelectItemVm> GetCurrentStatusesAsSelect();
     }

@@ -130,6 +130,15 @@ namespace SpeedlightMoney_App.Controllers
             return Ok(vm);
         }
 
+        [HttpGet("usersnotinfriendlistdropdown")]
+        [Authorize]
+        public async Task<ActionResult<SelectItemVm>> GetUsersNotInFriendsListDropdown()
+        {
+            var vm = await _identityService.GetUsersNotAlreadyFriendsAsSelect();
+
+            return Ok(vm);
+        }
+
         [HttpGet("currentstatusesdropdown")]
         public async Task<ActionResult<SelectItemVm>> GetCurrentStatusesDropdown()
         {

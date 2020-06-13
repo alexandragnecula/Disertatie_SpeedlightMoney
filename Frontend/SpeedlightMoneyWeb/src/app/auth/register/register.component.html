@@ -182,7 +182,7 @@
           <mat-card class="subscriptionInformation">
             <h2 class="registrationFormHeaders">SUBSCRIPTION TYPE</h2>  
             <mat-form-field>
-              <mat-select placeholder="Choose subscription" formControlName="roleId" required>
+              <mat-select placeholder="Choose subscription" formControlName="roleId" required (selectionChange)="disableWallet()">
                 <mat-option
                   *ngFor="let role of roleSelectList.selectItems"
                   [value]="role.value">
@@ -217,7 +217,7 @@
                 formControlName="totalAmount"
                 required>
               <mat-hint>Please enter an amount.</mat-hint>
-              <mat-error>Amount is required!</mat-error>
+              <mat-error>Please enter an amount or one equal or grater than 30 RON/€5</mat-error>
             </mat-form-field>
           </mat-card>
       <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" [disabled]="registerForm.invalid">Submit</button>

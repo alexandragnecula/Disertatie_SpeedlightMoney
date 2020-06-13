@@ -17,6 +17,7 @@ namespace BusinessLayer.Views
         //User Friend
         public long UserFriendId { get; set; }
         public string UserFriendName { get; set; }
+        public string UserFriendPhoneNumber { get; set; }
 
         public bool Deleted { get; set; }
 
@@ -32,7 +33,13 @@ namespace BusinessLayer.Views
                     opt => opt.MapFrom(s =>
                         s.UserFriend != null
                             ? s.UserFriend.GetFullName()
-                            : string.Empty));
+                            : string.Empty))
+                 .ForMember(d => d.UserFriendPhoneNumber,
+                        opt => opt.MapFrom(s =>
+                            s.UserFriend != null
+                                ? s.UserFriend.PhoneNumber
+                                : string.Empty));
+
         }
     }
 }

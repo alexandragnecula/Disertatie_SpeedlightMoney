@@ -136,7 +136,19 @@ export class UserService extends UserData {
             catchError(this.errService.errorHandl)
         );
     }
-
+    GetUsersNotInFriendsListDropdown(): Observable<SelectItemsList> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<SelectItemsList>(this.baseUrl + '/usersnotinfriendlistdropdown', this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
     getCurrentStatusesDropdown(): Observable<SelectItemsList> {
         this.httpOptions = {
             headers: new HttpHeaders({

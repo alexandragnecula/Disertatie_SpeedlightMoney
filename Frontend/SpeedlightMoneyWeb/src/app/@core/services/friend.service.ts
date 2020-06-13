@@ -7,7 +7,7 @@ import { SelectItemsList } from '../data/common/selectitem';
 import { Result } from '../data/common/result';
 import { ErrorService } from 'src/app/shared/error.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { FriendData, Friend, FriendsList, AddFriendCommand, UpdateFriendCommand, RestoreFriendCommand } from '../data/friend';
+import { FriendData, Friend, FriendsList, AddFriendCommand, UpdateFriendCommand, RestoreFriendCommand, FriendsLookup } from '../data/friend';
 
 @Injectable()
 export class FriendService extends FriendData {
@@ -123,6 +123,19 @@ export class FriendService extends FriendData {
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
         return this.http.post<Result>(this.baseUrl + '/addfriendforcurrentuser', JSON.stringify(addFriendCommand), this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    GetFriendsForCurrentUser(): Observable<FriendsLookup[]> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<FriendsList>(this.baseUrl + '/friendsforcurrentuser', this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

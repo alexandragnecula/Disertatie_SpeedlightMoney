@@ -134,16 +134,16 @@ namespace BusinessLayer.Services.Friends
         {
             var firstFriend = new Friend
             {
-                Nickname = friendToAdd.Nickname,
+                // Nickname = friendToAdd.Nickname,
                 UserId = _currentUserService.UserId.Value,
                 UserFriendId = friendToAdd.UserFriendId
             };
 
             var secondFriend = new Friend
             {
-                Nickname = null,
-                UserId = friendToAdd.UserId,
-                UserFriendId = _currentUserService.UserId.Value
+                //Nickname = null,
+                UserId = friendToAdd.UserFriendId,
+                UserFriendId = friendToAdd.UserId
             };
 
             await _context.Friends.AddAsync(firstFriend);
@@ -157,8 +157,8 @@ namespace BusinessLayer.Services.Friends
         public async Task<IList<FriendDto>> GetAllFriendsForCurrentUser()
         {
             List<FriendDto> friends = await _context.Friends
-               .Where(x => (x.UserId == _currentUserService.UserId.Value && x.UserFriendId!= _currentUserService.UserId.Value)
-                            && (x.UserId != _currentUserService.UserId.Value && x.UserFriendId == _currentUserService.UserId.Value))
+               .Where(x => (x.UserId == _currentUserService.UserId.Value))
+               .Include(x => x.UserFriend)
                .OrderByDescending(x => x.CreatedOn)
                .ProjectTo<FriendDto>(_mapper.ConfigurationProvider)
                .ToListAsync();

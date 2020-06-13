@@ -1,0 +1,51 @@
+<div mat-dialog-content>
+    <section fxLayout fxLayoutAlign="center">
+        <form [formGroup]="addFriendForm">
+          <mat-card fxFlex.xs="100%" fxFlex="600px">
+            <mat-card-title fxLayoutAlign="center">Add Friend</mat-card-title>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field *ngIf="this.usersSelectList.selectItems">
+                    <mat-select placeholder="Choose User" formControlName="userFriendId" required>
+                        <!-- <mat-option>
+                            <ngx-mat-select-search 
+                                formControlName="userFriendId"
+                                placeholderLabel="Find user..." 
+                                noEntriesFoundLabel="'no matching user found'"
+                            ></ngx-mat-select-search>
+                          </mat-option> -->
+                      <mat-option
+                        *ngFor="let user of usersSelectList.selectItems"
+                        [value]="user.value">
+                        {{ user.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint>Please choose a user</mat-hint>
+                    <mat-error>Please choose a user</mat-error>
+                  </mat-form-field>
+
+              <mat-spinner *ngIf="isLoading"></mat-spinner>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+              <button
+              *ngIf="!isLoading"
+              type="button"
+              mat-raised-button
+              color="accent"
+              [mat-dialog-close]
+            >
+              Close
+            </button>
+              <button
+                type="submit"
+                mat-raised-button
+                color="primary"
+                [disabled]="addFriendForm.invalid"
+                [mat-dialog-close]="addFriendForm"
+              >
+                Submit
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
+      </section>
+</div>

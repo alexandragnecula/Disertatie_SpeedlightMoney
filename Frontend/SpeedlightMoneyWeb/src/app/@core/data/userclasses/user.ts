@@ -129,6 +129,7 @@ export abstract class UserData {
     abstract getUser(id: number): Observable<User>;
     abstract getUserProfile(id: number): Observable<UserProfile>;
     abstract getUsersDropdown(): Observable<SelectItemsList>;
+    abstract GetUsersNotInFriendsListDropdown(): Observable<SelectItemsList>;
     abstract getCurrentStatusesDropdown(): Observable<SelectItemsList>;
     abstract updateUser(user: UpdateUserCommand): Observable<Result>;
 }

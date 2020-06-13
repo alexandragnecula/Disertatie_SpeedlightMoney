@@ -14,6 +14,7 @@ export class FriendsLookup {
     nickname: string;
     userName: string;
     userFriendName: string;
+    userFriendPhoneNumber: string;
     deleted: boolean;
 }
 
@@ -47,5 +48,6 @@ export abstract class FriendData {
     abstract DeleteFriend(id: number): Observable<Result>;
     abstract RestoreFriend(restoreFriendCommand: RestoreFriendCommand): Observable<Result>;
     abstract AddFriendForCurrentUser(addFriendCommand: AddFriendCommand): Observable<Result>;
+    abstract GetFriendsForCurrentUser(): Observable<FriendsLookup[]>;
 }
 

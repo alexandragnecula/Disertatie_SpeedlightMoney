@@ -40,8 +40,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
               private userData: UserData,
               private loanData: LoanData,
               private uiService: UIService,
-              private authService: AuthService,
-              private friendData: FriendData) { }
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getAllLenders();
