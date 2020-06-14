@@ -25,6 +25,7 @@ namespace BusinessLayer.Services.Users
         Task<Result> UpdateUser(UserDto userToUpdate);
         Task<UserDto> GetUserById(long id);
         Task<IList<UserDto>> GetAllUsers();
+        Task<IList<UserDto>> GetUsers();
         Task<SelectItemVm> GetAllAsSelect(UserDto userDto);
         Task<SelectItemVm> GetUsersNotAlreadyFriendsAsSelect();
         Task<AuthenticationResult> RegisterAsyncWithWallets(RegisterUserDto userToAdd);

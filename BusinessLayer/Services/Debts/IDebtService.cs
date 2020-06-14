@@ -22,5 +22,7 @@ namespace BusinessLayer.Services.Debts
         Task<IList<DebtDto>> GetCreditsHistoryForCurrentUser();
         Task<Result> PayDebt(DebtDto debtToUpdate);
         Task<Result> DeferPayment(DebtDto debtToUpdate);
+        Task<IList<DebtDto>> GetDebts();
+        Task<IList<DebtDto>> GetDebtsForUser(long id);
     }
 }

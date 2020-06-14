@@ -22,6 +22,10 @@ using BusinessLayer.Services.Loans;
 using BusinessLayer.Services.LoanStatuses;
 using BusinessLayer.Services.Terms;
 using BusinessLayer.Services.Wallets;
+using Quartz.Spi;
+using BusinessLayer.Common.SendEmails;
+using Quartz;
+using Quartz.Impl;
 
 namespace SpeedlightMoney_App
 {
@@ -68,6 +72,19 @@ namespace SpeedlightMoney_App
 
           
             services.InstallServicesInAssembly(Configuration);
+
+            // Add Quartz services
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            // Add our job
+            services.AddSingleton<SendEmailJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(SendEmailJob),
+                cronExpression: "0 0/1 * 1/1 * ? *")); // (0 0/1 * 1/1 * ? *) runs every 1 minute / (0 0 8 1/1 * ? *) runs every day at 8 am
+
+            services.AddHostedService<QuartzHostedService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

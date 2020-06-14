@@ -113,6 +113,16 @@ namespace BusinessLayer.Services.Debts
             return debts;
         }
 
+        public async Task<IList<DebtDto>> GetDebts()
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Include(x => x.Loan)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                 .ToListAsync();
+
+            return debts;
+        }
         public async Task<SelectItemVm> GetAllAsSelect(DebtDto debtDto)
         {
             var vm = new SelectItemVm
@@ -283,6 +293,19 @@ namespace BusinessLayer.Services.Debts
             await _context.SaveChangesAsync();
 
             return Result.Success("Debt deferred with 14 days!");
+        }
+
+        public async Task<IList<DebtDto>> GetDebtsForUser(long id)
+        {
+            List<DebtDto> debts = await _context.Debts
+                .Where(x => x.Loan.BorrowerId == id && !x.Deleted)
+                .Include(x => x.Loan)
+                .Include(x => x.DebtStatus)
+                .OrderByDescending(x => x.CreatedOn)
+                .ProjectTo<DebtDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return debts;
         }
 
 

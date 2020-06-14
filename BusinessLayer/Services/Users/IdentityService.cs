@@ -390,6 +390,16 @@ namespace BusinessLayer.Services.Users
             return users;
         }
 
+        public async Task<IList<UserDto>> GetUsers()
+        {
+            List<UserDto> users = await _context.Users
+               .OrderByDescending(x => x.Email)
+               .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+               .ToListAsync();
+
+            return users;
+        }
+
         public async Task<SelectItemVm> GetAllAsSelect(UserDto userDto)
         {
             var vm = new SelectItemVm
