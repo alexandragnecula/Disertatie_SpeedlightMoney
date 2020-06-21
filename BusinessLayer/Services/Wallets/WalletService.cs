@@ -199,7 +199,17 @@ namespace BusinessLayer.Services.Wallets
                 if (currentUserWallet.TotalAmount >= walletToUpdate.TotalAmount)
                 {
                     currentUserWallet.TotalAmount -= walletToUpdate.TotalAmount;
-                    beneficiaryWallet.TotalAmount += walletToUpdate.TotalAmount;                   
+                    beneficiaryWallet.TotalAmount += walletToUpdate.TotalAmount;
+
+                    var entity = new TransactionHistory
+                    {
+                        Amount = walletToUpdate.TotalAmount,
+                        SenderId = _currentUserService.UserId.Value,
+                        BeneficiarId = beneficiaryWallet.UserId,
+                        CurrencyId = walletToUpdate.CurrencyId
+                    };
+
+                    await _context.TransactionsHistory.AddAsync(entity);
                 }
                 else
                 {

@@ -26,6 +26,7 @@ using Quartz.Spi;
 using BusinessLayer.Common.SendEmails;
 using Quartz;
 using Quartz.Impl;
+using BusinessLayer.Services.TransactionsHistory;
 
 namespace SpeedlightMoney_App
 {
@@ -64,6 +65,7 @@ namespace SpeedlightMoney_App
             services.AddScoped<ILoanStatusService, LoanStatusService>();
             services.AddScoped<ITermService, TermService>();
             services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<ITransactionHistoryService, TransactionHistoryService >();
 
             services.AddHttpContextAccessor();
 
@@ -81,7 +83,7 @@ namespace SpeedlightMoney_App
             services.AddSingleton<SendEmailJob>();
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(SendEmailJob),
-                cronExpression: "0 0/1 * 1/1 * ? *")); // (0 0/1 * 1/1 * ? *) runs every 1 minute / (0 0 8 1/1 * ? *) runs every day at 8 am
+                cronExpression: "0 0 8 1/1 * ? *")); // (0 0/1 * 1/1 * ? *) runs every 1 minute / (0 0 8 1/1 * ? *) runs every day at 8 am
 
             services.AddHostedService<QuartzHostedService>();
 

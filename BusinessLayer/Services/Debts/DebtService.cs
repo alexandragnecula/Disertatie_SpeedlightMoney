@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -287,7 +289,7 @@ namespace BusinessLayer.Services.Debts
             }
             else
             {
-                return Result.Failure(new List<string> { "Debt cannot be deferred until due date"});
+                return Result.Failure(new List<string> { "Debt cannot be deferred until due date" });
             }
 
             await _context.SaveChangesAsync();
@@ -308,7 +310,65 @@ namespace BusinessLayer.Services.Debts
             return debts;
         }
 
+        public async Task<Result> SendEmailReminder(long id)
+        {
+            try
+            {
+                var selectedCredit = await _context.Debts
+                    .Include(x => x.Loan).ThenInclude(x => x.Borrower)
+                    .Include(x => x.Loan).ThenInclude(x => x.Lender)
+                    .Include(x =>x.Loan).ThenInclude(x => x.Currency)
+               .FirstOrDefaultAsync(x => x.Loan.LenderId == _currentUserService.UserId.Value && !x.Deleted && x.Id == id);
 
+                if (selectedCredit == null)
+                {
+                    return Result.Failure(new List<string> { "No valid credit found" });
+                }
+
+
+                var fromAddress = new MailAddress("speedlight.money@gmail.com", "Speedlight Money");
+                var toAddress = new MailAddress(selectedCredit.Loan.Borrower.Email, selectedCredit.Loan.Borrower.GetFullName());
+                const string fromPassword = "carryON09171996";
+                const string subject = "[Speedlight Money] Due date Reminder";
+
+                string body = "<div>Hi, " + selectedCredit.Loan.Borrower.FirstName + "! </div> <br/>" +
+                               "<div>This is a friendly email from your lender, " + selectedCredit.Loan.Lender.GetFullName() + ", to remind you of your debt to him. Your due date is comming soon so don't forget to pay your debt!</div><br/>" +
+                               "<div>Here are some details about your debt: </div>" +
+                               "<div>Owed amount: " + selectedCredit.Loan.Lender.GetFullName() + "</div>" +
+                                "<div>Owed amount: " + selectedCredit.Loan.Amount + " " + selectedCredit.Loan.Currency.CurrencyName + "</div>" +
+                               "<div>Due date: " + selectedCredit.Loan.DueDate + "</div><br/>" +
+                               "<div>You can go to the Debts tab on the application and send the money to " + selectedCredit.Loan.Lender.GetFullName() + " by clicking on the Return loan column corresponding to " + selectedCredit.Loan.Lender.GetFullName() + ". If you can't return the loan right now, don't forget you can defer the debt with 14 days from the Debts tab in the Speedlight Money App.</div>" +
+                               "<div>Thank you for using our app and have a great week!</div><br/>" +
+                               "<div>Speedlight Money Team</div>" +
+                               "<div>Phone: 0771345665</div>" +
+                               "<div>More info: speedlightmoney.com</div>";
+
+                using var smtp = new System.Net.Mail.SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                using var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true
+                };
+
+                smtp.Send(message);
+                return Result.Success("Reminder was sent with success to " + selectedCredit.Loan.Borrower.GetFullName() + "!");
+            }
+            catch(Exception ex)
+            {
+                return Result.Failure(new List<string> { ex.Message });
+            }
+
+           
+        }
     }
 
 }

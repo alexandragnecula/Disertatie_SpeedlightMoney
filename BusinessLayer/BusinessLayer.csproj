@@ -58,5 +58,6 @@
     <Folder Include="Services\Terms\" />
     <Folder Include="Services\Wallets\" />
     <Folder Include="Common\SendEmails\" />
+    <Folder Include="Services\TransactionsHistory\" />
   </ItemGroup>
 </Project>

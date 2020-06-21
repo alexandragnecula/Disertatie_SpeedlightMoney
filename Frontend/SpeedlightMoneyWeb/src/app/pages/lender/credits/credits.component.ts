@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { DebtsLookup, DebtData } from 'src/app/@core/data/debt';
 import { UIService } from 'src/app/shared/ui.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Result } from 'src/app/@core/data/common/result';
 
 @Component({
   selector: 'app-credits',
@@ -46,5 +47,17 @@ export class CreditsComponent implements OnInit, AfterViewInit {
 
   doFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  sendReminderEmailToBorrower(id){
+    this.isLoading = true;
+
+    this.debtData.SendReminderToBorrower(id).subscribe((res: Result) => {
+      this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+      this.uiService.showErrorSnackbar(error, null, 3000);
+    });
   }
 }

@@ -15,6 +15,8 @@ namespace DataLayer.Entities
             Loans = new HashSet<Loan>();
             Users = new HashSet<Friend>();
             UserFriends = new HashSet<Friend>();
+            SenderTransactionsHistory = new HashSet<TransactionHistory>();
+            BeneficiarTransactionsHistory = new HashSet<TransactionHistory>();
         }
 
         public string FirstName { get; set; }
@@ -41,7 +43,8 @@ namespace DataLayer.Entities
         public ICollection<Loan> Loans { get; private set; }
         public ICollection<Friend> Users { get; private set; }
         public ICollection<Friend> UserFriends { get; private set; }
-        //public ICollection<Debt> Debts { get; private set; }
+        public ICollection<TransactionHistory> SenderTransactionsHistory { get; private set; }
+        public ICollection<TransactionHistory> BeneficiarTransactionsHistory { get; private set; }
 
         public string GetFullName()
         {

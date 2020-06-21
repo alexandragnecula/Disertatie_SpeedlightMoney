@@ -5,14 +5,12 @@ import { MaterialModule } from '../material.module';
 import { LayoutModule } from '@angular/cdk/layout';
 import { PAGESROUTES } from './pages-routing';
 import { SharedModule } from '../shared/shared.module';
-import { AddmoneyComponent } from './wallet/addmoney/addmoney.component';
 import { WalletModule } from './wallet/wallet.module';
 import { ProfileComponent } from './profile/profile.component';
-
-
+import { TransactionshistoryComponent } from './transactionshistory/transactionshistory.component';
 
 @NgModule({
-  declarations: [DashboardComponent, ProfileComponent],
+  declarations: [DashboardComponent, ProfileComponent, TransactionshistoryComponent],
   imports: [
     PAGESROUTES,
     LayoutModule,

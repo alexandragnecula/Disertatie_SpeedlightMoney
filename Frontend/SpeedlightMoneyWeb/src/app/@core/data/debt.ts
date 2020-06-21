@@ -56,4 +56,5 @@ export abstract class DebtData {
     abstract RestoreDebt(restoreDebtCommand: RestoreDebtCommand): Observable<Result>;
     abstract PayDebt(updateDebtCommand: UpdateDebtCommand): Observable<Result>;
     abstract DeferPayment(updateDebtCommand: UpdateDebtCommand): Observable<Result>;
+    abstract SendReminderToBorrower(id: number): Observable<Result>;
 }

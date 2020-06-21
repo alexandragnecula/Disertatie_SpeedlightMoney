@@ -24,5 +24,6 @@ namespace BusinessLayer.Services.Debts
         Task<Result> DeferPayment(DebtDto debtToUpdate);
         Task<IList<DebtDto>> GetDebts();
         Task<IList<DebtDto>> GetDebtsForUser(long id);
+        Task<Result> SendEmailReminder(long id);
     }
 }

@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         streetName: new FormControl('', [Validators.required]),
         streetNumber: new FormControl('', [Validators.required]),
         currentStatus: new FormControl('', [Validators.required]),
-        cardNumber: new FormControl('', [Validators.required]),
+        cardNumber: new FormControl('', [Validators.required, this.cardNumberValidator(), Validators.pattern('^[0-9]*$')]),
         cvv: new FormControl('', [Validators.required]),
         expireDate: new FormControl(new Date(), [Validators.required]),
         salary: new FormControl('', [Validators.required]),
@@ -133,6 +133,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
         }
       }
         return pAmount;
+  }
+
+  cardNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const invalid = this.validateCardNumber(control.value);
+      return !invalid ? {invalidError: {value: control.value}} : null;
+    };
+  }
+
+  private validateCardNumber(pCardNumber: string){
+    if(pCardNumber.length > 16){
+      return false;
+    }
+    return pCardNumber;
   }
 
   disableWallet(){

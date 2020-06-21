@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Result } from 'src/app/@core/data/common/result';
 import { SelectItemsList } from 'src/app/@core/data/common/selectitem';
 import { LoanStatusData } from 'src/app/@core/data/loanstatus';
+import { LoanrequestshistoryComponent } from '../loanrequestshistory/loanrequestshistory.component';
 
 @Component({
   selector: 'app-loanrequests',
@@ -22,6 +23,7 @@ export class LoanrequestsComponent implements OnInit, AfterViewInit{
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(LoanrequestshistoryComponent) loanRequestHistory: LoanrequestshistoryComponent;
 
   constructor(private loanData: LoanData,
               private loanStatusData: LoanStatusData,
@@ -65,6 +67,7 @@ export class LoanrequestsComponent implements OnInit, AfterViewInit{
     this.loanData.ManageLoan(updateLoanCommand).subscribe((res: Result) => {
       this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
       this.getLoanRequestsForCurrentUser();
+      this.loanRequestHistory.getLoanRequestsHistoryForCurrentUser();
       this.isLoading = false;
     }, error => {
       this.isLoading = false;

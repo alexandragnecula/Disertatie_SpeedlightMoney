@@ -180,5 +180,18 @@ namespace SpeedlightMoney_App.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("sendreminder/{id}")]
+        public async Task<ActionResult<Result>> SendReminderToBorrower(long id)
+        {
+            var result = await _debtService.SendEmailReminder(id);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

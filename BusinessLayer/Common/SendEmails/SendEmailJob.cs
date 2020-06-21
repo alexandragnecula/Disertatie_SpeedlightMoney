@@ -47,17 +47,24 @@ namespace BusinessLayer.Common.SendEmails
                         var toAddress = new MailAddress(user.Email, user.FirstName + " " + user.LastName);
                         const string fromPassword = "carryON09171996";
                         const string subject = "[Speedlight Money] Due date alert";
-                        const string body = "<div><p4>Hi, Alexandra!</p4> </div> " +
-                            "<div>You can go to the Debts tab on the application and send the money to Eduard by clicking on the Return loan column corresponding to Eduard. If you can't return the loan right now, don't forget you can defer the debt with 14 days from the Debts tab in the Speedlight Money App.</div>" +
-                            "<div>Please make sure you don't forget to pursue the changes and don't hesitate to contact us if you have any questions or concerns!</div></br>" +
-                            "<div>Thank you for using our app and have a great week!</div></br>" +
-                            "<div><p5>Speedlight Money Team</p5></div>" +
-                            "<div><p5>Phone: 0771345665</p5></div>" +
-                            "<div><p5>More info: speedlightmoney.com</p5></div>";
+                       
 
                         var debtsForUser = await _debtService.GetDebtsForUser(user.Id);
                         foreach (var debt in debtsForUser)
                         {
+                            string body = "<div>Hi, " + user.FirstName + "! </div> <br/>" +
+                           "<div>We are sending this email to remind you of your debt to " + debt.LenderName + ". You have 2 days until the the due date of the debt.</div><br/>" +
+                           "<div>Here are some details about your debt: </div>" +
+                           "<div>Owed amount: " + debt.LenderName + "</div>" +
+                            "<div>Owed amount: " + debt.LoanAmount +" " + debt.CurrencyName + "</div>" +
+                           "<div>Due date: " + debt.DueDate + "</div><br/>"  +
+                           "<div>You can go to the Debts tab on the application and send the money to " + debt.LenderName + " by clicking on the Return loan column corresponding to "+ debt.LenderName +". If you can't return the loan right now, don't forget you can defer the debt with 14 days from the Debts tab in the Speedlight Money App.</div>" +
+                           "<div>Please make sure you don't forget to pursue the changes and don't hesitate to contact us if you have any questions or concerns!</div><br/>" +
+                           "<div>Thank you for using our app and have a great week!</div><br/>" +
+                           "<div>Speedlight Money Team</div>" +
+                           "<div>Phone: 0771345665</div>" +
+                           "<div>More info: speedlightmoney.com</div>";
+
                             if (debt.ReturnDate == null && debt.DueDate != null && DateTime.Now.Date == debt.DueDate.Value.Date.AddDays(-2))
                             {
                                 using var smtp = new System.Net.Mail.SmtpClient

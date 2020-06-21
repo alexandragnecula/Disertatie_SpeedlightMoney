@@ -21,6 +21,8 @@ import { LoanStatusData } from './data/loanstatus';
 import { LoanStatusService } from './services/loanstatus.service';
 import { TermData } from './data/term';
 import { TermService } from './services/term.service';
+import { TransactionHistoryData } from './data/transactionhistory';
+import { TransactionHistoryService } from './services/transactionhistory.service';
 
 const DATA_SERVICES = [
   {provide: CurrencyData, useClass: CurrencyService},
@@ -32,7 +34,8 @@ const DATA_SERVICES = [
   {provide: RoleData, useClass: RoleService},
   {provide: TermData, useClass: TermService},
   { provide: UserData, useClass: UserService },
-  {provide: WalletData, useClass: WalletService}
+  {provide: WalletData, useClass: WalletService},
+  {provide: TransactionHistoryData, useClass: TransactionHistoryService}
 ];
 
 export const NB_CORE_PROVIDERS = [

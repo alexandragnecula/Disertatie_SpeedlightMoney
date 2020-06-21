@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { WalletData, UpdateWalletCommand } from 'src/app/@core/data/wallet';
 import { UIService } from 'src/app/shared/ui.service';
 import { SelectItemsList, SelectItem } from 'src/app/@core/data/common/selectitem';
@@ -8,6 +8,7 @@ import { AddmoneyComponent } from '../wallet/addmoney/addmoney.component';
 import { Result } from 'src/app/@core/data/common/result';
 import { UserData } from 'src/app/@core/data/userclasses/user';
 import { SendmoneyComponent } from '../wallet/sendmoney/sendmoney.component';
+import { TransactionshistoryComponent } from '../transactionshistory/transactionshistory.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,8 @@ export class DashboardComponent implements OnInit {
   walletForm: FormGroup;
   walletId: number;
   isLoading = true;
+
+  @ViewChild(TransactionshistoryComponent) transactionHistoryComponent: TransactionshistoryComponent;
 
   constructor(private walletData: WalletData,
               private uiService: UIService,
@@ -114,6 +117,7 @@ export class DashboardComponent implements OnInit {
     this.walletData.SendMoney(updateWalletCommand).subscribe((res: Result) => {
       this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
       this.getWalletsForCurrentUserSelect();
+      this.transactionHistoryComponent.getTransactionsHistoryForCurrentUser();
       this.isLoading = false;
     }, error => {
       this.isLoading = false;

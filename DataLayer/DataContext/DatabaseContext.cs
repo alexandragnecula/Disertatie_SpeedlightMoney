@@ -28,6 +28,7 @@ namespace DataLayer.DataContext
         public virtual DbSet<Term> Terms { get; set; }
         public virtual DbSet<Debt> Debts { get; set; }
         public virtual DbSet<DebtStatus> DebtStatuses { get; set; }
+        public virtual DbSet<TransactionHistory> TransactionsHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

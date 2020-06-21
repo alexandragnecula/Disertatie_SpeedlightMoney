@@ -194,4 +194,17 @@ export class DebtService extends DebtData {
             catchError(this.errService.errorHandl)
         );
     }
+    SendReminderToBorrower(id: number): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.get<Result>(this.baseUrl + '/sendreminder/' + id, this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
 }

@@ -10,13 +10,13 @@
     <mat-icon>input</mat-icon>
     <span class="nav-caption">Login</span>
   </a>
-  <a mat-list-item routerLink="/profile/{{currentUserId}}" (click)="onClose()" *ngIf="isAuth">
-    <mat-icon>people</mat-icon>
-    <span class="nav-caption">Profile</span>
-  </a>
   <a mat-list-item routerLink="" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>input</mat-icon>
     <span class="nav-caption">Dashboard</span>
+  </a>
+  <a mat-list-item routerLink="/profile/{{currentUserId}}" (click)="onClose()" *ngIf="isAuth">
+    <mat-icon>person</mat-icon>
+    <span class="nav-caption">Profile</span>
   </a>
   <a mat-list-item routerLink="/borrowings" (click)="onClose()" *ngIf="isAuth">
     <mat-icon>domain</mat-icon>

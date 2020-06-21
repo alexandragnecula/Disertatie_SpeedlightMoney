@@ -27,7 +27,7 @@ namespace SpeedlightMoney_App.Controllers
         {
             if (walletToAdd.CurrencyId == 0)
             {
-                return BadRequest("The wallet is mandatory!");
+                return BadRequest("The currency is mandatory!");
             }
             var result = await _walletService.AddWallet(walletToAdd);
 

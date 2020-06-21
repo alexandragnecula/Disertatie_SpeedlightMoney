@@ -7,7 +7,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { WALLETROUTES } from './wallet-routing';
 import { SendmoneyComponent } from './sendmoney/sendmoney.component';
 
-
 @NgModule({
   declarations: [AddmoneyComponent, SendmoneyComponent],
   imports: [

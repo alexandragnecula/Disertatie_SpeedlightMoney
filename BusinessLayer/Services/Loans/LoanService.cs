@@ -170,7 +170,10 @@ namespace BusinessLayer.Services.Loans
             }
             else if(entity.CurrencyId == 2)
             {
-                return Result.Failure(new List<string> { "You cannot borrow more than €5.0000. Please request another amount." });
+                if (entity.Amount > 5000)
+                {
+                    return Result.Failure(new List<string> { "You cannot borrow more than €5.0000. Please request another amount." });
+                }
             }
             
             await _context.Loans.AddAsync(entity);

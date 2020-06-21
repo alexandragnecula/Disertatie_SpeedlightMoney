@@ -10,6 +10,7 @@ namespace DataLayer.Entities
         {
             Wallets = new HashSet<Wallet>();
             Loans = new HashSet<Loan>();
+            TransactionsHistory = new HashSet<TransactionHistory>();
         }
 
         public long Id { get; set; }
@@ -17,5 +18,6 @@ namespace DataLayer.Entities
 
         public ICollection<Wallet> Wallets { get; private set; }
         public ICollection<Loan> Loans { get; private set; }
+        public ICollection<TransactionHistory> TransactionsHistory { get; private set; }
     }
 }
