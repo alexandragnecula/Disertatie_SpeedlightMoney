@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   currencySelectList: SelectItemsList = new SelectItemsList();
   roleSelectList: SelectItemsList = new SelectItemsList();
   currentStatusSelectList: SelectItemsList = new SelectItemsList();
-
+  oldRoleId: number;
   ngOnInit(): void {
     if (Number(this.route.snapshot.params.id)) {
       this.currentUserId = +this.route.snapshot.params.id;
@@ -89,6 +89,7 @@ export class ProfileComponent implements OnInit {
         this.getCurrentStatusesSelect();
         this.getRolesSelect();
         this.isLoading = false;
+        this.oldRoleId = user.roleId;
     },
         error => {
             this.uiService.showErrorSnackbar(error, null, 3000);
@@ -169,6 +170,9 @@ onSubmit() {
   this.userData.updateUser(updateUserCommand).subscribe(res => {
       this.isLoading = false;
       this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
+      if (updateUserCommand.roleId !== this.oldRoleId){
+        this.authService.logout();
+      }
   }, error => {
       this.isLoading = false;
       this.uiService.showErrorSnackbar(error, null, 3000);

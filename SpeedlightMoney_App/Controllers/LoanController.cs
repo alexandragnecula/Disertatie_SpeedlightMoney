@@ -173,5 +173,19 @@ namespace SpeedlightMoney_App.Controllers
 
             return Ok(vm);
         }
+
+
+        [HttpPut("cancelloanrequest")]
+        public async Task<ActionResult<Result>> CancelLoanRequest([FromBody] LoanDto loanToUpdate)
+        {
+            var result = await _loanService.CancelLoanRequest(loanToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

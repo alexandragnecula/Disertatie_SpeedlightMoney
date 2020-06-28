@@ -8,14 +8,14 @@
 <mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="createdOn">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <p>Order</p>
+                    <p>Order by date</p>
                 </mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.createdOn | date: 'dd/MM/yyyy, HH:mm'}}</mat-cell>
             </ng-container>
 
                 <ng-container matColumnDef="senderBeneficiarName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header>
-                        <p>Order</p>
+                        <p>Order by name</p>
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <p *ngIf="isSentMoney(element.senderId)" class="toFromStyle">From</p> 
@@ -30,7 +30,7 @@
         
                <ng-container matColumnDef="amount">
                    <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <p>Order</p>
+                    <p>Order by amount</p>
                    </mat-header-cell>
                    <mat-cell *matCellDef="let element">
                         <mat-icon *ngIf="!isSentMoney(element.senderId)" aria-label="Received Money" class="iconReceive">add</mat-icon>

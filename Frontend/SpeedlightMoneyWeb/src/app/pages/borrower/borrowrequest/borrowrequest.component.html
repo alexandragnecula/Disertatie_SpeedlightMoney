@@ -68,7 +68,7 @@
                 type="submit"
                 mat-raised-button
                 color="primary"
-                [disabled]="loanRequestForm.invalid"
+                [disabled]="loanRequestForm.invalid || isExplorer"
                 [mat-dialog-close]="loanRequestForm"
               >
                 Submit

@@ -381,13 +381,13 @@ namespace BusinessLayer.Services.Users
 
         public async Task<IList<UserDto>> GetAllUsers()
         {
-            List<UserDto> users = await _context.Users
-               .Where(x => x.Id != _currentUserService.UserId.Value)
-               .OrderByDescending(x => x.Email)
-               .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-               .ToListAsync();
+           var usersInExplorerRoleIds = (await _userManager.GetUsersInRoleAsync(RoleConstants.Explorer)).Select(x => x.Id).ToList();
+            var users = await _userManager.Users.Where(x => x.Id != _currentUserService.UserId)
+                .OrderByDescending(x => x.Email)
+                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
-            return users;
+            return users.Where(x => !usersInExplorerRoleIds.Contains(x.Id)).ToList();
         }
 
         public async Task<IList<UserDto>> GetUsers()

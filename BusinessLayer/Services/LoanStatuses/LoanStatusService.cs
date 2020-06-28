@@ -117,7 +117,7 @@ namespace BusinessLayer.Services.LoanStatuses
             var vm = new SelectItemVm
             {
                 SelectItems = await _context.LoanStatuses
-                    .Where(x => !x.Deleted && x.LoanStatusName != "Pending")
+                    .Where(x => !x.Deleted && x.LoanStatusName != "Pending" && x.LoanStatusName != "Canceled")
                     .Select(x => new SelectItemDto { Label = x.LoanStatusName, Value = x.Id.ToString() })
                     .ToListAsync()
             };

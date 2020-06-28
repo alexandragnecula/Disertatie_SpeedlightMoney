@@ -30,7 +30,7 @@
     <mat-icon>query_builder</mat-icon>
     <span class="nav-caption">Debts</span>
   </a>
-  <a mat-list-item routerLink="/friends" (click)="onClose()" *ngIf="isAuth">
+  <a mat-list-item routerLink="/friends" (click)="onClose()" *ngIf="isUltimate || isExplorer">
     <mat-icon>people</mat-icon>
     <span class="nav-caption">Friends</span>
   </a>

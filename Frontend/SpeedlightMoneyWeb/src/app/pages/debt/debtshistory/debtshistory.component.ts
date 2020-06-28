@@ -16,7 +16,6 @@ export class DebtshistoryComponent implements OnInit, AfterViewInit {
   isLoading = false;
   displayedColumns = ['lenderName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName'];
   dataSource = new MatTableDataSource<DebtsLookup>();
-  currentUserIdSubscription: Subscription;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

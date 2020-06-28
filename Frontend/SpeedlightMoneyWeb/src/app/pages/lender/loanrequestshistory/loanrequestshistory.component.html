@@ -53,10 +53,10 @@
         </ng-container> -->
 
         <ng-container matColumnDef="loanStatusName">
-            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
             <mat-cell *matCellDef="let element"> 
             <button mat-icon-button class="iconbutton" color="primary">
-                <mat-icon aria-label="Approve loan" >swap_vert</mat-icon>
+                <mat-icon aria-label="Approve loan" >timeline</mat-icon>
                 {{element.loanStatusName}}
             </button>
             </mat-cell>

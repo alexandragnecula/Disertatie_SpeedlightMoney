@@ -89,4 +89,5 @@ export abstract class LoanData {
     abstract GetLendRequestsForCurrentUser(): Observable<LoansLookup[]>;
     abstract GetBorrowRequestsHistoryForCurrentUser(): Observable<LoansLookup[]>;
     abstract GetLendRequestsHistoryForCurrentUser(): Observable<LoansLookup[]>;
+    abstract CancelLoanRequest(updateLoanCommand: ManageLoanCommand): Observable<Result>;
 }

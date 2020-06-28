@@ -57,12 +57,21 @@
         </ng-container> -->
 
         <ng-container matColumnDef="loanStatusName">
-            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
             <mat-cell *matCellDef="let element"> 
             <button mat-icon-button class="iconbutton" color="primary">
-                <mat-icon aria-label="Request loan" >swap_vert</mat-icon>
+                <mat-icon aria-label="Loan status" >timeline</mat-icon>
                 {{element.loanStatusName}}
             </button>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cancelloanrequest">
+            <mat-header-cell class="requestLoanStyle" *matHeaderCellDef>Cancel Request</mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+              <button mat-icon-button matTooltip="Click to cancel request" class="iconbutton" color="primary" *ngIf="element.id">
+                  <mat-icon aria-label="Cancel Request" (click)="cancelLoanRequest(element)">cancel</mat-icon>
+              </button>
             </mat-cell>
         </ng-container>
 

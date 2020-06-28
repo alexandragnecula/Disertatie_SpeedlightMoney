@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { FriendsLookup, FriendData, FriendsList, AddFriendCommand } from 'src/app/@core/data/friend';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.scss']
 })
-export class FriendsComponent implements OnInit, AfterViewInit {
+export class FriendsComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   displayedColumns = ['userFriendName', 'userFriendPhoneNumber'];
   dataSource = new MatTableDataSource<FriendsLookup>();
@@ -86,4 +86,7 @@ export class FriendsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.currentUserIdSubscription.unsubscribe();
+  }
 }

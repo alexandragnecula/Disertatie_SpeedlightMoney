@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { WalletData, UpdateWalletCommand } from 'src/app/@core/data/wallet';
 import { UIService } from 'src/app/shared/ui.service';
 import { SelectItemsList, SelectItem } from 'src/app/@core/data/common/selectitem';
@@ -9,28 +9,37 @@ import { Result } from 'src/app/@core/data/common/result';
 import { UserData } from 'src/app/@core/data/userclasses/user';
 import { SendmoneyComponent } from '../wallet/sendmoney/sendmoney.component';
 import { TransactionshistoryComponent } from '../transactionshistory/transactionshistory.component';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   currentUserWalletsSelectList: SelectItemsList = new SelectItemsList();
   beneficiarsSelectList: SelectItemsList = new SelectItemsList();
   walletForm: FormGroup;
   walletId: number;
   isLoading = true;
+  isExplorerSubscription: Subscription;
+  isExplorer: boolean;
 
   @ViewChild(TransactionshistoryComponent) transactionHistoryComponent: TransactionshistoryComponent;
 
   constructor(private walletData: WalletData,
               private uiService: UIService,
               public dialog: MatDialog,
-              public dialogToSendMoney: MatDialog) { }
+              public dialogToSendMoney: MatDialog,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.isExplorerSubscription = this.authService.isExplorer.subscribe(isExplorer => {
+      this.isExplorer = isExplorer;
+    });
+
     this.initForm();
     this.getWalletsForCurrentUserSelect();
   }
@@ -123,5 +132,9 @@ export class DashboardComponent implements OnInit {
       this.isLoading = false;
       this.uiService.showErrorSnackbar(error, null, 3000);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.isExplorerSubscription.unsubscribe();
   }
 }

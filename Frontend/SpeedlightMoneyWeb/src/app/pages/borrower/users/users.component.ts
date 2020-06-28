@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserLookup, UserData, UserList, User } from 'src/app/@core/data/userclasses/user';
 import { MatSort } from '@angular/material/sort';
@@ -7,7 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UIService } from 'src/app/shared/ui.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BorrowrequestComponent } from '../borrowrequest/borrowrequest.component';
-import { AddLoanCommand, LoanData } from 'src/app/@core/data/loan';
+import { AddLoanCommand, LoanData, Loan } from 'src/app/@core/data/loan';
 import { Result } from 'src/app/@core/data/common/result';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -20,7 +20,7 @@ import { FriendData } from 'src/app/@core/data/friend';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit, AfterViewInit {
+export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   panelOpenState = false;
   displayedColumns = ['email', 'firstName', 'country', 'city', 'currentStatus', 'phoneNumber', 'actions'];
@@ -35,6 +35,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
   loanRequestForm: FormGroup;
 
   currentUserIdSubscription: Subscription;
+  isExplorerSubscription: Subscription;
+  isExplorer: boolean;
 
   constructor(public dialog: MatDialog,
               private userData: UserData,
@@ -48,6 +50,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
     this.currentUserIdSubscription = this.authService.currentUserId.subscribe(userId => {
       this.borrowerId = userId;
       });
+
+    this.isExplorerSubscription = this.authService.isExplorer.subscribe(isExplorer => {
+        this.isExplorer = isExplorer;
+    });
   }
 
   getAllLenders() {
@@ -104,5 +110,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
       this.isLoading = false;
       this.uiService.showErrorSnackbar(error, null, 3000);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.currentUserIdSubscription.unsubscribe();
+    this.isExplorerSubscription.unsubscribe();
   }
 }

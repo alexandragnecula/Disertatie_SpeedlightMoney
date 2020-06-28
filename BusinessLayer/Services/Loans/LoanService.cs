@@ -66,18 +66,13 @@ namespace BusinessLayer.Services.Loans
 
             entity.Description = loanToUpdate.Description;
             entity.Amount = loanToUpdate.Amount;
-            entity.BorrowDate = loanToUpdate.BorrowDate;
-            entity.ReturnDate = loanToUpdate.ReturnDate;
-            entity.DueDate = loanToUpdate.DueDate;
-            entity.BorrowerId = loanToUpdate.BorrowerId;
             entity.LenderId = loanToUpdate.LenderId;
             entity.CurrencyId = loanToUpdate.CurrencyId;
-            entity.LoanStatusId = loanToUpdate.LoanStatusId;
             entity.TermId = loanToUpdate.TermId;          
 
             await _context.SaveChangesAsync();
 
-            return Result.Success("Loan update was successful");
+            return Result.Success("Loan request updated successfully");
         }
 
         public async Task<Result> DeleteLoan(LoanDto loanToDelete)
@@ -148,6 +143,16 @@ namespace BusinessLayer.Services.Loans
 
         public async Task<Result> RequestLoan(LoanDto loanToAdd)
         {
+            var walletForCurrentUserRON = await _context.Wallets.Where(x => x.UserId == _currentUserService.UserId)
+                                          .FirstOrDefaultAsync(x => x.CurrencyId == 1);
+            var walletForCurrentUserEUR = await _context.Wallets.Where(x => x.UserId == _currentUserService.UserId)
+                                          .FirstOrDefaultAsync(x => x.CurrencyId == 2);
+
+            if(walletForCurrentUserRON.TotalAmount < 30 && walletForCurrentUserEUR.TotalAmount < 5)
+            {
+                return Result.Failure(new List<string> { "Insufficient funds. You must have at least 30 RON/€5 in your wallet to request a loan!" });
+            }
+
             var entity = new Loan
             {
                 Description = loanToAdd.Description,
@@ -161,6 +166,8 @@ namespace BusinessLayer.Services.Loans
                 LoanStatusId = 3,
                 TermId = loanToAdd.TermId
             };
+
+
             if(entity.CurrencyId == 1)
             {
                 if (entity.Amount > 25000)
@@ -332,5 +339,33 @@ namespace BusinessLayer.Services.Loans
 
             return loans;
         }
+
+        public async Task<Result> CancelLoanRequest(LoanDto loanToUpdate)
+        {
+            var entity = await _context.Loans.FirstOrDefaultAsync(x => x.Id == loanToUpdate.Id && !x.Deleted);
+
+            if (entity == null)
+            {
+                return Result.Failure(new List<string> { "No valid loan found" });
+            }
+
+            if(entity.LoanStatusId == 1 || entity.LoanStatusId != 2)
+            {
+                entity.Deleted = true;
+                entity.LoanStatusId = 5;
+
+
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return Result.Failure(new List<string> { "The loan has already been managed by the lender" });
+            }
+
+            return Result.Success("Loan request was successfully canceled");
+        }
+
+
+
     }
 }

@@ -22,5 +22,6 @@ namespace BusinessLayer.Services.Loans
         Task<IList<LoanDto>> GetLendRequestsForCurrentUser();
         Task<IList<LoanDto>> GetBorrowRequestsHistoryForCurrentUser();
         Task<IList<LoanDto>> GetLendRequestsHistoryForCurrentUser();
+        Task<Result> CancelLoanRequest(LoanDto loanToUpdate);
     }
 }

@@ -17,7 +17,6 @@ export class DebtsComponent implements OnInit, AfterViewInit {
   isLoading = false;
   displayedColumns = ['lenderName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'debtStatusName', 'loanStatusName', 'actions', 'deferpayment'];
   dataSource = new MatTableDataSource<DebtsLookup>();
-  currentUserIdSubscription: Subscription;
   currentUserId = -1;
   currentDate = new Date();
 

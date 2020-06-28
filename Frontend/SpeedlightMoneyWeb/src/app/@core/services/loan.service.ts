@@ -130,13 +130,13 @@ export class LoanService extends LoanData {
                 catchError(this.errService.errorHandl)
             );
     }
-    ManageLoan(addLoanCommand: ManageLoanCommand): Observable<Result> {
+    ManageLoan(updateLoanCommand: ManageLoanCommand): Observable<Result> {
         this.httpOptions = {
             headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
-        return this.http.put<Result>(this.baseUrl + '/manageloan', JSON.stringify(addLoanCommand), this.httpOptions)
+        return this.http.put<Result>(this.baseUrl + '/manageloan', JSON.stringify(updateLoanCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),
@@ -190,6 +190,19 @@ export class LoanService extends LoanData {
           Authorization: `Bearer ${this.authService.getToken()}`
         })};
         return this.http.get<LoansList>(this.baseUrl + '/lendrequestshistory', this.httpOptions)
+            .pipe(
+                map((response: any) => response),
+                retry(1),
+                catchError(this.errService.errorHandl)
+            );
+    }
+    CancelLoanRequest(updateLoanCommand: ManageLoanCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+        return this.http.put<Result>(this.baseUrl + '/cancelloanrequest', JSON.stringify(updateLoanCommand), this.httpOptions)
             .pipe(
                 map((response: any) => response),
                 retry(1),

@@ -53,10 +53,10 @@
         </ng-container> -->
 
         <ng-container matColumnDef="loanStatusName">
-            <mat-header-cell *matHeaderCellDef>Loan status</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Loan status</mat-header-cell>
             <mat-cell *matCellDef="let element"> 
             <button mat-icon-button class="iconbutton" color="primary">
-                <mat-icon aria-label="Request loan" >swap_vert</mat-icon>
+                <mat-icon aria-label="Request loan" >timeline</mat-icon>
                 {{element.loanStatusName}}
             </button>
             </mat-cell>
@@ -64,10 +64,10 @@
 
 
         <ng-container matColumnDef="debtStatusName">
-            <mat-header-cell *matHeaderCellDef>Debt status</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Debt status</mat-header-cell>
             <mat-cell *matCellDef="let element"> 
             <button mat-icon-button class="iconbutton" color="primary">
-                <mat-icon aria-label="Request loan" >swap_vert</mat-icon>
+                <mat-icon aria-label="Request loan" >timeline</mat-icon>
                 {{element.debtStatusName}}
             </button>
             </mat-cell>

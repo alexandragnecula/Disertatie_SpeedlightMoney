@@ -19,13 +19,13 @@
 
               <!-- <mat-card-actions> -->
                 <button class="buttonSubmit" mat-raised-button color="primary"
-                  (click)="openDialogToEdit()">
+                  (click)="openDialogToEdit()" [disabled]="isExplorer">
                   <mat-icon>add</mat-icon>
                   Add money
                 </button>
 
                 <button mat-raised-button color="primary"
-                (click)="openDialogToSendMoney()">
+                (click)="openDialogToSendMoney()" [disabled]="isExplorer">
                   <mat-icon>send</mat-icon>
                   Send money
                </button>

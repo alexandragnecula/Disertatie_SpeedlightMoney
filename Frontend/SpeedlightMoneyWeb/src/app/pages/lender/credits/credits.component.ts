@@ -17,7 +17,6 @@ export class CreditsComponent implements OnInit, AfterViewInit {
   isLoading = false;
   displayedColumns = ['borrowerName', 'loanAmount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'loanStatusName', 'debtStatusName', 'sendReminder'];
   dataSource = new MatTableDataSource<DebtsLookup>();
-  currentUserIdSubscription: Subscription;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

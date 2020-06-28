@@ -4,7 +4,7 @@
     <mat-form-field fxFlex="40%" fxFlex.xs="100%">
        <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter"/>
     </mat-form-field>
-    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" 
+    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary"
         class="buttontyle" fxFlex="200px" fxFlex.xs="100%" (click)="openDialogToAdd()">Add Friend</button>
 </div>
 

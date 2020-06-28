@@ -16,7 +16,7 @@
         <li *ngIf="isAuth"><a routerLink="/borrowings">Borrow</a></li>
         <li *ngIf="isAuth"><a routerLink="/loans">Lend</a></li>
         <li *ngIf="isAuth"><a routerLink="/debts">Debts</a></li>
-        <li *ngIf="isAuth"><a routerLink="/friends">Friends</a></li>
+        <li *ngIf="isUltimate || isExplorer"><a routerLink="/friends">Friends</a></li>
         <!-- <li *ngIf="isAuth"><a routerLink="/user/profile/{{currentUserId}}">Profile</a></li> -->
         <li *ngIf="isAuth"><a style="cursor:pointer" (click)="onLogout()">Logout</a>
         <li *ngIf="isAuth" class="currentUserName">{{currentUserName}}</li>

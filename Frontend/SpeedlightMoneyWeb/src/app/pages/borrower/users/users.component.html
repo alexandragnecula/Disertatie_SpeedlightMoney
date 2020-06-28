@@ -44,7 +44,8 @@
     <ng-container matColumnDef="actions">
         <mat-header-cell class="requestLoanStyle" *matHeaderCellDef>Request loan </mat-header-cell>
         <mat-cell *matCellDef="let element"> 
-          <button mat-icon-button matTooltip="Click to request loan" class="iconbutton" color="primary" *ngIf="element.id">
+          <button mat-icon-button matTooltip="Click to request loan" class="iconbutton" color="primary" *ngIf="element.id"
+          [disabled]="isExplorer">
               <mat-icon aria-label="Request loan" (click)="openDialogToAdd(element)">swap_vert</mat-icon>
           </button>
         </mat-cell>

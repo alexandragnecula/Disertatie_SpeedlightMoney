@@ -39,7 +39,7 @@
                 type="submit"
                 mat-raised-button
                 color="primary"
-                [disabled]="addFriendForm.invalid"
+                [disabled]="addFriendForm.invalid || isExplorer"
                 [mat-dialog-close]="addFriendForm"
               >
                 Submit

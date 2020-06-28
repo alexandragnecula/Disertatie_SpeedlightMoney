@@ -1,30 +1,42 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { SelectItemsList } from 'src/app/@core/data/common/selectitem';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { LoanData } from 'src/app/@core/data/loan';
+import { LoanData, Loan } from 'src/app/@core/data/loan';
 import { UIService } from 'src/app/shared/ui.service';
 import { TermData } from 'src/app/@core/data/term';
 import { CurrencyData } from 'src/app/@core/data/currency';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-borrowrequest',
   templateUrl: './borrowrequest.component.html',
   styleUrls: ['./borrowrequest.component.scss']
 })
-export class BorrowrequestComponent implements OnInit {
+export class BorrowrequestComponent implements OnInit, OnDestroy {
 
   termSelectList: SelectItemsList = new SelectItemsList();
   currencySelectList: SelectItemsList = new SelectItemsList();
   isLoading = false;
   loanRequestForm: FormGroup;
+  isExplorerSubscription: Subscription;
+  isExplorer: boolean;
 
   constructor(@Inject(MAT_DIALOG_DATA)  public loanRequest: any,
               private termData: TermData,
-              private currencyData: CurrencyData, private uiService: UIService) { }
+              private currencyData: CurrencyData, private uiService: UIService,
+              private authService: AuthService,
+              private loanData: LoanData,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.isExplorerSubscription = this.authService.isExplorer.subscribe(isExplorer => {
+      this.isExplorer = isExplorer;
+    });
+
     this.getTerms();
     this.getCurrencies();
     this.initForm();
@@ -85,4 +97,7 @@ export class BorrowrequestComponent implements OnInit {
     return pAmount;
   }
 
+  ngOnDestroy(): void {
+    this.isExplorerSubscription.unsubscribe();
+  }
 }
