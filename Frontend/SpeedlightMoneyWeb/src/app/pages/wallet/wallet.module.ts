@@ -6,9 +6,10 @@ import { MaterialModule } from 'src/app/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { WALLETROUTES } from './wallet-routing';
 import { SendmoneyComponent } from './sendmoney/sendmoney.component';
+import { BanktransferComponent } from './banktransfer/banktransfer.component';
 
 @NgModule({
-  declarations: [AddmoneyComponent, SendmoneyComponent],
+  declarations: [AddmoneyComponent, SendmoneyComponent, BanktransferComponent],
   imports: [
     WALLETROUTES,
     CommonModule,

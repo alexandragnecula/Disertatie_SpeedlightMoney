@@ -173,7 +173,7 @@ namespace BusinessLayer.Services.Wallets
 
             await _context.SaveChangesAsync();
 
-            return Result.Success("Money were added was successful");
+            return Result.Success("Money were added successfully");
         }
 
         public async Task<Result> SendMoney(WalletDto walletToUpdate)
@@ -229,6 +229,31 @@ namespace BusinessLayer.Services.Wallets
 
                 throw new Exception(e.ToString());
             }
+        }
+
+        public async Task<Result> BankTransfer(WalletDto walletToUpdate)
+        {
+            var entity = await _context.Wallets.FirstOrDefaultAsync(x => x.Id == walletToUpdate.Id && !x.Deleted);
+
+            if (entity == null)
+            {
+                return Result.Failure(new List<string> { "No valid wallet found" });
+            }
+
+            if(entity.TotalAmount >= walletToUpdate.TotalAmount)
+            {
+                entity.TotalAmount -= walletToUpdate.TotalAmount;
+            }
+            else
+            {
+                return Result.Failure(new List<string> { "Insuficient funds" });
+            }
+            
+
+            await _context.SaveChangesAsync();
+
+            return Result.Success("Money were transfered successfully");
+
         }
     }
 }

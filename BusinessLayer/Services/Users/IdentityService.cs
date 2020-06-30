@@ -338,8 +338,34 @@ namespace BusinessLayer.Services.Users
             entity.ExpireDate = userToUpdate.ExpireDate;
             entity.Salary = userToUpdate.Salary;
             entity.PhoneNumber = userToUpdate.PhoneNumber;
+
+            bool isPremium = await _userManager.IsInRoleAsync(entity, RoleConstants.Premium);
+            bool isExplorer = await _userManager.IsInRoleAsync(entity, RoleConstants.Explorer);
+
+            var walletForCurrentUserRON = await _context.Wallets.Where(x => x.UserId == _currentUserService.UserId)
+                                          .FirstOrDefaultAsync(x => x.CurrencyId == 1);
+            var walletForCurrentUserEUR = await _context.Wallets.Where(x => x.UserId == _currentUserService.UserId)
+                                          .FirstOrDefaultAsync(x => x.CurrencyId == 2);
+
+            if ((isPremium || isExplorer) && userToUpdate.RoleId == 2)
+            {
+                if (walletForCurrentUserRON.TotalAmount < 35 && walletForCurrentUserEUR.TotalAmount < 7)
+                {
+                    return Result.Failure(new List<string> { "You must have at least 35 RON/€7 for the ULTIMATE Subscription" });
+                }
+            }
+            else if(isExplorer && userToUpdate.RoleId == 3)
+            {
+                if (walletForCurrentUserRON.TotalAmount < 30 && walletForCurrentUserEUR.TotalAmount < 6)
+                {
+                    return Result.Failure(new List<string> { "You must have at least 30 RON/€6 for the PREMIUM Subscription" });
+                }
+
+            }
+
             await _context.SaveChangesAsync();
             await AddUserToRole(userToUpdate.Id, userToUpdate.RoleId);
+
 
             return Result.Success("Your profile update was successful");
             } catch (Exception e)
@@ -359,6 +385,8 @@ namespace BusinessLayer.Services.Users
             await _userManager.RemoveFromRoleAsync(user, existingRoleNames[0]);
 
             var roleToAdd = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+
+
             await _userManager.AddToRoleAsync(user, roleToAdd.Name);
         }
 
@@ -526,41 +554,76 @@ namespace BusinessLayer.Services.Users
                 //validate amount if Subscription == Ultimate, Premium
                 else
                 {
-                    if (wallet.CurrencyId == 1 && wallet.TotalAmount >= 30)
+                    if(userToAdd.RoleId == 2)
                     {
-
-                        var walletEUR = new Wallet
+                        if (wallet.CurrencyId == 1 && wallet.TotalAmount >= 35)
                         {
-                            TotalAmount = 0.0,
-                            UserId = user.Id,
-                            CurrencyId = 2
-                        };
-                        await _context.Wallets.AddAsync(walletEUR);
+
+                            var walletEUR = new Wallet
+                            {
+                                TotalAmount = 0.0,
+                                UserId = user.Id,
+                                CurrencyId = 2
+                            };
+                            await _context.Wallets.AddAsync(walletEUR);
+                        }
+                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 6)
+                        {
+                            var walletRON = new Wallet
+                            {
+                                TotalAmount = 0.0,
+                                UserId = user.Id,
+                                CurrencyId = 1
+                            };
+                            await _context.Wallets.AddAsync(walletRON);
+                        }
+                        else
+                        {
+                            return new AuthenticationResult
+                            {
+                                Errors = new[] { "You cannot register unless you provide a minimum amount of 30 RON/€6 for this subscription" }
+                            };
+                        }
+
+                    }
+                    else if(userToAdd.RoleId == 3)
+                    {
+                        if (wallet.CurrencyId == 1 && wallet.TotalAmount >= 30)
+                        {
+
+                            var walletEUR = new Wallet
+                            {
+                                TotalAmount = 0.0,
+                                UserId = user.Id,
+                                CurrencyId = 2
+                            };
+                            await _context.Wallets.AddAsync(walletEUR);
+                        }
+                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 7)
+                        {
+                            var walletRON = new Wallet
+                            {
+                                TotalAmount = 0.0,
+                                UserId = user.Id,
+                                CurrencyId = 1
+                            };
+                            await _context.Wallets.AddAsync(walletRON);
+                        }
+                        else
+                        {
+                            return new AuthenticationResult
+                            {
+                                Errors = new[] { "You cannot register unless you provide a minimum amount of 35 RON/€7 for this subscription" }
+                            };
+                        }
                     }
                     else
                     {
                         return new AuthenticationResult
                         {
-                            Errors = new[] { "You cannot register unless you provide a minimum amount of 30 RON" }
+                            Errors = new[] { "Invalid subscription" }
                         };
-                    }
 
-                    if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 5)
-                    {
-                        var walletRON = new Wallet
-                        {
-                            TotalAmount = 0.0,
-                            UserId = user.Id,
-                            CurrencyId = 1
-                        };
-                        await _context.Wallets.AddAsync(walletRON);
-                    }
-                    else
-                    {
-                        return new AuthenticationResult
-                        {
-                            Errors = new[] { "You cannot register unless you provide a minimum amount of €5" }
-                        };
                     }
                 }
 

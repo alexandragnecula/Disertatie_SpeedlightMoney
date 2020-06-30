@@ -11,6 +11,7 @@ import { SendmoneyComponent } from '../wallet/sendmoney/sendmoney.component';
 import { TransactionshistoryComponent } from '../transactionshistory/transactionshistory.component';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { BanktransferComponent } from '../wallet/banktransfer/banktransfer.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -97,6 +98,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  openDialogToBankTransfer() {
+
+    const dialogRef = this.dialog.open(BanktransferComponent, {
+      width: '600px',
+      data: {
+        walletsSelectList: this.currentUserWalletsSelectList,
+        walletId: this.walletForm.value.walletId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.bankTransfer(result);
+      }
+    });
+
+  }
+
   addMoneyToWallet(form) {
     this.isLoading = true;
     const updateWalletCommand: UpdateWalletCommand = {
@@ -127,6 +146,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
       this.getWalletsForCurrentUserSelect();
       this.transactionHistoryComponent.getTransactionsHistoryForCurrentUser();
+      this.isLoading = false;
+    }, error => {
+      this.isLoading = false;
+      this.uiService.showErrorSnackbar(error, null, 3000);
+    });
+  }
+
+  bankTransfer(form) {
+    this.isLoading = true;
+    const updateWalletCommand: UpdateWalletCommand = {
+      id: +form.value.walletId,
+      totalAmount: form.value.totalAmount,
+
+    } as UpdateWalletCommand;
+
+    this.walletData.BankTransfer(updateWalletCommand).subscribe((res: Result) => {
+      this.uiService.showSuccessSnackbar(res.successMessage, null, 3000);
+      this.getWalletsForCurrentUserSelect();
       this.isLoading = false;
     }, error => {
       this.isLoading = false;

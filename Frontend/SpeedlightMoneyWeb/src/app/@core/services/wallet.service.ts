@@ -178,4 +178,19 @@ export class WalletService extends WalletData {
         );
     }
 
+    BankTransfer(updateWalletCommand: UpdateWalletCommand): Observable<Result> {
+        this.httpOptions = {
+            headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.authService.getToken()}`
+        })};
+
+        return this.http.put<Result>(this.baseUrl + '/banktransfer', JSON.stringify(updateWalletCommand), this.httpOptions)
+        .pipe(
+            map((response: any) => response),
+            retry(1),
+            catchError(this.errService.errorHandl)
+        );
+    }
+
 }

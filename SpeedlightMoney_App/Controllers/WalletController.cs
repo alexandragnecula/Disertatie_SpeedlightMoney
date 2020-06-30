@@ -154,5 +154,18 @@ namespace SpeedlightMoney_App.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("banktransfer")]
+        public async Task<ActionResult<Result>> BankTransfer([FromBody] WalletDto walletToUpdate)
+        {
+            var result = await _walletService.BankTransfer(walletToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

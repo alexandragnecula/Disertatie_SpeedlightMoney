@@ -24,10 +24,16 @@
                   Add money
                 </button>
 
-                <button mat-raised-button color="primary"
+                <button class="buttonSubmit" mat-raised-button color="primary"
                 (click)="openDialogToSendMoney()" [disabled]="isExplorer">
                   <mat-icon>send</mat-icon>
                   Send money
+               </button>
+
+               <button class="buttonSubmit" mat-raised-button color="primary"
+                (click)="openDialogToBankTransfer()" [disabled]="isExplorer">
+                  <mat-icon>home</mat-icon>
+                  Bank Transfer 
                </button>
               <!-- </mat-card-actions> -->
               

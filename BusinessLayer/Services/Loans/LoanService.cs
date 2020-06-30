@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BusinessLayer.Common.Constants;
 using BusinessLayer.Common.Models.SelectItem;
 using BusinessLayer.Services.Wallets;
 using BusinessLayer.Utilities;
@@ -11,6 +12,7 @@ using BusinessLayer.Views;
 using DataLayer.DataContext;
 using DataLayer.Entities;
 using DataLayer.SharedInterfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services.Loans
@@ -21,14 +23,16 @@ namespace BusinessLayer.Services.Loans
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
         private readonly IWalletService _walletService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public LoanService(DatabaseContext context, IMapper mapper, ICurrentUserService currentUserService,
-                            IWalletService walletService)
+                            IWalletService walletService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _mapper = mapper;
             _currentUserService = currentUserService;
             _walletService = walletService;
+            _userManager = userManager;
         }
 
         public async Task<Result> AddLoan(LoanDto loanToAdd)
@@ -148,9 +152,9 @@ namespace BusinessLayer.Services.Loans
             var walletForCurrentUserEUR = await _context.Wallets.Where(x => x.UserId == _currentUserService.UserId)
                                           .FirstOrDefaultAsync(x => x.CurrencyId == 2);
 
-            if(walletForCurrentUserRON.TotalAmount < 30 && walletForCurrentUserEUR.TotalAmount < 5)
+            if(walletForCurrentUserRON.TotalAmount < 30 && walletForCurrentUserEUR.TotalAmount < 6)
             {
-                return Result.Failure(new List<string> { "Insufficient funds. You must have at least 30 RON/€5 in your wallet to request a loan!" });
+                return Result.Failure(new List<string> { "Insufficient funds. You must have at least 30 RON/€6 in your wallet to request a loan!" });
             }
 
             var entity = new Loan
@@ -196,6 +200,7 @@ namespace BusinessLayer.Services.Loans
             try
             {
                 var entity = await _context.Loans
+                                           .Include(x => x.Lender)
                                            .FirstOrDefaultAsync(x => x.Id == loanToUpdate.Id && !x.Deleted);
 
                 if (entity == null)
@@ -228,19 +233,39 @@ namespace BusinessLayer.Services.Loans
                     var walletForBorrower = await _context.Wallets.Where(x => x.UserId == loanToUpdate.BorrowerId)
                                                                      .FirstOrDefaultAsync(x => x.CurrencyId == loanToUpdate.CurrencyId);
 
+
+                    bool isPremium = await _userManager.IsInRoleAsync(entity.Lender, RoleConstants.Premium);
+                    bool isUltimate = await _userManager.IsInRoleAsync(entity.Lender, RoleConstants.Ultimate);
+
+
                     //add amount to borrower wallet and withdraw amount from lender
                     if (loanToUpdate.CurrencyId == wallletForCurentUser.CurrencyId)
                     {
                         if (wallletForCurentUser.TotalAmount >= loanToUpdate.Amount)
                         {
-                            if(loanToUpdate.CurrencyId == 1)
+                            if (isUltimate)
                             {
-                                wallletForCurentUser.TotalAmount -= 0.97;
+                                if (loanToUpdate.CurrencyId == 1)
+                                {
+                                    wallletForCurentUser.TotalAmount -= 1;
+                                }
+                                else if (loanToUpdate.CurrencyId == 2)
+                                {
+                                    wallletForCurentUser.TotalAmount -= 0.2;
+                                }
                             }
-                            else if(loanToUpdate.CurrencyId == 2)
+                            else if (isPremium)
                             {
-                                wallletForCurentUser.TotalAmount -= 0.2;
+                                if (loanToUpdate.CurrencyId == 1)
+                                {
+                                    wallletForCurentUser.TotalAmount -= 1.5;
+                                }
+                                else if (loanToUpdate.CurrencyId == 2)
+                                {
+                                    wallletForCurentUser.TotalAmount -= 0.3;
+                                }
                             }
+                         
                             wallletForCurentUser.TotalAmount -= loanToUpdate.Amount;
                             walletForBorrower.TotalAmount += loanToUpdate.Amount;
                            

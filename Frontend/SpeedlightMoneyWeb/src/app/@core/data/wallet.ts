@@ -48,4 +48,5 @@ export abstract class WalletData {
     abstract RestoreWallet(restoreWalletCommand: RestoreWalletCommand): Observable<Result>;
     abstract AddMoneyToWallet(updateWalletCommand: UpdateWalletCommand);
     abstract SendMoney(updateWalletCommand: UpdateWalletCommand): Observable<Result>;
+    abstract BankTransfer(updateWalletCommand: UpdateWalletCommand);
 }

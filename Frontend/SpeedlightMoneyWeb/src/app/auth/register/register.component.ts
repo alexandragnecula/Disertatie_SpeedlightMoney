@@ -118,18 +118,34 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private validateAmount( pAmount: number ) {
         if (this.currencySelectList.selectItems) {
           const item = this.currencySelectList.selectItems.find(x => x.value === this.registerForm.value.currencyId);
-          if (item) {
-          if (item.label === 'RON'){
-            if (pAmount < 30){
-              return false;
-            }
-          }
+          const role = this.roleSelectList.selectItems.find(x => x.value === this.registerForm.value.roleId);
+          if (item && role) {
+            if (role.label === 'ULTIMATE'){
+              if (item.label === 'RON'){
+                if (pAmount < 35){
+                  return false;
+                }
+              }
 
-          if (item.label === 'EUR'){
-            if (pAmount < 5){
-              return false;
+              if (item.label === 'EUR'){
+                if (pAmount < 7){
+                  return false;
+                }
+              }
             }
-          }
+            else if (role.label === 'PREMIUM'){
+              if (item.label === 'RON'){
+                if (pAmount < 30){
+                  return false;
+                }
+              }
+
+              if (item.label === 'EUR'){
+                if (pAmount < 6){
+                  return false;
+                }
+              }
+            }
         }
       }
         return pAmount;
