@@ -567,7 +567,7 @@ namespace BusinessLayer.Services.Users
                             };
                             await _context.Wallets.AddAsync(walletEUR);
                         }
-                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 6)
+                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 7)
                         {
                             var walletRON = new Wallet
                             {
@@ -599,7 +599,7 @@ namespace BusinessLayer.Services.Users
                             };
                             await _context.Wallets.AddAsync(walletEUR);
                         }
-                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 7)
+                        else if (wallet.CurrencyId == 2 && wallet.TotalAmount >= 6)
                         {
                             var walletRON = new Wallet
                             {

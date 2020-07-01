@@ -17,6 +17,15 @@
                 </mat-form-field>
 
                 <mat-form-field>
+                  <input
+                      matInput
+                      placeholder="IBAN"
+                      required>
+                  <mat-hint>Please enter an IBAN.</mat-hint>
+                  <mat-error>IBAN is required!</mat-error>
+                </mat-form-field>        
+
+                <mat-form-field>
                     <input
                       matInput
                       type="number" min="0" value="0" step="0.01"
