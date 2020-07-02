@@ -9,6 +9,11 @@
 </div>
 
 <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.userFriendId | number}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="userFriendName">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Friend Name</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.userFriendName}}</mat-cell>
@@ -25,17 +30,15 @@
         <mat-cell *matCellDef="let element">{{element.userFriendLastName}}</mat-cell>
     </ng-container> -->
 
-    <!-- <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Actions</mat-header-cell>
-        <mat-cell *matCellDef="let element">
-            <button mat-icon-button matTooltip="Click to request loan" class="iconbutton" color="primary" *ngIf="element.id">
-                <mat-icon aria-label="Request loan" (click)="openDialogToAddLoan(element)">swap_vert</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Click to delete friend" class="iconbutton" color="primary" *ngIf="element.id">
-                <mat-icon aria-label="Delete friend" (click)="deleteFriend(element)">delete</mat-icon>
-            </button>
+    <ng-container matColumnDef="actions">
+        <mat-header-cell class="requestLoanStyle" *matHeaderCellDef>Request loan </mat-header-cell>
+        <mat-cell *matCellDef="let element"> 
+          <button mat-icon-button matTooltip="Click to request loan" class="iconbutton" color="primary" *ngIf="element.id"
+          [disabled]="isExplorer">
+              <mat-icon aria-label="Request loan" (click)="openDialogToRequestLoan(element)">swap_vert</mat-icon>
+          </button>
         </mat-cell>
-    </ng-container> -->
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>

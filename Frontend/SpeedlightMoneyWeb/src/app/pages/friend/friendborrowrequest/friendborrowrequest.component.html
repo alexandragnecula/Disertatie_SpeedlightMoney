@@ -1,0 +1,80 @@
+<div mat-dialog-content>
+    <section fxLayout fxLayoutAlign="center" class="prescription-drug-card">
+        <form [formGroup]="loanRequestForm">
+          <mat-card fxFlex.xs="100%" fxFlex="600px">
+            <mat-card-title fxLayoutAlign="center">Loan</mat-card-title>
+            <mat-card-content fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                    <input
+                        matInput
+                        placeholder="Lender"
+                        formControlName="lenderName">
+                </mat-form-field>
+                <mat-form-field>
+                    <input
+                        matInput
+                        placeholder="Message"
+                        formControlName="description">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="this.termSelectList.selectItems">
+                  <mat-select placeholder="Choose term" formControlName="termId" required>
+                    <mat-option
+                      *ngFor="let term of termSelectList.selectItems"
+                      [value]="term.value">
+                      {{ term.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint>Please choose a term</mat-hint>
+                  <mat-error>Please choose a term</mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="this.currencySelectList.selectItems">
+                    <mat-select placeholder="Choose currency" formControlName="currencyId" required>
+                      <mat-option
+                        *ngFor="let currency of currencySelectList.selectItems"
+                        [value]="currency.value">
+                        {{ currency.label }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint>Please choose a currency</mat-hint>
+                    <mat-error>Please choose a currency</mat-error>
+                  </mat-form-field>
+
+                <mat-form-field>
+                    <input
+                      matInput
+                      type="number" min="0" value="0" step="0.01"
+                      placeholder="Amount"
+                      formControlName="amount"             
+                      required>
+                    <mat-hint>Please enter an amount.</mat-hint>
+                    <mat-error>Please enter a valid amount! It cannot be more than €5.000/25.000 RON</mat-error>
+                </mat-form-field>
+               
+              <mat-spinner *ngIf="isLoading"></mat-spinner>
+            </mat-card-content>
+            <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+              <button
+              *ngIf="!isLoading"
+              type="button"
+              mat-raised-button
+              color="accent"
+              [mat-dialog-close]
+            >
+              Close
+            </button>
+              <button
+                type="submit"
+                mat-raised-button
+                color="primary"
+                [disabled]="loanRequestForm.invalid || isExplorer"
+                [mat-dialog-close]="loanRequestForm"
+              >
+                Submit
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </form>
+      </section>
+</div>

@@ -11,6 +11,7 @@ export class Friend {
 
 export class FriendsLookup {
     id: number;
+    userFriendId: number;
     nickname: string;
     userName: string;
     userFriendName: string;

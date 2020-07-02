@@ -217,6 +217,7 @@ namespace BusinessLayer.Services.Loans
                                                                                  : (entity.TermId == 3 ? (DateTime.Now).AddDays(90)
                                                                                                            : (entity.TermId == 4) ? (DateTime.Now).AddDays(180)
                                                                                                                                      : (DateTime.Now).AddDays(365)))) : (DateTime?)null;
+                await _context.SaveChangesAsync();
 
                 if (loanToUpdate.LoanStatusId == 1)
                 {
@@ -278,20 +279,24 @@ namespace BusinessLayer.Services.Loans
 
                     await _context.Debts.AddAsync(debt);
 
-                    await _context.SaveChangesAsync();
-
                     await transaction.CommitAsync();
+
+                    await _context.SaveChangesAsync();
 
                     return Result.Success("Loan was successfully approved");
                 }
                 else if(loanToUpdate.LoanStatusId == 2)
                 {
+                    await transaction.CommitAsync();
+
                     return Result.Success("Loan was successfully rejected");
                 }
                 else
                 {
                     return Result.Success("Something went wrong. Please contact your administrator");
-                }             
+                }
+
+                
             }
             catch (Exception e)
             {
