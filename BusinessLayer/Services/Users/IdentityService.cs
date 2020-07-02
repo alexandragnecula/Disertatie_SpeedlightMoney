@@ -581,7 +581,7 @@ namespace BusinessLayer.Services.Users
                         {
                             return new AuthenticationResult
                             {
-                                Errors = new[] { "You cannot register unless you provide a minimum amount of 30 RON/€6 for this subscription" }
+                                Errors = new[] { "You cannot register unless you provide a minimum amount of 37 RON/€7 for this subscription" }
                             };
                         }
 
@@ -613,7 +613,7 @@ namespace BusinessLayer.Services.Users
                         {
                             return new AuthenticationResult
                             {
-                                Errors = new[] { "You cannot register unless you provide a minimum amount of 35 RON/€7 for this subscription" }
+                                Errors = new[] { "You cannot register unless you provide a minimum amount of 30 RON/€6 for this subscription" }
                             };
                         }
                     }
