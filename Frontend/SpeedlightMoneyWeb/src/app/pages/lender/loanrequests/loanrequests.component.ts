@@ -16,7 +16,7 @@ import { LoanrequestshistoryComponent } from '../loanrequestshistory/loanrequest
 })
 export class LoanrequestsComponent implements OnInit, AfterViewInit{
   isLoading = false;
-  displayedColumns = ['borrowerName', 'amount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'loanStatusName', 'manageRequest'];
+  displayedColumns = ['description', 'borrowerName', 'amount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'loanStatusName', 'manageRequest'];
   dataSource = new MatTableDataSource<LoansLookup>();
   loanstatusesSelectList: SelectItemsList = new SelectItemsList();
   isManaged =  false;

@@ -15,6 +15,11 @@
             <mat-cell *matCellDef="let element">{{element.id | number}}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Message</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.description}}</mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="amount">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.amount | number}}</mat-cell>
@@ -85,11 +90,17 @@
     <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" fxLayoutAlign="center center"></mat-paginator>
 
 <section fxLayout fxLayoutAlign="center">
-    <app-loanrequestshistory></app-loanrequestshistory>
+    <app-credits></app-credits>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
 </section>
 
 <section fxLayout fxLayoutAlign="center">
-    <app-credits></app-credits>
+    <app-loanrequestshistory></app-loanrequestshistory>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+</section>
+
+
+<section fxLayout fxLayoutAlign="center">
+    <app-creditshistory></app-creditshistory>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
 </section>

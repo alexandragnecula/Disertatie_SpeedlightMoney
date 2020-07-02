@@ -16,7 +16,7 @@ import { BorrowrequestshistoryComponent } from '../borrowrequestshistory/borrowr
 })
 export class BorrowrequestsComponent implements OnInit, AfterViewInit{
   isLoading = false;
-  displayedColumns = ['lenderName', 'amount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'loanStatusName', 'cancelloanrequest'];
+  displayedColumns = ['description', 'lenderName', 'amount', 'currencyName', 'termName', 'borrowDate', 'returnDate', 'dueDate', 'loanStatusName', 'cancelloanrequest'];
   dataSource = new MatTableDataSource<LoansLookup>();
   currentUserIdSubscription: Subscription;
 
